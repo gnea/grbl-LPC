@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 
 struct DummyReg {
@@ -31,6 +32,7 @@ extern DummyReg OCIE0A;
 extern DummyReg OCIE0B;
 extern DummyReg OCIE1A;
 extern DummyReg OCR1A;
+extern DummyReg OCR2A;
 extern DummyReg PCICR;
 extern DummyReg PCIE0;
 extern DummyReg PCIE1;
@@ -39,22 +41,38 @@ extern DummyReg PCMSK1;
 extern DummyReg SREG;
 extern DummyReg TCCR0A;
 extern DummyReg TCCR0B;
-extern DummyReg TCCR0B;
 extern DummyReg TCCR1A;
 extern DummyReg TCCR1B;
+extern DummyReg TCCRA;
+extern DummyReg TCCR2A;
+extern DummyReg TCCR2B;
 extern DummyReg TCNT0;
 extern DummyReg TIMSK0;
 extern DummyReg TIMSK1;
 extern DummyReg TOIE0;
 
+extern DummyReg UCSR0A;
+extern DummyReg UCSR0B;
+extern DummyReg U2X0;
+extern DummyReg UBRR0H;
+extern DummyReg UBRR0L;
+extern DummyReg UDR0;
+
+
 static const int COM1A0 = 0;
 static const int COM1A1 = 0;
 static const int COM1B0 = 0;
 static const int COM1B1 = 0;
+static const int COM2A0 = 0;
+static const int COM2A1 = 0;
+static const int COM2B0 = 0;
+static const int COM2B1 = 0;
+
 static const int CS01 = 0;
 static const int CS10 = 0;
 static const int CS11 = 0;
 static const int CS12 = 0;
+static const int CS22 = 0;
 static const int EEMWE = 0;
 static const int EERE = 0;
 static const int EEWE = 0;
@@ -62,3 +80,10 @@ static const int WGM10 = 0;
 static const int WGM11 = 0;
 static const int WGM12 = 0;
 static const int WGM13 = 0;
+static const int WGM20 = 0;
+static const int WGM21 = 0;
+
+static const int RXEN0 = 0;
+static const int TXEN0 = 0;
+static const int RXCIE0 = 0;
+static const int UDRIE0 = 0;

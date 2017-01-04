@@ -21,6 +21,56 @@
 
 #include "grbl.h"
 
+/*Holding space for dummy registers*/
+DummyReg DDRA;
+DummyReg DDRB;
+DummyReg DDRC;
+DummyReg DDRD;
+
+DummyReg PORTA;
+DummyReg PORTB;
+DummyReg PORTC;
+DummyReg PORTD;
+
+DummyReg PINA;
+DummyReg PINB;
+DummyReg PINC;
+DummyReg PIND;
+
+DummyReg EEAR;
+DummyReg EECR;
+DummyReg EEDR;
+DummyReg EEMPE;
+DummyReg EEPE;
+DummyReg OCIE0A;
+DummyReg OCIE0B;
+DummyReg OCIE1A;
+DummyReg OCR1A;
+DummyReg OCR2A;
+DummyReg PCICR;
+DummyReg PCIE0;
+DummyReg PCIE1;
+DummyReg PCMSK0;
+DummyReg PCMSK1;
+DummyReg SREG;
+DummyReg TCCR0A;
+DummyReg TCCR0B;
+DummyReg TCCR1A;
+DummyReg TCCR1B;
+DummyReg TCCRA;
+DummyReg TCCR2A;
+DummyReg TCCR2B;
+DummyReg TCNT0;
+DummyReg TIMSK0;
+DummyReg TIMSK1;
+DummyReg TOIE0;
+
+DummyReg UCSR0A;
+DummyReg UCSR0B;
+DummyReg U2X0;
+DummyReg UBRR0H;
+DummyReg UBRR0L;
+DummyReg UDR0;
 
 // Declare system global variable structure
 system_t sys;
