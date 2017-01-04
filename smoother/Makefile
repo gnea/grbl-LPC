@@ -33,20 +33,25 @@ VPATH = ..
 GCC_BIN = 
 PROJECT = mbed_blinky
 
-OBJECTS = 					\
-	src/main.o 				\
-	../grbl/protocol.o		\
-	../grbl/stepper.o		\
-	../grbl/eeprom.o		\
-	../grbl/settings.o		\
-	../grbl/planner.o		\
-	../grbl/nuts_bolts.o	\
-	../grbl/limits.o		\
-	../grbl/jog.o			\
-	../grbl/print.o 		\
-	../grbl/probe.o 		\
-	../grbl/report.o 		\
-	../grbl/system.o		\
+OBJECTS = 						\
+	../grbl/coolant_control.o 	\
+	../grbl/eeprom.o 			\
+	../grbl/gcode.o 			\
+	../grbl/jog.o				\
+	../grbl/limits.o 			\
+	../grbl/main.o 				\
+	../grbl/motion_control.o 	\
+	../grbl/nuts_bolts.o 		\
+	../grbl/planner.o 			\
+	../grbl/print.o 			\
+	../grbl/probe.o				\
+	../grbl/protocol.o 			\
+	../grbl/report.o			\
+	../grbl/serial.o 			\
+	../grbl/settings.o 			\
+	../grbl/spindle_control.o	\
+	../grbl/stepper.o 			\
+	../grbl/system.o			\
 
 SYS_OBJECTS = mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/analogin_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/analogout_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/can_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/cmsis_nvic.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/ethernet_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/gpio_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/gpio_irq_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/i2c_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/mbed_board.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/pinmap.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/port_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/pwmout_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/retarget.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/rtc_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/serial_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/sleep.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/spi_api.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/startup_LPC17xx.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/system_LPC17xx.o mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM/us_ticker.o 
 INCLUDE_PATHS = -I../. -I../src -I../mbed/. -I../mbed/TARGET_LPC1768 -I../mbed/TARGET_LPC1768/TARGET_NXP -I../mbed/TARGET_LPC1768/TARGET_NXP/TARGET_LPC176X -I../mbed/TARGET_LPC1768/TARGET_NXP/TARGET_LPC176X/TARGET_MBED_LPC1768 -I../mbed/TARGET_LPC1768/TARGET_NXP/TARGET_LPC176X/device -I../mbed/TARGET_LPC1768/TOOLCHAIN_GCC_ARM -I../mbed/drivers -I../mbed/hal -I../mbed/platform 
