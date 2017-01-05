@@ -60,7 +60,7 @@
 typedef struct {
   uint32_t steps[N_AXIS];
   uint32_t step_event_count;
-  uint8_t direction_bits;
+  uint32_t direction_bits;
   #ifdef VARIABLE_SPINDLE
     uint8_t is_pwm_rate_adjusted; // Tracks motions that require constant laser power/rate
   #endif
@@ -93,13 +93,13 @@ typedef struct {
            counter_y,
            counter_z;
   #ifdef STEP_PULSE_DELAY
-    uint8_t step_bits;  // Stores out_bits output to complete the step pulse delay
+    uint32_t step_bits;  // Stores out_bits output to complete the step pulse delay
   #endif
 
   uint8_t execute_step;     // Flags step execution for each interrupt.
   uint8_t step_pulse_time;  // Step pulse reset time after step rise
-  uint8_t step_outbits;         // The next stepping-bits to be output
-  uint8_t dir_outbits;
+  uint32_t step_outbits;         // The next stepping-bits to be output
+  uint32_t dir_outbits;
   #ifdef ADAPTIVE_MULTI_AXIS_STEP_SMOOTHING
     uint32_t steps[N_AXIS];
   #endif
@@ -117,8 +117,8 @@ static uint8_t segment_buffer_head;
 static uint8_t segment_next_head;
 
 // Step and direction port invert masks.
-static uint8_t step_port_invert_mask;
-static uint8_t dir_port_invert_mask;
+static uint32_t step_port_invert_mask;
+static uint32_t dir_port_invert_mask;
 
 // Used to avoid ISR nesting of the "Stepper Driver Interrupt". Should never occur though.
 static volatile uint8_t busy;
@@ -207,8 +207,8 @@ static st_prep_t prep;
 void st_wake_up()
 {
   // Enable stepper drivers.
-  if (bit_istrue(settings.flags,BITFLAG_INVERT_ST_ENABLE)) { STEPPERS_DISABLE_PORT |= (1<<STEPPERS_DISABLE_BIT); }
-  else { STEPPERS_DISABLE_PORT &= ~(1<<STEPPERS_DISABLE_BIT); }
+  if (bit_istrue(settings.flags,BITFLAG_INVERT_ST_ENABLE)) { STEPPERS_DISABLE_PORT |= STEPPERS_DISABLE_MASK; }
+  else { STEPPERS_DISABLE_PORT &= ~STEPPERS_DISABLE_MASK; }
 
   // Initialize stepper output bits to ensure first ISR call does not step.
   st.step_outbits = step_port_invert_mask;
@@ -246,8 +246,8 @@ void st_go_idle()
     pin_state = true; // Override. Disable steppers.
   }
   if (bit_istrue(settings.flags,BITFLAG_INVERT_ST_ENABLE)) { pin_state = !pin_state; } // Apply pin invert.
-  if (pin_state) { STEPPERS_DISABLE_PORT |= (1<<STEPPERS_DISABLE_BIT); }
-  else { STEPPERS_DISABLE_PORT &= ~(1<<STEPPERS_DISABLE_BIT); }
+  if (pin_state) { STEPPERS_DISABLE_PORT |= STEPPERS_DISABLE_MASK; }
+  else { STEPPERS_DISABLE_PORT &= ~STEPPERS_DISABLE_MASK; }
 }
 
 
@@ -502,7 +502,7 @@ void stepper_init()
 {
   // Configure step and direction interface pins
   STEP_DDR |= STEP_MASK;
-  STEPPERS_DISABLE_DDR |= 1<<STEPPERS_DISABLE_BIT;
+  STEPPERS_DISABLE_DDR |= STEPPERS_DISABLE_MASK;
   DIRECTION_DDR |= DIRECTION_MASK;
 
   // Configure Timer 1: Stepper Driver Interrupt

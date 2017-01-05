@@ -28,6 +28,7 @@
 #ifndef config_h
 #define config_h
 #include "grbl.h" // For Arduino IDE compatibility.
+#include "LPC17xx.h"
 
 
 // Define CPU pin map and default settings.
@@ -584,26 +585,28 @@
 #define SERIAL_UDRE   USART_UDRE_vect
 
 // Define step pulse output pins. NOTE: All step bit pins must be on the same port.
-#define STEP_DDR        DDRD
-#define STEP_PORT       PORTD
-#define X_STEP_BIT      2  // Uno Digital Pin 2
-#define Y_STEP_BIT      3  // Uno Digital Pin 3
-#define Z_STEP_BIT      4  // Uno Digital Pin 4
+#define STEP_DDR        LPC_GPIO2->FIODIR
+#define STEP_PORT       LPC_GPIO2->FIOPIN
+#define X_STEP_BIT      0
+#define Y_STEP_BIT      1
+#define Z_STEP_BIT      2
 #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)) // All step bits
 
 // Define step direction output pins. NOTE: All direction pins must be on the same port.
-#define DIRECTION_DDR     DDRD
-#define DIRECTION_PORT    PORTD
-#define X_DIRECTION_BIT   5  // Uno Digital Pin 5
-#define Y_DIRECTION_BIT   6  // Uno Digital Pin 6
-#define Z_DIRECTION_BIT   7  // Uno Digital Pin 7
+#define DIRECTION_DDR     LPC_GPIO0->FIODIR
+#define DIRECTION_PORT    LPC_GPIO0->FIOPIN
+#define X_DIRECTION_BIT   5
+#define Y_DIRECTION_BIT   11
+#define Z_DIRECTION_BIT   20
 #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)) // All direction bits
 
 // Define stepper driver enable/disable output pin.
-#define STEPPERS_DISABLE_DDR    DDRB
-#define STEPPERS_DISABLE_PORT   PORTB
-#define STEPPERS_DISABLE_BIT    0  // Uno Digital Pin 8
-#define STEPPERS_DISABLE_MASK   (1<<STEPPERS_DISABLE_BIT)
+#define STEPPERS_DISABLE_DDR    LPC_GPIO0->FIODIR
+#define STEPPERS_DISABLE_PORT   LPC_GPIO0->FIOPIN
+#define X_DISABLE_BIT           4
+#define Y_DISABLE_BIT           10
+#define Z_DISABLE_BIT           19
+#define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT))
 
 // Define homing/hard limit switch input pins and limit interrupt vectors.
 // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
@@ -725,7 +728,7 @@
 #define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
 #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
 #define DEFAULT_INVERT_PROBE_PIN 0 // false
-#define DEFAULT_LASER_MODE 0 // false
+#define DEFAULT_LASER_MODE 1 // true
 #define DEFAULT_HOMING_ENABLE 0  // false
 #define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
 #define DEFAULT_HOMING_FEED_RATE 25.0 // mm/min

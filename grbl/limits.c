@@ -158,7 +158,7 @@ void limits_go_home(uint8_t cycle_mask)
 
   // Initialize variables used for homing computations.
   uint8_t n_cycle = (2*N_HOMING_LOCATE_CYCLE+1);
-  uint8_t step_pin[N_AXIS];
+  uint32_t step_pin[N_AXIS];
   float target[N_AXIS];
   float max_travel = 0.0;
   uint8_t idx;
@@ -180,7 +180,7 @@ void limits_go_home(uint8_t cycle_mask)
   bool approach = true;
   float homing_rate = settings.homing_seek_rate;
 
-  uint8_t limit_state, axislock, n_active_axis;
+  uint32_t limit_state, axislock, n_active_axis;
   do {
 
     system_convert_array_steps_to_mpos(target,sys_position);
