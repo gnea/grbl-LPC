@@ -324,9 +324,9 @@
 // normal-open switch and vice versa.
 // NOTE: All pins associated with the feature are disabled, i.e. XYZ limit pins, not individual axes.
 // WARNING: When the pull-ups are disabled, this requires additional wiring with pull-down resistors!
-//#define DISABLE_LIMIT_PIN_PULL_UP
-//#define DISABLE_PROBE_PIN_PULL_UP
-//#define DISABLE_CONTROL_PIN_PULL_UP
+//#define DISABLE_LIMIT_PIN_PULL_UP     Don't use; pull-up control not ported to ARM yet. pull-up is always on.  
+//#define DISABLE_PROBE_PIN_PULL_UP     Don't use; pull-up control not ported to ARM yet. pull-up is always on.  
+//#define DISABLE_CONTROL_PIN_PULL_UP   Don't use; pull-up control not ported to ARM yet. pull-up is always on.    
 
 // Sets which axis the tool length offset is applied. Assumes the spindle is always parallel with
 // the selected axis with the tool oriented toward the negative direction. In other words, a positive
@@ -610,20 +610,16 @@
 
 // Define homing/hard limit switch input pins and limit interrupt vectors.
 // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
-#define LIMIT_DDR        DDRB
-#define LIMIT_PIN        PINB
-#define LIMIT_PORT       PORTB
-#define X_LIMIT_BIT      1  // Uno Digital Pin 9
-#define Y_LIMIT_BIT      2  // Uno Digital Pin 10
-#ifdef VARIABLE_SPINDLE // Z Limit pin and spindle enabled swapped to access hardware PWM on Pin 11.
-  #define Z_LIMIT_BIT	   4 // Uno Digital Pin 12
-#else
-  #define Z_LIMIT_BIT    3  // Uno Digital Pin 11
-#endif
+#define LIMIT_DDR         LPC_GPIO0->FIODIR
+#define LIMIT_PIN         LPC_GPIO0->FIOPIN
+#define LIMIT_PORT        LPC_GPIO0->FIOPIN
+#define X_LIMIT_BIT       25  // X-MIN=24, X-MAX=25
+#define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
+#define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
 #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
-#define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
-#define LIMIT_INT_vect   PCINT0_vect
-#define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
+// hard/soft limit not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
+// hard/soft limit not ported    #define LIMIT_INT_vect   PCINT0_vect
+// hard/soft limit not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
 
 // Define spindle enable and spindle direction output pins.
 #define SPINDLE_ENABLE_DDR    DDRB

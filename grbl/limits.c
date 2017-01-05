@@ -41,8 +41,8 @@ void limits_init()
   #endif
 
   if (bit_istrue(settings.flags,BITFLAG_HARD_LIMIT_ENABLE)) {
-    LIMIT_PCMSK |= LIMIT_MASK; // Enable specific pins of the Pin Change Interrupt
-    PCICR |= (1 << LIMIT_INT); // Enable Pin Change Interrupt
+    //LIMIT_PCMSK |= LIMIT_MASK; // Enable specific pins of the Pin Change Interrupt
+    //PCICR |= (1 << LIMIT_INT); // Enable Pin Change Interrupt
   } else {
     limits_disable();
   }
@@ -58,8 +58,8 @@ void limits_init()
 // Disables hard limits.
 void limits_disable()
 {
-  LIMIT_PCMSK &= ~LIMIT_MASK;  // Disable specific pins of the Pin Change Interrupt
-  PCICR &= ~(1 << LIMIT_INT);  // Disable Pin Change Interrupt
+  //LIMIT_PCMSK &= ~LIMIT_MASK;  // Disable specific pins of the Pin Change Interrupt
+  //PCICR &= ~(1 << LIMIT_INT);  // Disable Pin Change Interrupt
 }
 
 
@@ -69,7 +69,7 @@ void limits_disable()
 uint8_t limits_get_state()
 {
   uint8_t limit_state = 0;
-  uint8_t pin = (LIMIT_PIN & LIMIT_MASK);
+  uint32_t pin = (LIMIT_PIN & LIMIT_MASK);
   #ifdef INVERT_LIMIT_PIN_MASK
     pin ^= INVERT_LIMIT_PIN_MASK;
   #endif
