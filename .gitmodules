@@ -1,3 +1,0 @@
-[submodule "smoother/mbed"]
-	path = smoother/mbed
-	url = git@github.com:chamnit/smoother-libmbed.git
