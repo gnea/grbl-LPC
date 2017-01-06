@@ -310,7 +310,7 @@ uint8_t mc_probe_cycle(float *target, plan_line_data_t *pl_data, uint8_t parser_
   else { return(GC_PROBE_FAIL_END); } // Failed to trigger probe within travel. With or without error.
 }
 
-
+#ifdef PARKING_ENABLE
 // Plans and executes the single special motion case for parking. Independent of main planner buffer.
 // NOTE: Uses the always free planner ring buffer head to store motion parameters for execution.
 void mc_parking_motion(float *parking_target, plan_line_data_t *pl_data)
@@ -336,7 +336,7 @@ void mc_parking_motion(float *parking_target, plan_line_data_t *pl_data)
   }
 
 }
-
+#endif
 
 // Method to ready the system to reset by setting the realtime reset command and killing any
 // active processes in the system. This also checks if a system reset is issued while Grbl
