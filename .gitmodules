@@ -1,0 +1,6 @@
+[submodule "CMSIS_5"]
+	path = CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5.git
+[submodule "NXP_LPC"]
+	path = NXP_LPC
+	url = https://github.com/ARM-software/NXP_LPC.git
