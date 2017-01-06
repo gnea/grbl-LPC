@@ -351,57 +351,57 @@ uint8_t system_check_travel_limits(float *target)
 
 // Special handlers for setting and clearing Grbl's real-time execution flags.
 void system_set_exec_state_flag(uint8_t mask) {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_state |= (mask);
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_clear_exec_state_flag(uint8_t mask) {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_state &= ~(mask);
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_set_exec_alarm(uint8_t code) {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_alarm = code;
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_clear_exec_alarm() {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_alarm = 0;
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_set_exec_motion_override_flag(uint8_t mask) {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_motion_override |= (mask);
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_set_exec_accessory_override_flag(uint8_t mask) {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_accessory_override |= (mask);
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_clear_exec_motion_overrides() {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_motion_override = 0;
-  SREG = sreg;
+  if(en) __enable_irq();
 }
 
 void system_clear_exec_accessory_overrides() {
-  uint8_t sreg = SREG;
-  cli();
+  uint8_t en = __get_PRIMASK();
+  __disable_irq();
   sys_rt_exec_accessory_override = 0;
-  SREG = sreg;
+  if(en) __enable_irq();
 }
