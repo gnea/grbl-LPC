@@ -28,7 +28,6 @@ INCLUDES =                                        \
     -I CMSIS_5/Device/ARM/ARMCM3/Include          \
     -I grbl                                       \
     -I lpc17xx                                    \
-    -I NXP_LPC/LPC1700/CMSIS/Driver/Config        \
     -I smoother                                   \
 
 # Compile all .c and .cpp files in these directories
@@ -95,6 +94,7 @@ CMSIS_CFLAGS = $(CFLAGS)                \
 	-Wno-switch                         \
 	-Wno-unused-but-set-variable        \
 	-Wno-unused-variable                \
+    -Wno-int-conversion                 \
     -Wno-missing-field-initializers     \
     -Wno-unused-function                \
     -Wno-unused-parameter               \
@@ -145,7 +145,7 @@ build/src/%.o : %.cpp
 default: build/$(PROJECT).hex build/$(PROJECT).bin
 
 build/$(PROJECT).elf: $(SRC_OBJECTS) $(CMSIS_OBJECTS) $(LINKER_SCRIPT)
-	$(LD) -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
+	$(LD) -mcpu=cortex-m3 -mthumb -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
 
 build/$(PROJECT).bin : build/$(PROJECT).elf
 	$(OBJCOPY) -O binary $^ $@
