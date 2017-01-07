@@ -34,6 +34,8 @@ uint8_t serial_tx_buffer_head = 0;
 volatile uint8_t serial_tx_buffer_tail = 0;
 
 extern ARM_DRIVER_USART Driver_USART0;
+ARM_DRIVER_USART serialDriver = Driver_USART0;
+
 void serialInterrupt(uint32_t event);
 void legacy_ISR(uint8_t data);
 uint8_t arm_rx_buf[1];
@@ -74,14 +76,14 @@ void serial_init()
                       ARM_USART_STOP_BITS_1 |
                       ARM_USART_FLOW_CONTROL_NONE;
 
-  Driver_USART0.Initialize(serialInterrupt);
-  Driver_USART0.PowerControl(ARM_POWER_FULL);
-  Driver_USART0.Control(uartFlags, 115200);
-  Driver_USART0.Control(ARM_USART_CONTROL_TX, 1);
-  Driver_USART0.Control(ARM_USART_CONTROL_RX, 1);
+  serialDriver.Initialize(serialInterrupt);
+  serialDriver.PowerControl(ARM_POWER_FULL);
+  serialDriver.Control(uartFlags, 115200);
+  serialDriver.Control(ARM_USART_CONTROL_TX, 1);
+  serialDriver.Control(ARM_USART_CONTROL_RX, 1);
 
   //Issue first read
-  Driver_USART0.Receive(arm_rx_buf, 1);
+  serialDriver.Receive(arm_rx_buf, 1);
 }
 
 void legacy_serial_init()
@@ -109,7 +111,7 @@ void serial_write(uint8_t data) {
   //provides one. But we have to have a place to keep the data safe until the driver has completed
   //the transmit and is ready for more bytes.
 
-  while (Driver_USART0.GetStatus().tx_busy) {
+  while (serialDriver.GetStatus().tx_busy) {
     // TODO: Restructure st_prep_buffer() calls to be executed here during a long print.
     if (sys_rt_exec_state & EXEC_RESET) { return; } // Only check for abort to avoid an endless loop.
   }
@@ -117,7 +119,7 @@ void serial_write(uint8_t data) {
   //Issue the write to the driver, bypassing our tx fifo (driver has one already), and bypassing
   // the original GRBL TX Interrupt.
   serial_tx_buffer[0] = data;
-  Driver_USART0.Send(serial_tx_buffer, 1);
+  serialDriver.Send(serial_tx_buffer, 1);
 }
 
 // Writes one byte to the TX serial buffer. Called by main program.
@@ -147,7 +149,7 @@ void serialInterrupt(uint32_t event) {
   if (event & ARM_USART_EVENT_RECEIVE_COMPLETE) {
     //We got our single byte read, so put the data into our fifo and issue another read
     legacy_ISR(arm_rx_buf[0]);
-    Driver_USART0.Receive(arm_rx_buf, 1);
+    serialDriver.Receive(arm_rx_buf, 1);
   }
 }
 
