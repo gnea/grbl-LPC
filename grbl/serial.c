@@ -34,7 +34,7 @@ uint8_t serial_tx_buffer_head = 0;
 volatile uint8_t serial_tx_buffer_tail = 0;
 
 extern ARM_DRIVER_USART Driver_USART0;
-ARM_DRIVER_USART serialDriver = Driver_USART0;
+#define serialDriver Driver_USART0
 
 void serialInterrupt(uint32_t event);
 void legacy_ISR(uint8_t data);
