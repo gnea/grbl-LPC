@@ -20,6 +20,7 @@
 */
 
 #include "grbl.h"
+#include "Driver_USART.h"
 
 #define RX_RING_BUFFER (RX_BUFFER_SIZE+1)
 #define TX_RING_BUFFER (TX_BUFFER_SIZE+1)
@@ -32,6 +33,10 @@ uint8_t serial_tx_buffer[TX_RING_BUFFER];
 uint8_t serial_tx_buffer_head = 0;
 volatile uint8_t serial_tx_buffer_tail = 0;
 
+extern ARM_DRIVER_USART Driver_USART0;
+void serialInterrupt(uint32_t event);
+void legacy_ISR(uint8_t data);
+uint8_t arm_rx_buf[1];
 
 // Returns the number of bytes available in the RX serial buffer.
 uint8_t serial_get_rx_buffer_available()
@@ -61,8 +66,25 @@ uint8_t serial_get_tx_buffer_count()
   return (TX_RING_BUFFER - (ttail-serial_tx_buffer_head));
 }
 
-
 void serial_init()
+{
+  int32_t uartFlags = ARM_USART_MODE_ASYNCHRONOUS |
+                      ARM_USART_DATA_BITS_8 |
+                      ARM_USART_PARITY_NONE |
+                      ARM_USART_STOP_BITS_1 |
+                      ARM_USART_FLOW_CONTROL_NONE;
+
+  Driver_USART0.Initialize(serialInterrupt);
+  Driver_USART0.PowerControl(ARM_POWER_FULL);
+  Driver_USART0.Control(uartFlags, 115200);
+  Driver_USART0.Control(ARM_USART_CONTROL_TX, 1);
+  Driver_USART0.Control(ARM_USART_CONTROL_RX, 1);
+
+  //Issue first read
+  Driver_USART0.Receive(arm_rx_buf, 1);
+}
+
+void legacy_serial_init()
 {
   // Set baud rate
   #if BAUD_RATE < 57600
@@ -81,9 +103,25 @@ void serial_init()
   // defaults to 8-bit, no parity, 1 stop bit
 }
 
-
 // Writes one byte to the TX serial buffer. Called by main program.
 void serial_write(uint8_t data) {
+  //We're just really cheating here. We dont need the grbl fifo because the driver already
+  //provides one. But we have to have a place to keep the data safe until the driver has completed
+  //the transmit and is ready for more bytes.
+
+  while (Driver_USART0.GetStatus().tx_busy) {
+    // TODO: Restructure st_prep_buffer() calls to be executed here during a long print.
+    if (sys_rt_exec_state & EXEC_RESET) { return; } // Only check for abort to avoid an endless loop.
+  }
+
+  //Issue the write to the driver, bypassing our tx fifo (driver has one already), and bypassing
+  // the original GRBL TX Interrupt.
+  serial_tx_buffer[0] = data;
+  Driver_USART0.Send(serial_tx_buffer, 1);
+}
+
+// Writes one byte to the TX serial buffer. Called by main program.
+void legacy_serial_write(uint8_t data) {
   // Calculate next head
   uint8_t next_head = serial_tx_buffer_head + 1;
   if (next_head == TX_RING_BUFFER) { next_head = 0; }
@@ -102,9 +140,20 @@ void serial_write(uint8_t data) {
   UCSR0B |=  (1 << UDRIE0);
 }
 
+//Device driver interrupt
+// The CMSIS Driver doesn't have seperate interrupts/callbacks available for TX and RX but instead
+// is a single composite interrupt.
+void serialInterrupt(uint32_t event) {
+  if (event & ARM_USART_EVENT_RECEIVE_COMPLETE) {
+    //We got our single byte read, so put the data into our fifo and issue another read
+    legacy_ISR(arm_rx_buf[0]);
+    Driver_USART0.Receive(arm_rx_buf, 1);
+  }
+}
 
+//We don't use TX interrupts directly with the ARM Driver.
 // Data Register Empty Interrupt handler
-ISR(SERIAL_UDRE)
+void legacy_TX_ISR(void* SERIAL_UDRE)
 {
   uint8_t tail = serial_tx_buffer_tail; // Temporary serial_tx_buffer_tail (to optimize for volatile)
 
@@ -139,10 +188,9 @@ uint8_t serial_read()
   }
 }
 
-
-ISR(SERIAL_RX)
+//Legacy ISR, slightly modified to receive data from ARM callback (serialInterrupt) above.
+void legacy_ISR(uint8_t data)
 {
-  uint8_t data = UDR0;
   uint8_t next_head;
 
   // Pick off realtime command characters directly from the serial stream. These characters are
