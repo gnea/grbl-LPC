@@ -20,6 +20,7 @@
 */
 
 #include "grbl.h"
+#include "current_control.h"
 
 /*Holding space for dummy registers*/
 DummyReg DDRA;
@@ -89,6 +90,7 @@ int main(void)
   // Initialize system upon power-up.
   serial_init();   // Setup serial baud rate and interrupts
   settings_init(); // Load Grbl settings from EEPROM
+  current_init();  // Configure stepper driver current
   stepper_init();  // Configure stepper pins and interrupt timers
   system_init();   // Configure pinout pins and pin-change interrupt
 

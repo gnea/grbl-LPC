@@ -696,22 +696,31 @@
 #define SPINDLE_PWM_PORT  PORTB
 #define SPINDLE_PWM_BIT	  3    // Uno Digital Pin 11
 
+#define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
+#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
+#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
+#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
+
 // Paste default settings definitions here.
-#define DEFAULT_X_STEPS_PER_MM 250.0
-#define DEFAULT_Y_STEPS_PER_MM 250.0
-#define DEFAULT_Z_STEPS_PER_MM 250.0
-#define DEFAULT_X_MAX_RATE 500.0 // mm/min
-#define DEFAULT_Y_MAX_RATE 500.0 // mm/min
+#define DEFAULT_X_STEPS_PER_MM 158.0
+#define DEFAULT_Y_STEPS_PER_MM 158.0
+#define DEFAULT_Z_STEPS_PER_MM 158.0
+#define DEFAULT_X_MAX_RATE 30000 // mm/min
+#define DEFAULT_Y_MAX_RATE 30000 // mm/min
 #define DEFAULT_Z_MAX_RATE 500.0 // mm/min
-#define DEFAULT_X_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-#define DEFAULT_Y_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-#define DEFAULT_Z_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+#define DEFAULT_X_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_Y_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_Z_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_X_CURRENT 0.4 // amps
+#define DEFAULT_Y_CURRENT 1.5 // amps
+#define DEFAULT_Z_CURRENT 0.0 // amps
+#define DEFAULT_A_CURRENT 0.0  // amps
 #define DEFAULT_X_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
-#define DEFAULT_STEP_PULSE_MICROSECONDS 10
+#define DEFAULT_STEP_PULSE_MICROSECONDS 1
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
 #define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)

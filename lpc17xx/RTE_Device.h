@@ -249,7 +249,7 @@
 
 // <e> I2C1 (Inter-integrated Circuit Interface 1) [Driver_I2C1]
 // <i> Configuration settings for Driver_I2C1 in component ::Drivers:I2C
-#define RTE_I2C1                        0
+#define RTE_I2C1                        1
 
 //   <o> I2C1_SCL Pin <0=>P0_1 <1=>P0_20
 #define RTE_I2C1_SCL_PORT_ID            0

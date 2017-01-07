@@ -34,6 +34,7 @@ INCLUDES =                                        \
 # Hack: .c files are compiled as if they were c++.
 SRC_DIRS =          \
 	grbl            \
+    smoother        \
 
 # Compile all .c files in these directories, except ones on the exclude list.
 # These files get extra -Wno-* flags to reduce spam.
@@ -145,7 +146,7 @@ build/src/%.o : %.cpp
 default: build/$(PROJECT).hex build/$(PROJECT).bin
 
 build/$(PROJECT).elf: $(SRC_OBJECTS) $(CMSIS_OBJECTS) $(LINKER_SCRIPT)
-	$(LD) -mcpu=cortex-m3 -mthumb -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
+	$(LD) -mcpu=cortex-m3 -mthumb -specs=nosys.specs -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
 
 build/$(PROJECT).bin : build/$(PROJECT).elf
 	$(OBJCOPY) -O binary $^ $@
@@ -161,4 +162,4 @@ flash: build/$(PROJECT).hex
 clean:
 	$(call RM,build)
 
--include $(wildcard build/*.d build/cmsis/*.d)
+-include $(wildcard build/src/*.d build/cmsis/*.d)
