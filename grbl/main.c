@@ -88,6 +88,7 @@ volatile uint8_t sys_rt_exec_accessory_override; // Global realtime executor bit
 int main(void)
 {
   // Initialize system upon power-up.
+  delay_init();    // Setup delay timer
   serial_init();   // Setup serial baud rate and interrupts
   settings_init(); // Load Grbl settings from EEPROM
   current_init();  // Configure stepper driver current
