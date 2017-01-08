@@ -24,15 +24,25 @@
 
 void delay_init();
 
+// Get current time in clock cycles
+inline uint32_t get_time()
+{
+    return LPC_TIM3->TC;
+}
+
+// Wait until get_time() is numCycles past startTime. Handles timer wrap.
+inline void delay_loop(uint32_t startTime, uint32_t numCycles)
+{
+    while (get_time() - startTime < numCycles)
+        ;
+}
+
 inline void delay_us(uint32_t us)
 {
-    uint32_t start = LPC_TIM3->TC;
-    uint32_t cycles = uint32_t(uint64_t(SystemCoreClock) * us / 1000000);
-    while (LPC_TIM3->TC - start < cycles)
-        ;
+    delay_loop(get_time(), uint32_t(uint64_t(SystemCoreClock) * us / 1'000'000));
 }
 
 inline void delay_ms(uint32_t ms)
 {
-    return delay_us(ms * 1000);
+    delay_loop(get_time(), uint32_t(uint64_t(SystemCoreClock) * ms / 1000));
 }

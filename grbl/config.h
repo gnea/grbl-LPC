@@ -415,14 +415,18 @@
 // NOTE: Uncomment to enable. The recommended delay must be > 3us, and, when added with the
 // user-supplied step pulse time, the total time must not exceed 127us. Reported successful
 // values for certain setups have ranged from 5 to 20us.
-// #define STEP_PULSE_DELAY 10 // Step pulse delay in microseconds. Default disabled.
+// not ported; don't use. #define STEP_PULSE_DELAY 10 // Step pulse delay in microseconds. Default disabled.
+
+// Creates a delay between setting the direction pin and pulsing the step pin. This delay
+// lives inside the main Grbl interrupt.
+#define STEP_PULSE_DELAY_NS 200 // Step pulse delay in nanoseconds.
 
 // The number of linear motions in the planner buffer to be planned at any give time. The vast
 // majority of RAM that Grbl uses is based on this buffer size. Only increase if there is extra
 // available RAM, like when re-compiling for a Mega2560. Or decrease if the Arduino begins to
 // crash due to the lack of available RAM or if the CPU is having trouble keeping up with planning
 // new incoming motions as they are executed.
-// #define BLOCK_BUFFER_SIZE 16 // Uncomment to override default in planner.h.
+#define BLOCK_BUFFER_SIZE 32 // Uncomment to override default in planner.h.
 
 // Governs the size of the intermediary step segment buffer between the step execution algorithm
 // and the planner blocks. Each segment is set of steps executed at a constant velocity over a
@@ -617,9 +621,9 @@
 #define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
 #define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
 #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
-// hard/soft limit not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
-// hard/soft limit not ported    #define LIMIT_INT_vect   PCINT0_vect
-// hard/soft limit not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
+// hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
+// hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
+// hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
 
 // Define spindle enable and spindle direction output pins.
 #define SPINDLE_ENABLE_DDR    DDRB
