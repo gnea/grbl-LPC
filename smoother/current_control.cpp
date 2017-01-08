@@ -37,10 +37,16 @@ void current_init()
     CURRENT_I2C.Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
     CURRENT_I2C.Control(ARM_I2C_BUS_CLEAR, 0);
 
+#ifdef CURRENT_MCP44XX_ADDR
     uint8_t init1[] = {0x40, 0xff};
     uint8_t init2[] = {0xA0, 0xff};
     CURRENT_I2C.MasterTransmit(CURRENT_MCP44XX_ADDR, init1, 2, false);
+    while (CURRENT_I2C.GetStatus().busy)
+        ;
     CURRENT_I2C.MasterTransmit(CURRENT_MCP44XX_ADDR, init2, 2, false);
+    while (CURRENT_I2C.GetStatus().busy)
+        ;
+#endif
 
     set_current(0, DEFAULT_X_CURRENT);
     set_current(1, DEFAULT_Y_CURRENT);
