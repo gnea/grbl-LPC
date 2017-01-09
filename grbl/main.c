@@ -22,6 +22,8 @@
 #include "grbl.h"
 #include "current_control.h"
 
+void isr_init();
+
 /*Holding space for dummy registers*/
 DummyReg DDRA;
 DummyReg DDRB;
@@ -43,28 +45,14 @@ DummyReg EECR;
 DummyReg EEDR;
 DummyReg EEMPE;
 DummyReg EEPE;
-DummyReg OCIE0A;
-DummyReg OCIE0B;
-DummyReg OCIE1A;
-DummyReg OCR1A;
 DummyReg OCR2A;
 DummyReg PCICR;
 DummyReg PCIE0;
 DummyReg PCIE1;
 DummyReg PCMSK0;
 DummyReg PCMSK1;
-DummyReg SREG;
-DummyReg TCCR0A;
-DummyReg TCCR0B;
-DummyReg TCCR1A;
-DummyReg TCCR1B;
-DummyReg TCCRA;
 DummyReg TCCR2A;
 DummyReg TCCR2B;
-DummyReg TCNT0;
-DummyReg TIMSK0;
-DummyReg TIMSK1;
-DummyReg TOIE0;
 
 DummyReg UCSR0A;
 DummyReg UCSR0B;
@@ -88,6 +76,7 @@ volatile uint8_t sys_rt_exec_accessory_override; // Global realtime executor bit
 int main(void)
 {
   // Initialize system upon power-up.
+  isr_init();      // Set ISR priorities
   delay_init();    // Setup delay timer
   serial_init();   // Setup serial baud rate and interrupts
   settings_init(); // Load Grbl settings from EEPROM
