@@ -22,9 +22,11 @@
 
 void isr_init()
 {
-    // Set all interrupts to lowest priority
+    // Set all interrupts and system handlers to lowest priority
     for (auto &ip : NVIC->IP)
-        ip = 31;
+        ip = 31 << 3;
+    for (auto &shp : SCB->SHP)
+        shp = 31 << 3;
 
     // Stepper ISR needs highest priority
     NVIC->IP[TIMER1_IRQn] = 0;
