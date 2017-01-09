@@ -372,6 +372,9 @@ extern "C" void TIMER1_IRQHandler()
       #endif
 
     } else {
+      // Reset stepping pins after delay
+      delay_loop(step_start_time, st.step_pulse_time);
+      STEP_PORT = (STEP_PORT & ~STEP_MASK) | (step_port_invert_mask & STEP_MASK);
       // Segment buffer empty. Shutdown.
       st_go_idle();
       #ifdef VARIABLE_SPINDLE
@@ -379,9 +382,6 @@ extern "C" void TIMER1_IRQHandler()
         if (st.exec_block->is_pwm_rate_adjusted) { spindle_set_speed(SPINDLE_PWM_OFF_VALUE); }
       #endif
       system_set_exec_state_flag(EXEC_CYCLE_STOP); // Flag main program for cycle end
-      // Reset stepping pins after delay
-      delay_loop(step_start_time, st.step_pulse_time);
-      STEP_PORT = (STEP_PORT & ~STEP_MASK) | (step_port_invert_mask & STEP_MASK);
       return; // Nothing to do but exit.
     }
   }
