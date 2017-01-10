@@ -38,24 +38,27 @@ void fifo_init(fifo_t *fifo, U8 *buf)
 }
 
 
+// TBF: only non-isr may call this
 BOOL fifo_put(fifo_t *fifo, U8 c)
 {
-	int next;
+	int tail = fifo->tail;
+	int head = fifo->head;
 	
 	// check if FIFO has room
-	next = (fifo->head + 1) % VCOM_FIFO_SIZE;
-	if (next == fifo->tail) {
+	int next = (head + 1) % VCOM_FIFO_SIZE;
+	if (next == tail) {
 		// full
 		return FALSE;
 	}
 	
-	fifo->buf[fifo->head] = c;
+	fifo->buf[head] = c;
 	fifo->head = next;
 	
 	return TRUE;
 }
 
 
+// TBF: only USB isr may call this
 BOOL fifo_get(fifo_t *fifo, U8 *pc)
 {
 	int next;
@@ -74,12 +77,14 @@ BOOL fifo_get(fifo_t *fifo, U8 *pc)
 }
 
 
+// TBF: only USB isr may call this
 int fifo_avail(fifo_t *fifo)
 {
 	return (VCOM_FIFO_SIZE + fifo->head - fifo->tail) % VCOM_FIFO_SIZE;
 }
 
 
+// TBF: only USB isr may call this
 int fifo_free(fifo_t *fifo)
 {
 	return (VCOM_FIFO_SIZE - 1 - fifo_avail(fifo));

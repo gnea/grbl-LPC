@@ -26,13 +26,14 @@
 */
 
 #include "lpcusb_type.h"
+#include <atomic>
 
 #define VCOM_FIFO_SIZE	512
 
 typedef struct {
-	int		head;
-	int 	tail;
-	U8		*buf;
+	std::atomic<int> head;
+	std::atomic<int> tail;
+	U8  *buf;
 } fifo_t;
 
 void fifo_init(fifo_t *fifo, U8 *buf);

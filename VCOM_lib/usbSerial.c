@@ -261,7 +261,7 @@ static void BulkIn(U8 bEP, U8 bEPStatus)
 		}
 	}
 	iLen = i;
-	
+
 	// send over USB
 	if (iLen > 0) {
 		USBHwEPWrite(bEP, abBulkBuf, iLen);
@@ -435,7 +435,7 @@ void VCOM_puts(const char* str)
 {
 	while(*str != '\0')
 	{
-		VCOM_putchar(*str++);
+		VCOM_putc(*str++);
 	}
 }
 void VCOM_putc(char c)
