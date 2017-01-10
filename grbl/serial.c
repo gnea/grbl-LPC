@@ -33,8 +33,8 @@
 #define TX_RING_BUFFER (TX_BUFFER_SIZE+1)
 
 uint8_t serial_rx_buffer[RX_RING_BUFFER];
-uint8_t serial_rx_buffer_head = 0;
-volatile uint8_t serial_rx_buffer_tail = 0;
+uint16_t serial_rx_buffer_head = 0;
+volatile uint16_t serial_rx_buffer_tail = 0;
 
 uint8_t serial_tx_buffer[TX_RING_BUFFER];
 uint8_t serial_tx_buffer_head = 0;
@@ -50,9 +50,9 @@ void legacy_ISR(uint8_t data);
 uint8_t arm_rx_buf[1];
 
 // Returns the number of bytes available in the RX serial buffer.
-uint8_t serial_get_rx_buffer_available()
+uint16_t serial_get_rx_buffer_available()
 {
-  uint8_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
+  uint16_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
   if (serial_rx_buffer_head >= rtail) { return(RX_BUFFER_SIZE - (serial_rx_buffer_head-rtail)); }
   return((rtail-serial_rx_buffer_head-1));
 }
@@ -60,9 +60,9 @@ uint8_t serial_get_rx_buffer_available()
 
 // Returns the number of bytes used in the RX serial buffer.
 // NOTE: Deprecated. Not used unless classic status reports are enabled in config.h.
-uint8_t serial_get_rx_buffer_count()
+uint16_t serial_get_rx_buffer_count()
 {
-  uint8_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
+  uint16_t rtail = serial_rx_buffer_tail; // Copy to limit multiple calls to volatile
   if (serial_rx_buffer_head >= rtail) { return(serial_rx_buffer_head-rtail); }
   return (RX_BUFFER_SIZE - (rtail-serial_rx_buffer_head));
 }
@@ -201,7 +201,7 @@ void legacy_TX_ISR(void* SERIAL_UDRE)
 // Fetches the first byte in the serial read buffer. Called by main program.
 uint8_t serial_read()
 {
-  uint8_t tail = serial_rx_buffer_tail; // Temporary serial_rx_buffer_tail (to optimize for volatile)
+  uint16_t tail = serial_rx_buffer_tail; // Temporary serial_rx_buffer_tail (to optimize for volatile)
   if (serial_rx_buffer_head == tail) {
     return SERIAL_NO_DATA;
   } else {
@@ -218,7 +218,7 @@ uint8_t serial_read()
 //Legacy ISR, slightly modified to receive data from ARM callback (serialInterrupt) above.
 void legacy_ISR(uint8_t data)
 {
-  uint8_t next_head;
+  uint16_t next_head;
 
   // Pick off realtime command characters directly from the serial stream. These characters are
   // not passed into the main buffer, but these set system state flag bits for realtime execution.

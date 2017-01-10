@@ -502,7 +502,7 @@ void report_realtime_status()
       printPgmString(PSTR("|Bf:"));
       print_uint8_base10(plan_get_block_buffer_available());
       serial_write(',');
-      print_uint8_base10(serial_get_rx_buffer_available());
+      print_uint32_base10(serial_get_rx_buffer_available());
     }
   #endif
 

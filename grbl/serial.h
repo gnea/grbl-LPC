@@ -24,7 +24,7 @@
 
 
 #ifndef RX_BUFFER_SIZE
-  #define RX_BUFFER_SIZE 128
+  #define RX_BUFFER_SIZE 1024
 #endif
 #ifndef TX_BUFFER_SIZE
   #ifdef USE_LINE_NUMBERS
@@ -49,11 +49,11 @@ uint8_t serial_read();
 void serial_reset_read_buffer();
 
 // Returns the number of bytes available in the RX serial buffer.
-uint8_t serial_get_rx_buffer_available();
+uint16_t serial_get_rx_buffer_available();
 
 // Returns the number of bytes used in the RX serial buffer.
 // NOTE: Deprecated. Not used unless classic status reports are enabled in config.h.
-uint8_t serial_get_rx_buffer_count();
+uint16_t serial_get_rx_buffer_count();
 
 // Returns the number of bytes used in the TX serial buffer.
 // NOTE: Not used except for debugging and ensuring no TX bottlenecks.
