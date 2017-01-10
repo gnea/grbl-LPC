@@ -60,6 +60,9 @@ void VCOM_gets_echo(char *str); // gets string terminated in '\r' or '\n' and ec
 
 */
 
+/* Modified by Todd Fleming (TBF), 2017
+   Replaced read polling API with callback API
+*/
 
 #include "usbSerial.h"
 
@@ -78,10 +81,12 @@ static U8 abBulkBuf[64];
 static U8 abClassReqData[8];
 
 static U8 txdata[VCOM_FIFO_SIZE];
-static U8 rxdata[VCOM_FIFO_SIZE];
+//static U8 rxdata[VCOM_FIFO_SIZE];
 
 static fifo_t txfifo;
-static fifo_t rxfifo;
+//static fifo_t rxfifo;
+
+static UsbSerialReadCallback* usbSerialReadCallback = nullptr;
 
 // forward declaration of interrupt handler
 void USBIntHandler(void);
@@ -207,15 +212,20 @@ static const U8 abDescriptors[] = {
  */
 static void BulkOut(U8 bEP, U8 bEPStatus)
 {
-	int i, iLen;
+	int iLen;
 	bEPStatus = bEPStatus;
+	/* TBF: replaced rxfifo with callback
 	if (fifo_free(&rxfifo) < MAX_PACKET_SIZE) {
 		// may not fit into fifo
 		return;
 	}
+	*/
 
 	// get data from USB into intermediate buffer
 	iLen = USBHwEPRead(bEP, abBulkBuf, sizeof(abBulkBuf));
+	if(usbSerialReadCallback)
+		usbSerialReadCallback(abBulkBuf, iLen);
+	/* TBF: replaced rxfifo with callback
 	for (i = 0; i < iLen; i++) {
 		// put into FIFO
 		if (!fifo_put(&rxfifo, abBulkBuf[i])) {
@@ -224,6 +234,7 @@ static void BulkOut(U8 bEP, U8 bEPStatus)
 			break;
 		}
 	}
+	*/
 }
 
 
@@ -307,7 +318,7 @@ static BOOL HandleClassRequest(TSetupPacket *pSetup, int *piLen, U8 **ppbData)
 void VCOM_init(void)
 {
 	fifo_init(&txfifo, txdata);
-	fifo_init(&rxfifo, rxdata);
+	//fifo_init(&rxfifo, rxdata);
 }
 
 
@@ -328,13 +339,14 @@ int VCOM_putchar(int c)
 	
 	@returns character read, or EOF if character could not be read
  */
+/* TBF: replaced with callback
 int VCOM_getchar(void)
 {
 	U8 c;
 	
 	return fifo_get(&rxfifo, &c) ? c : EOF;
 }
-
+*/
 
 /**
 	Interrupt handler
@@ -342,7 +354,7 @@ int VCOM_getchar(void)
 	Simply calls the USB ISR
  */
 //void USBIntHandler(void)
-void USB_IRQHandler(void)
+extern "C" void USB_IRQHandler(void)
 {
 	USBHwISR();
 }
@@ -364,8 +376,10 @@ void enable_USB_interrupts(void);
 	main
 	====
 **************************************************************************/
-int usbSerialInit()
+int usbSerialInit(UsbSerialReadCallback* usbSerialReadCallback)
 {
+	::usbSerialReadCallback = usbSerialReadCallback;
+
 	// initialise stack
 	USBInit();
 
@@ -428,6 +442,7 @@ void VCOM_putc(char c)
 {
 	while(VCOM_putchar(c) == EOF);
 }
+/* TBF: replaced with callback
 char VCOM_getc()
 {
 	int c;
@@ -438,6 +453,7 @@ char VCOM_getc()
 	}
 	return (char)c;
 }
+*/
 void VCOM_putHex(uint8_t hex)
 {
 	uint8_t temp;
@@ -454,6 +470,7 @@ void VCOM_putHex(uint8_t hex)
 		
 	VCOM_putc((char)temp);
 }
+/* TBF: replaced with callback
 void VCOM_gets(char* str)
 {
 	char c;
@@ -483,7 +500,7 @@ void VCOM_gets_echo(char *str)
 	}
 	*str = '\0';
 }
-
+*/
 /* Original code by ELM_ChaN. Modified by Martin Thomas */
 int xatoi (char **str, long *res)
 {

@@ -40,9 +40,6 @@
 #ifndef _LPCUSB_TYPE_H_
 #define _LPCUSB_TYPE_H_
 
-// CodeRed - include NXP-produced type.h file
-#include "type.h"
-
 typedef unsigned char		U8;		/**< unsigned 8-bit */
 typedef unsigned short int	U16;	/**< unsigned 16-bit */
 typedef unsigned int		U32;	/**< unsigned 32-bit */
@@ -50,10 +47,10 @@ typedef unsigned int		U32;	/**< unsigned 32-bit */
 
 // CodeRed - comment out defines duplicated in NXP type.h
 
-//typedef int					BOOL;	/**< #TRUE or #FALSE */
+typedef int					BOOL;	/**< #TRUE or #FALSE */
 
-//#define	TRUE	1					/**< TRUE */
-//#define FALSE	0					/**< FALSE */
+#define	TRUE	1					/**< TRUE */
+#define FALSE	0					/**< FALSE */
 
 //#ifndef NULL
 //#define NULL	((void*)0)			/**< NULL pointer */

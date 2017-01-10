@@ -20,7 +20,14 @@
 */
 
 #include "grbl.h"
+
+#define USE_USB
+
+#ifdef USE_USB
+#include "usbSerial.h"
+#else
 #include "Driver_USART.h"
+#endif
 
 #define RX_RING_BUFFER (RX_BUFFER_SIZE+1)
 #define TX_RING_BUFFER (TX_BUFFER_SIZE+1)
@@ -33,8 +40,10 @@ uint8_t serial_tx_buffer[TX_RING_BUFFER];
 uint8_t serial_tx_buffer_head = 0;
 volatile uint8_t serial_tx_buffer_tail = 0;
 
+#ifndef USE_USB
 extern ARM_DRIVER_USART Driver_USART0;
 #define serialDriver Driver_USART0
+#endif
 
 void serialInterrupt(uint32_t event);
 void legacy_ISR(uint8_t data);
@@ -70,6 +79,12 @@ uint8_t serial_get_tx_buffer_count()
 
 void serial_init()
 {
+#ifdef USE_USB
+  usbSerialInit([](const U8* data, unsigned len) {
+    while(len--)
+      legacy_ISR(*data++);
+  });
+#else
   int32_t uartFlags = ARM_USART_MODE_ASYNCHRONOUS |
                       ARM_USART_DATA_BITS_8 |
                       ARM_USART_PARITY_NONE |
@@ -84,6 +99,7 @@ void serial_init()
 
   //Issue first read
   serialDriver.Receive(arm_rx_buf, 1);
+#endif
 }
 
 void legacy_serial_init()
@@ -107,6 +123,12 @@ void legacy_serial_init()
 
 // Writes one byte to the TX serial buffer. Called by main program.
 void serial_write(uint8_t data) {
+#ifdef USE_USB
+  while(VCOM_putchar(data) == EOF) {
+    // TODO: Restructure st_prep_buffer() calls to be executed here during a long print.
+    if (sys_rt_exec_state & EXEC_RESET) { return; } // Only check for abort to avoid an endless loop.
+  }
+#else
   //We're just really cheating here. We dont need the grbl fifo because the driver already
   //provides one. But we have to have a place to keep the data safe until the driver has completed
   //the transmit and is ready for more bytes.
@@ -120,6 +142,7 @@ void serial_write(uint8_t data) {
   // the original GRBL TX Interrupt.
   serial_tx_buffer[0] = data;
   serialDriver.Send(serial_tx_buffer, 1);
+#endif
 }
 
 // Writes one byte to the TX serial buffer. Called by main program.
@@ -145,6 +168,7 @@ void legacy_serial_write(uint8_t data) {
 //Device driver interrupt
 // The CMSIS Driver doesn't have seperate interrupts/callbacks available for TX and RX but instead
 // is a single composite interrupt.
+#ifndef USE_USB
 void serialInterrupt(uint32_t event) {
   if (event & ARM_USART_EVENT_RECEIVE_COMPLETE) {
     //We got our single byte read, so put the data into our fifo and issue another read
@@ -152,6 +176,7 @@ void serialInterrupt(uint32_t event) {
     serialDriver.Receive(arm_rx_buf, 1);
   }
 }
+#endif
 
 //We don't use TX interrupts directly with the ARM Driver.
 // Data Register Empty Interrupt handler

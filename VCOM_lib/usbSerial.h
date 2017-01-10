@@ -60,11 +60,15 @@ void VCOM_gets_echo(char *str); // gets string terminated in '\r' or '\n' and ec
 
 */
 
+/* Modified by Todd Fleming (TBF), 2017
+   Replaced read polling API with callback API
+*/
+
 #ifndef __USB_SERIAL_H__
 #define __USB_SERIAL_H__
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #include <stdarg.h>
@@ -94,8 +98,10 @@ extern "C" {
 
 #include "serial_fifo.h"
 
-int usbSerialInit(); // run once in main b4 main loop starts.
+// Receives serial data. Called by an interrupt.
+typedef void UsbSerialReadCallback(const U8* data, unsigned len);
 
+int usbSerialInit(UsbSerialReadCallback* usbSerialReadCallback); // run once in main b4 main loop starts.
 
 /*
 	Writes one character to VCOM port
@@ -110,20 +116,20 @@ int VCOM_putchar(int c);
 	
 	@returns character read, or EOF if character could not be read
  */
-int VCOM_getchar(void);
+//int VCOM_getchar(void);
 
 void VCOM_puts(const char* str); //writes a null terminated string. 
 void VCOM_putc(char c); // writes a character.
 void VCOM_putHex(uint8_t hex); // writes 0x.. hex value on the terminal.
-char VCOM_getc(); // returns character entered in the terminal. blocking function
-void VCOM_gets(char* str); // returns a string. '\r' or '\n' will terminate character collection.
-char VCOM_getc_echo(); // returns character entered and echoes the same back.
-void VCOM_gets_echo(char *str); // gets string terminated in '\r' or '\n' and echoes back the same.
+//char VCOM_getc(); // returns character entered in the terminal. blocking function
+//void VCOM_gets(char* str); // returns a string. '\r' or '\n' will terminate character collection.
+//char VCOM_getc_echo(); // returns character entered and echoes the same back.
+//void VCOM_gets_echo(char *str); // gets string terminated in '\r' or '\n' and echoes back the same.
 
 void VCOM_printf(const char* str, ...); // Original code by Elm_CHaN. Modified by Martin Thomas
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif

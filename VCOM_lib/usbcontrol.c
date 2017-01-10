@@ -118,6 +118,7 @@ static void StallControlPipe(U8 bEPStat)
 // dump setup packet
 	DBG("STALL on [");
 	pb = (U8 *)&Setup;
+	pb = pb;
 	for (i = 0; i < 8; i++) {
 		DBG(" %02x", *pb++);
 	}

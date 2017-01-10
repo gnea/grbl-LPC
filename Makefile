@@ -29,12 +29,14 @@ INCLUDES =                                        \
     -I grbl                                       \
     -I lpc17xx                                    \
     -I smoother                                   \
+    -I VCOM_lib                                   \
 
 # Compile all .c and .cpp files in these directories
 # Hack: .c files are compiled as if they were c++.
 SRC_DIRS =          \
 	grbl            \
     smoother        \
+    VCOM_lib        \
 
 # Compile all .c files in these directories, except ones on the exclude list.
 # These files get extra -Wno-* flags to reduce spam.
