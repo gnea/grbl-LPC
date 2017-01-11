@@ -39,6 +39,7 @@
 #include <stdbool.h>
 
 // Define the Grbl system include files. NOTE: Do not alter organization.
+#include "debug.h"
 #include "config.h"
 #include "delay.h"
 #include "nuts_bolts.h"
