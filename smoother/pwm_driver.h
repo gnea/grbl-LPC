@@ -26,11 +26,19 @@ typedef struct _PWM_Channel_Config {
     volatile uint32_t* MRn; //LPC_PWM1->MR1 through MR6
     uint32_t PCR_Enable_Mask;
     uint32_t LER_Enable_Mask;
-} PWM_Channel_Config;
+                                  //PWM Output Mapping  PWM1   PWM2   PWM3   PWM4   PWM5   PWM6
+    uint32_t PINSEL3_Enable_Mask; //For PWM support on (P1.18, P1.20, P1.21, P1.23, P1.24, P1.26)
+    uint32_t PINSEL4_Enable_Mask; //For PWM support on (P2.0,  P2.1,  P2.2,  P2.3,  P2.4,  P2.6)
+} const PWM_Channel_Config;
 
-extern const PWM_Channel_Config PWM1_CH1;
+extern PWM_Channel_Config PWM1_CH1;
+extern PWM_Channel_Config PWM1_CH2;
+extern PWM_Channel_Config PWM1_CH3;
+extern PWM_Channel_Config PWM1_CH4;
+extern PWM_Channel_Config PWM1_CH5;
+extern PWM_Channel_Config PWM1_CH6;
 
-void pwm_init(PWM_Channel_Config* channel, uint32_t period, uint32_t width);
+void pwm_init(PWM_Channel_Config* channel, bool primaryPin, bool secondaryPin, uint32_t period, uint32_t width);
 void pwm_set_period(uint32_t period);
 void pwm_set_width(PWM_Channel_Config* channel, uint32_t width);
 void pwm_enable(PWM_Channel_Config* channel);

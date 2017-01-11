@@ -23,7 +23,7 @@
 #include "pwm_driver.h"
 #include "LPC17xx.h"
 
-#include "grbl.h"
+//#include "grbl.h"
 
 //LPC_PWM1_BASE
 //LPC_PWM1 is of type LPC_PWM_TypeDef at Address LPC_PWM1_BASE
@@ -46,43 +46,51 @@
 const PWM_Channel_Config PWM1_CH1 = {
     &(LPC_PWM1->MR1),   //Match Register
     (1 << 9),           //PWM Enable
-    (1 << 1)            //Latch Enable Register
+    (1 << 1),           //Latch Enable Register
+    (0x2 << 4),         //PINSEL3 - P1.18
+    (0x1 << 0)          //PINSEL4 - P2.0
 };
 
 const PWM_Channel_Config PWM1_CH2 = {
     &(LPC_PWM1->MR2),   //Match Register
     (1 << 10),          //PWM Enable
-    (1 << 2)            //Latch Enable Register
+    (1 << 2),           //Latch Enable Register
+    (0x2 << 8),         //PINSEL3 - P1.20
+    (0x1 << 2)          //PINSEL4 - P2.1
 };
 
 const PWM_Channel_Config PWM1_CH3 = {
     &(LPC_PWM1->MR3),   //Match Register
     (1 << 11),          //PWM Enable
-    (1 << 3)            //Latch Enable Register
+    (1 << 3),           //Latch Enable Register
+    (0x2 << 10),        //PINSEL3 - P1.21
+    (0x1 << 4)          //PINSEL4 - P2.2
 };
 
 const PWM_Channel_Config PWM1_CH4 = {
     &(LPC_PWM1->MR4),   //Match Register
     (1 << 12),          //PWM Enable
-    (1 << 4)            //Latch Enable Register
+    (1 << 4),           //Latch Enable Register
+    (0x2 << 14),        //PINSEL3 - P1.23
+    (0x1 << 6)          //PINSEL4 - P2.3
 };
 
 const PWM_Channel_Config PWM1_CH5 = {
     &(LPC_PWM1->MR5),   //Match Register
     (1 << 13),          //PWM Enable
-    (1 << 5)            //Latch Enable Register
+    (1 << 5),           //Latch Enable Register
+    (0x2 << 16),        //PINSEL3 - P1.24
+    (0x1 << 8)          //PINSEL4 - P2.4
 };
 
 const PWM_Channel_Config PWM1_CH6 = {
     &(LPC_PWM1->MR6),   //Match Register
     (1 << 14),          //PWM Enable
-    (1 << 6)            //Latch Enable Register
+    (1 << 6),           //Latch Enable Register
+    (0x2 << 20),        //PINSEL3 - P1.26
+    (0x1 << 10)         //PINSEL4 - P2.6
 };
 
-
-
-
-//Smoothie board uses P2.4 and P2.5 as PWM outputs
 
 //UM10360 LPC17xx Chapter 24 - Pulse Width Modulation
 
@@ -90,26 +98,29 @@ const PWM_Channel_Config PWM1_CH6 = {
 // channel - Which of the 6 PWM channels to init.
 // period - what is the overall period, in PCLK cycles, for ALL PWMs (not just the provided one)
 //
-void pwm_init(PWM_Channel_Config* channel, uint32_t period, uint32_t width) {
-    //Power up PCONP
+void pwm_init(PWM_Channel_Config* channel, bool primaryPin, bool secondaryPin, uint32_t period, uint32_t width) {
 
-    //Match Control - Continous operation (no interrupts, no timer reset)
-    LPC_PWM1->MCR = 0x0000;
+    //Power up PWM Circuitry - Defaulted to on at reset, but doesn't hurt to make sure
+    LPC_SC->PCONP |= 1 << 6; // Power up the PWM
+
+    //Pin mode selections
+    if (primaryPin) LPC_PINCON->PINSEL3 |= channel->PINSEL3_Enable_Mask;
+    if (secondaryPin) LPC_PINCON->PINSEL4 |= channel->PINSEL4_Enable_Mask;
+
+    //PWM Control Register - Disable output for channel
+    LPC_PWM1->PCR &= ~channel->PCR_Enable_Mask;
+
+    //Match Control - Continous operation (no interrupts, reset counter on MSR0 match (period))
+    LPC_PWM1->MCR = (1 << 1); 
 
     //PWM Control Register - Single Edge (0 for bits 2-6) mode for all PWMs
     LPC_PWM1->PCR &= 0xFF00;
     
-    //PWM Control Register - Disable output for channel
-    LPC_PWM1->PCR &= ~channel->PCR_Enable_Mask;
-
     //Disable Capture
     LPC_PWM1->CCR = 0x0000;
 
     //PWM Timer Control Register - Counter Enable, PWM Enable
-    LPC_PWM1->TCR = (1 << 0) | (1 << 3);
-
-    //PWM Counter Control Register - Use Timer Mode (Counter Mode is for external clocks, not PWM)
-    LPC_PWM1->CTCR = 0x0000;
+    LPC_PWM1->TCR = (1 << 0) | (1 << 2);
 
     pwm_set_period(period);
     pwm_set_width(channel, width);
@@ -119,14 +130,14 @@ void pwm_set_period(uint32_t period) {
     LPC_PWM1->MR0 = period;
 
     //If we are running, this will make the MRx register on the next cycle
-    LPC_PWM1->LER = (1 << 0);
+    LPC_PWM1->LER = 0x00000001;
 }
 
 void pwm_set_width(PWM_Channel_Config* channel, uint32_t width) {
     *(channel->MRn) = width;
 
     //If we are running, this will make the MRx register on the next cycle
-    LPC_PWM1->LER |= channel->LER_Enable_Mask;
+    LPC_PWM1->LER = channel->LER_Enable_Mask;
 }
 
 void pwm_enable(PWM_Channel_Config* channel) {
