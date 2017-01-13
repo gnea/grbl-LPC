@@ -209,7 +209,7 @@
 // NOTE: If VARIABLE_SPINDLE is enabled(default), this option has no effect as the PWM output and
 // spindle enable are combined to one pin. If you need both this option and spindle speed PWM,
 // uncomment the config option USE_SPINDLE_DIR_AS_ENABLE_PIN below.
-// #define INVERT_SPINDLE_ENABLE_PIN // Default disabled. Uncomment to enable.
+// not ported #define INVERT_SPINDLE_ENABLE_PIN // Default disabled. Uncomment to enable.
 
 // Inverts the selected coolant pin from low-disabled/high-enabled to low-enabled/high-disabled. Useful
 // for some pre-built electronic boards.
@@ -333,11 +333,36 @@
 // tool length offset value is subtracted from the current location.
 #define TOOL_LENGTH_OFFSET_AXIS Z_AXIS // Default z-axis. Valid values are X_AXIS, Y_AXIS, or Z_AXIS.
 
-// Enables variable spindle output voltage for different RPM values. On the Arduino Uno, the spindle
-// enable pin will output 5V for maximum RPM with 256 intermediate levels and 0V when disabled.
-// NOTE: IMPORTANT for Arduino Unos! When enabled, the Z-limit pin D11 and spindle enable pin D12 switch!
-// The hardware PWM output on pin D11 is required for variable spindle output voltages.
+// Enables variable spindle output voltage for different RPM values.
 #define VARIABLE_SPINDLE // Default enabled. Comment to disable.
+
+// RPM Scaling on LPC17xx
+//
+// 0   SPINDLE_PWM_OFF_VALUE               SPINDLE_PERIOD
+// |   |                                   |
+// |---|---|--------------------------|----|
+//         |                          |
+//         SPINDLE_PWM_MIN_VALUE      SPINDLE_PWM_MAX_VALUE
+//                                              
+//         settings.rpm_min           settings.rpm_max
+//         |--------------------------|
+//                   ^
+//             gcode S value
+//
+//  if(S <= 0)
+//      pwm = SPINDLE_PWM_OFF_VALUE;
+//  else if(S <= settings.rpm_min)
+//      pwm = SPINDLE_PWM_MIN_VALUE;
+//  else if(S >= settings.rpm_max)
+//      pwm = SPINDLE_PWM_MAX_VALUE;
+//  else
+//      pwm = scaled value. settings.rpm_min scales to SPINDLE_PWM_MIN_VALUE. settings.rpm_max
+//            scales to SPINDLE_PWM_MAX_VALUE.
+
+#define SPINDLE_PWM_PERIOD        (SystemCoreClock / 40000)         // SystemCoreClock / frequency
+#define SPINDLE_PWM_OFF_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
+#define SPINDLE_PWM_MIN_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
+#define SPINDLE_PWM_MAX_VALUE     (SPINDLE_PWM_PERIOD * 1.0)  // SPINDLE_PWM_PERIOD * fraction
 
 // Used by variable spindle output only. This forces the PWM output to a minimum duty cycle when enabled.
 // The PWM pin will still read 0V when the spindle is disabled. Most users will not need this option, but
@@ -348,7 +373,7 @@
 // in mind that you will begin to lose PWM resolution with increased minimum PWM values, since you have less
 // and less range over the total 255 PWM levels to signal different spindle speeds.
 // NOTE: Compute duty cycle at the minimum PWM by this equation: (% duty cycle)=(SPINDLE_PWM_MIN_VALUE/255)*100
-// #define SPINDLE_PWM_MIN_VALUE 5 // Default disabled. Uncomment to enable. Must be greater than zero. Integer (1-255).
+// define now lives above. #define SPINDLE_PWM_MIN_VALUE 5 // Default disabled. Uncomment to enable. Must be greater than zero. Integer (1-255).
 
 // By default on a 328p(Uno), Grbl combines the variable spindle PWM and the enable into one pin to help
 // preserve I/O pins. For certain setups, these may need to be separate pins. This configure option uses
@@ -358,7 +383,7 @@
 // NOTE: BEWARE! The Arduino bootloader toggles the D13 pin when it powers up. If you flash Grbl with
 // a programmer (you can use a spare Arduino as "Arduino as ISP". Search the web on how to wire this.),
 // this D13 LED toggling should go away. We haven't tested this though. Please report how it goes!
-// #define USE_SPINDLE_DIR_AS_ENABLE_PIN // Default disabled. Uncomment to enable.
+// not ported #define USE_SPINDLE_DIR_AS_ENABLE_PIN // Default disabled. Uncomment to enable.
 
 // With this enabled, Grbl sends back an echo of the line it has received, which has been pre-parsed (spaces
 // removed, capitalized letters, no comments) and is to be immediately executed by Grbl. Echoes will not be
@@ -626,6 +651,7 @@
 // hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
 
 // Define spindle enable and spindle direction output pins.
+/* not ported
 #define SPINDLE_ENABLE_DDR    DDRB
 #define SPINDLE_ENABLE_PORT   PORTB
 // Z Limit pin and spindle PWM/enable pin swapped to access hardware PWM on Pin 11.
@@ -644,6 +670,7 @@
   #define SPINDLE_DIRECTION_PORT  PORTB
   #define SPINDLE_DIRECTION_BIT   5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
 #endif
+*/
 
 // Define flood and mist coolant enable output pins.
 #define COOLANT_FLOOD_DDR   DDRC
@@ -675,31 +702,16 @@
 #define PROBE_BIT       5  // Uno Analog Pin 5
 #define PROBE_MASK      (1<<PROBE_BIT)
 
-// Variable spindle configuration below. Do not change unless you know what you are doing.
-// NOTE: Only used when variable spindle is enabled.
-#define SPINDLE_PWM_MAX_VALUE     255 // Don't change. 328p fast PWM mode fixes top value as 255.
-#ifndef SPINDLE_PWM_MIN_VALUE
-  #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
-#endif
-#define SPINDLE_PWM_OFF_VALUE     0
-#define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-#define SPINDLE_TCCRA_REGISTER	  TCCR2A
-#define SPINDLE_TCCRB_REGISTER	  TCCR2B
-#define SPINDLE_OCR_REGISTER      OCR2A
-#define SPINDLE_COMB_BIT	        COM2A1
+// The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
+//
+// PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
+// Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
+// Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.6
+#define SPINDLE_PWM_CHANNEL           PWM1_CH5
+#define SPINDLE_PWM_USE_PRIMARY_PIN   false
+#define SPINDLE_PWM_USE_SECONDARY_PIN true
 
-// Prescaled, 8-bit Fast PWM mode.
-#define SPINDLE_TCCRA_INIT_MASK   ((1<<WGM20) | (1<<WGM21))  // Configures fast PWM mode.
-// #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
-// #define SPINDLE_TCCRB_INIT_MASK   (1<<CS21)               // 1/8 prescaler -> 7.8kHz (Used in v0.9)
-// #define SPINDLE_TCCRB_INIT_MASK   ((1<<CS21) | (1<<CS20)) // 1/32 prescaler -> 1.96kHz
-#define SPINDLE_TCCRB_INIT_MASK      (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
-
-// NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
-#define SPINDLE_PWM_DDR	  DDRB
-#define SPINDLE_PWM_PORT  PORTB
-#define SPINDLE_PWM_BIT	  3    // Uno Digital Pin 11
-
+// Stepper current control
 #define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
 #define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
 #define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
@@ -722,7 +734,7 @@
 #define DEFAULT_X_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
+#define DEFAULT_SPINDLE_RPM_MAX 1.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
 #define DEFAULT_STEP_PULSE_MICROSECONDS 1
 #define DEFAULT_STEPPING_INVERT_MASK 0

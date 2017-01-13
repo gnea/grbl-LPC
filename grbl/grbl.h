@@ -84,11 +84,13 @@
   #endif
 #endif
 
+/* restriction removed
 #if defined(SPINDLE_PWM_MIN_VALUE)
   #if !(SPINDLE_PWM_MIN_VALUE > 0)
     #error "SPINDLE_PWM_MIN_VALUE must be greater than zero."
   #endif
 #endif
+*/
 
 #if (REPORT_WCO_REFRESH_BUSY_COUNT < REPORT_WCO_REFRESH_IDLE_COUNT)
   #error "WCO busy refresh is less than idle refresh."
