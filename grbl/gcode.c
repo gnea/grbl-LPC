@@ -992,7 +992,7 @@ uint8_t gc_execute_line(char *line)
   // [19. Go to predefined position, Set G10, or Set axis offsets ]:
   switch(gc_block.non_modal_command) {
     case NON_MODAL_SET_COORDINATE_DATA:
-      settings_write_coord_data(coord_select,gc_block.values.ijk);
+      settings_write_coord_data(coord_select,gc_block.values.ijk,false,true);
       // Update system coordinate system if currently active.
       if (gc_state.modal.coord_select == coord_select) {
         memcpy(gc_state.coord_system,gc_block.values.ijk,N_AXIS*sizeof(float));
@@ -1008,10 +1008,10 @@ uint8_t gc_execute_line(char *line)
       memcpy(gc_state.position, gc_block.values.ijk, N_AXIS*sizeof(float));
       break;
     case NON_MODAL_SET_HOME_0:
-      settings_write_coord_data(SETTING_INDEX_G28,gc_state.position);
+      settings_write_coord_data(SETTING_INDEX_G28,gc_state.position,false,true);
       break;
     case NON_MODAL_SET_HOME_1:
-      settings_write_coord_data(SETTING_INDEX_G30,gc_state.position);
+      settings_write_coord_data(SETTING_INDEX_G30,gc_state.position,false,true);
       break;
     case NON_MODAL_SET_COORDINATE_OFFSET:
       memcpy(gc_state.coord_offset,gc_block.values.xyz,sizeof(gc_block.values.xyz));

@@ -555,6 +555,10 @@
 // job. At this time, this option only forces a planner buffer sync with these g-code commands.
 #define FORCE_BUFFER_SYNC_DURING_EEPROM_WRITE // Default enabled. Comment to disable.
 
+// LPC176x flash blocks have a rating of 10,000 write cycles. To prevent excess wear, we don't
+// write G10, G28.1, and G30.1. Uncomment to enable these writes.
+// #define STORE_COORD_DATA // Default disabled. Uncomment to enable.
+
 // In Grbl v0.9 and prior, there is an old outstanding bug where the `WPos:` work position reported
 // may not correlate to what is executing, because `WPos:` is based on the g-code parser state, which
 // can be several motions behind. This option forces the planner buffer to empty, sync, and stop

@@ -13,15 +13,18 @@ MEMORY
 	/* On-chip SRAM is a readable (r), writable (w) and */
 	/* executable region (x) */
 
-	/* Main ROM region - 512k for LPC1768 */
-	IROM (rx) : ORIGIN = 0x00000000, LENGTH = 512k
+	/* vector table */
+	VECT (rx) : ORIGIN = 0x00000000, LENGTH = 4k
 
-        /* local static RAM - 32k for LPC1756 */
-        IRAM0 (rwx) : ORIGIN = 0x10000000, LENGTH = 32k
+	/* ROM. Skips the remaining 4k flash sectors so they can be used for persistent data */
+	IROM (rx) : ORIGIN = 0x00010000, LENGTH = 0x70000 /* 512k - 0x10000 */
 
-        /* AHB SRAM - 16k for LPC1756 - often used for USB */
-        IRAM1 (rwx) : ORIGIN = 0x2007C000, LENGTH = 16k
-		IRAM2 (rwx) : ORIGIN = 0x20080000, LENGTH = 16k
+	/* local static RAM - 32k for LPC1756 */
+	IRAM0 (rwx) : ORIGIN = 0x10000000, LENGTH = 32736 /* 32k-32: 32 bytes at top reserved by IAP */
+
+	/* AHB SRAM - 16k for LPC1756 - often used for USB */
+	IRAM1 (rwx) : ORIGIN = 0x2007C000, LENGTH = 16k
+	IRAM2 (rwx) : ORIGIN = 0x20080000, LENGTH = 16k
 }
 
 /* SECTION command : Define mapping of input sections */
@@ -32,11 +35,14 @@ SECTIONS
 	/******************************************/
 	/* code section */
 
-        /* "normal" code */
-	
-	.text :
+	.isr_vector_section :
 	{
 		KEEP(*(.isr_vector .isr_vector.*))
+	} >VECT
+
+	/* "normal" code */
+	.text :
+	{
 		*(.text .text.*)
 		*(.gnu.linkonce.t.*)
 		*(.glue_7)

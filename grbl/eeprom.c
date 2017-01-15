@@ -24,6 +24,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#ifdef xxxxx // replaced by flash.cpp
+
 /* These EEPROM bits have different names on different devices. */
 #ifndef EEPE
 		#define EEPE  EEWE  //!< EEPROM program/write enable.
@@ -147,5 +149,7 @@ int memcpy_from_eeprom_with_checksum(char *destination, unsigned int source, uns
   }
   return(checksum == eeprom_get_char(source));
 }
+
+#endif // xxxxx
 
 // end of file

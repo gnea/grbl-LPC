@@ -126,7 +126,7 @@ void settings_store_build_info(char *line);
 uint8_t settings_read_build_info(char *line);
 
 // Writes selected coordinate data to EEPROM
-void settings_write_coord_data(uint8_t coord_select, float *coord_data);
+void settings_write_coord_data(uint8_t coord_select, float *coord_data, bool force, bool commit);
 
 // Reads selected coordinate data from EEPROM
 uint8_t settings_read_coord_data(uint8_t coord_select, float *coord_data);

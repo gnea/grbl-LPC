@@ -80,6 +80,7 @@ int main(void)
   isr_init();      // Set ISR priorities
   delay_init();    // Setup delay timer
   serial_init();   // Setup serial baud rate and interrupts
+  eeprom_init();   // Init EEPROM or FLASH
   settings_init(); // Load Grbl settings from EEPROM
   current_init();  // Configure stepper driver current
   stepper_init();  // Configure stepper pins and interrupt timers

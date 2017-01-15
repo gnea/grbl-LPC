@@ -32,6 +32,7 @@ void settings_store_startup_line(uint8_t n, char *line)
   #endif
   uint32_t addr = n*(LINE_BUFFER_SIZE+1)+EEPROM_ADDR_STARTUP_BLOCK;
   memcpy_to_eeprom_with_checksum(addr,(char*)line, LINE_BUFFER_SIZE);
+  eeprom_commit();
 }
 
 
@@ -41,26 +42,36 @@ void settings_store_build_info(char *line)
 {
   // Build info can only be stored when state is IDLE.
   memcpy_to_eeprom_with_checksum(EEPROM_ADDR_BUILD_INFO,(char*)line, LINE_BUFFER_SIZE);
+  eeprom_commit();
 }
 
 
 // Method to store coord data parameters into EEPROM
-void settings_write_coord_data(uint8_t coord_select, float *coord_data)
+void settings_write_coord_data(uint8_t coord_select, float *coord_data, bool force, bool commit)
 {
   #ifdef FORCE_BUFFER_SYNC_DURING_EEPROM_WRITE
     protocol_buffer_synchronize();
   #endif
-  uint32_t addr = coord_select*(sizeof(float)*N_AXIS+1) + EEPROM_ADDR_PARAMETERS;
-  memcpy_to_eeprom_with_checksum(addr,(char*)coord_data, sizeof(float)*N_AXIS);
+  #ifdef STORE_COORD_DATA
+    force = true;
+  #endif
+  if(force) {
+    uint32_t addr = coord_select*(sizeof(float)*N_AXIS+1) + EEPROM_ADDR_PARAMETERS;
+    memcpy_to_eeprom_with_checksum(addr,(char*)coord_data, sizeof(float)*N_AXIS);
+    if(commit)
+      eeprom_commit();
+  }
 }
 
 
 // Method to store Grbl global settings struct and version number into EEPROM
 // NOTE: This function can only be called in IDLE state.
-void write_global_settings()
+void write_global_settings(bool commit)
 {
   eeprom_put_char(0, SETTINGS_VERSION);
   memcpy_to_eeprom_with_checksum(EEPROM_ADDR_GLOBAL, (char*)&settings, sizeof(settings_t));
+  if(commit)
+    eeprom_commit();
 }
 
 
@@ -107,14 +118,14 @@ void settings_restore(uint8_t restore_flag) {
     settings.max_travel[Y_AXIS] = (-DEFAULT_Y_MAX_TRAVEL);
     settings.max_travel[Z_AXIS] = (-DEFAULT_Z_MAX_TRAVEL);
 
-    write_global_settings();
+    write_global_settings(false);
   }
 
   if (restore_flag & SETTINGS_RESTORE_PARAMETERS) {
     uint8_t idx;
     float coord_data[N_AXIS];
     memset(&coord_data, 0, sizeof(coord_data));
-    for (idx=0; idx <= SETTING_INDEX_NCOORD; idx++) { settings_write_coord_data(idx, coord_data); }
+    for (idx=0; idx <= SETTING_INDEX_NCOORD; idx++) { settings_write_coord_data(idx, coord_data, true, false); }
   }
 
   if (restore_flag & SETTINGS_RESTORE_STARTUP_LINES) {
@@ -132,6 +143,8 @@ void settings_restore(uint8_t restore_flag) {
     eeprom_put_char(EEPROM_ADDR_BUILD_INFO , 0);
     eeprom_put_char(EEPROM_ADDR_BUILD_INFO+1 , 0); // Checksum
   }
+
+  eeprom_commit();
 }
 
 
@@ -169,7 +182,7 @@ uint8_t settings_read_coord_data(uint8_t coord_select, float *coord_data)
   if (!(memcpy_from_eeprom_with_checksum((char*)coord_data, addr, sizeof(float)*N_AXIS))) {
     // Reset with default zero vector
     clear_vector_float(coord_data);
-    settings_write_coord_data(coord_select,coord_data);
+    settings_write_coord_data(coord_select,coord_data,true,true);
     return(false);
   }
   return(true);
@@ -301,7 +314,7 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
         return(STATUS_INVALID_STATEMENT);
     }
   }
-  write_global_settings();
+  write_global_settings(true);
   return(STATUS_OK);
 }
 
@@ -309,9 +322,9 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
 // Initialize the config subsystem
 void settings_init() {
   if(!read_global_settings()) {
-    //report_status_message(STATUS_SETTING_READ_FAIL);
+    report_status_message(STATUS_SETTING_READ_FAIL);
     settings_restore(SETTINGS_RESTORE_ALL); // Force restore all EEPROM data.
-    //report_grbl_settings();
+    report_grbl_settings();
   }
 }
 
