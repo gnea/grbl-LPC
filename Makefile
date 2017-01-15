@@ -20,8 +20,6 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-PROJECT = grbl
-
 INCLUDES =                                        \
     -I CMSIS_5/CMSIS/Core/Include                 \
     -I CMSIS_5/CMSIS/Driver/Include               \
@@ -57,8 +55,6 @@ CMSIS_EXCLUDE_OBJECTS =             \
     build/cmsis/SPI_LPC17xx.o       \
     build/cmsis/USBD_LPC17xx.o      \
     build/cmsis/USBH_LPC17xx.o      \
-
-LINKER_SCRIPT = lpc17xx/grbl.ld
 
 AS      = arm-none-eabi-as
 CC      = arm-none-eabi-gcc
@@ -145,20 +141,23 @@ build/src/%.o : %.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $<
 
 .PHONY: default
-default: build/$(PROJECT).hex build/$(PROJECT).bin
+default: build/grbl.hex build/firmware.bin
 
-build/$(PROJECT).elf: $(SRC_OBJECTS) $(CMSIS_OBJECTS) $(LINKER_SCRIPT)
+build/grbl.elf: $(SRC_OBJECTS) $(CMSIS_OBJECTS) lpc17xx/grbl.ld
 	$(LD) -mcpu=cortex-m3 -mthumb -specs=nosys.specs -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
 
-build/$(PROJECT).bin : build/$(PROJECT).elf
+build/firmware.elf: $(SRC_OBJECTS) $(CMSIS_OBJECTS) lpc17xx/firmware.ld
+	$(LD) -mcpu=cortex-m3 -mthumb -specs=nosys.specs -T$(filter %.ld, $^) -o $@ $(filter %.o, $^) $(LIBS)
+
+build/%.bin : build/%.elf
 	$(OBJCOPY) -O binary $^ $@
 
-build/$(PROJECT).hex : build/$(PROJECT).elf
+build/%.hex : build/%.elf
 	$(OBJCOPY) -O ihex $^ $@
 
 .PHONY: flash
-flash: build/$(PROJECT).hex
-	fm COM(13, 115200) DEVICE(LPC1769, 0.000000, 0) HARDWARE(BOOTEXEC, 50, 100) ERASEUSED(build\$(PROJECT).hex, PROTECTISP) HEXFILE(build\$(PROJECT).hex, NOCHECKSUMS, NOFILL, PROTECTISP)
+flash: build/grbl.hex
+	fm COM(13, 115200) DEVICE(LPC1769, 0.000000, 0) HARDWARE(BOOTEXEC, 50, 100) ERASEUSED(build\grbl.hex, PROTECTISP) HEXFILE(build\grbl.hex, NOCHECKSUMS, NOFILL, PROTECTISP)
 
 .PHONY: clean
 clean:

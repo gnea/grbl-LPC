@@ -4,7 +4,7 @@
 * THE AUTHORS SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
 * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER. USE IT AT YOUR OWN RISK */
 
-/* This linker script is for grbl.hex, the standalone build (not compatible with sdcard bootloader)
+/* This linker script is for firmware.bin, which is compatible with the sdcard bootloader.
  */
 
 MEMORY
@@ -17,7 +17,7 @@ MEMORY
 	/* executable region (x) */
 
 	/* vector table */
-	VECT (rx) : ORIGIN = 0x00000000, LENGTH = 4k
+	VECT (rx) : ORIGIN = 0x00004000, LENGTH = 4k
 
 	/* ROM. Skips the remaining 4k flash sectors so they can be used for persistent data */
 	IROM (rx) : ORIGIN = 0x00010000, LENGTH = 0x70000 /* 512k - 0x10000 */
