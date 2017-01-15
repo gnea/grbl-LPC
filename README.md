@@ -21,6 +21,11 @@ Usage notes:
 * Hard limits not yet ported
 * Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
 
+New configuration settings
+* $140, $141, $142 are X, Y, Z current (amps)
+* Default to 0.0 A to avoid burning out your motors
+* Your motors will likely stall if you don't set these!
+
 Build notes:
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
 * Make produces 2 files:

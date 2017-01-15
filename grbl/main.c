@@ -20,7 +20,6 @@
 */
 
 #include "grbl.h"
-#include "current_control.h"
 
 void isr_init();
 

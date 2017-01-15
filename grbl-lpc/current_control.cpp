@@ -24,6 +24,10 @@
 #include "grbl.h"
 #include "Driver_I2C.h"
 
+#undef min
+#undef max
+#include <algorithm>
+
 #ifdef CURRENT_I2C
 extern ARM_DRIVER_I2C CURRENT_I2C;
 static const uint8_t wiperRegs[] = CURRENT_WIPERS;
@@ -48,9 +52,9 @@ void current_init()
         ;
 #endif
 
-    set_current(0, DEFAULT_X_CURRENT);
-    set_current(1, DEFAULT_Y_CURRENT);
-    set_current(2, DEFAULT_Z_CURRENT);
+    set_current(0, settings.current[0]);
+    set_current(1, settings.current[1]);
+    set_current(2, settings.current[2]);
     set_current(3, DEFAULT_A_CURRENT);
 #endif
 }
@@ -60,7 +64,7 @@ void set_current(uint8_t motor, float amps)
 #if defined(CURRENT_I2C) && defined(CURRENT_MCP44XX_ADDR)
     uint8_t command[] = {
         uint8_t(wiperRegs[motor] << 4),
-        uint8_t(std::round(amps * CURRENT_FACTOR)),
+        uint8_t(std::min(255.0, std::max(0.0, std::round(amps * CURRENT_FACTOR)))),
     };
     CURRENT_I2C.MasterTransmit(CURRENT_MCP44XX_ADDR, command, sizeof(command), false);
     while (CURRENT_I2C.GetStatus().busy)

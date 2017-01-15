@@ -117,6 +117,9 @@ void settings_restore(uint8_t restore_flag) {
     settings.max_travel[X_AXIS] = (-DEFAULT_X_MAX_TRAVEL);
     settings.max_travel[Y_AXIS] = (-DEFAULT_Y_MAX_TRAVEL);
     settings.max_travel[Z_AXIS] = (-DEFAULT_Z_MAX_TRAVEL);
+    settings.current[X_AXIS] = DEFAULT_X_CURRENT;
+    settings.current[Y_AXIS] = DEFAULT_Y_CURRENT;
+    settings.current[Z_AXIS] = DEFAULT_Z_CURRENT;
 
     write_global_settings(false);
   }
@@ -231,6 +234,10 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
             break;
           case 2: settings.acceleration[parameter] = value*60*60; break; // Convert to mm/min^2 for grbl internal use.
           case 3: settings.max_travel[parameter] = -value; break;  // Store as negative for grbl internal use.
+          case 4:
+            settings.current[parameter] = value;
+            set_current(parameter, settings.current[parameter]);
+            break;
         }
         break; // Exit while-loop after setting has been configured and proceed to the EEPROM write call.
       } else {
