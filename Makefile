@@ -27,15 +27,15 @@ INCLUDES =                                        \
     -I CMSIS_5/CMSIS/Driver/Include               \
     -I CMSIS_5/Device/ARM/ARMCM3/Include          \
     -I grbl                                       \
+    -I grbl-lpc                                   \
     -I lpc17xx                                    \
-    -I smoother                                   \
     -I VCOM_lib                                   \
 
 # Compile all .c and .cpp files in these directories
 # Hack: .c files are compiled as if they were c++.
 SRC_DIRS =          \
 	grbl            \
-    smoother        \
+    grbl-lpc        \
     VCOM_lib        \
 
 # Compile all .c files in these directories, except ones on the exclude list.
@@ -158,7 +158,7 @@ build/$(PROJECT).hex : build/$(PROJECT).elf
 
 .PHONY: flash
 flash: build/$(PROJECT).hex
-	fm COM(7, 115200) DEVICE(LPC1769, 0.000000, 0) HARDWARE(BOOTEXEC, 50, 100) ERASEUSED(build\$(PROJECT).hex, PROTECTISP) HEXFILE(build\$(PROJECT).hex, NOCHECKSUMS, NOFILL, PROTECTISP)
+	fm COM(13, 115200) DEVICE(LPC1769, 0.000000, 0) HARDWARE(BOOTEXEC, 50, 100) ERASEUSED(build\$(PROJECT).hex, PROTECTISP) HEXFILE(build\$(PROJECT).hex, NOCHECKSUMS, NOFILL, PROTECTISP)
 
 .PHONY: clean
 clean:
