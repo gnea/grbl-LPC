@@ -58,7 +58,7 @@ CMSIS_EXCLUDE_OBJECTS =             \
     build/cmsis/USBD_LPC17xx.o      \
     build/cmsis/USBH_LPC17xx.o      \
 
-LINKER_SCRIPT = lpc17xx/lpc1769.ld
+LINKER_SCRIPT = lpc17xx/grbl.ld
 
 AS      = arm-none-eabi-as
 CC      = arm-none-eabi-gcc
