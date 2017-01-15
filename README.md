@@ -1,6 +1,33 @@
 ![GitHub Logo](/doc/media/Grbl Logo 250px.png)
 ***
-_Click the `Release` tab to download pre-compiled `.hex` files or just [click here](https://github.com/gnea/grbl/releases)_
+This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
+
+Usage notes:
+* This uses a different usb-serial driver than Smoothieware. Windows 10 should recognize it automatically.
+  If it doesn't, try installing VCOM_lib/usbser.inf.
+* This doesn't pass the sdcard to the host. Once installed you need to use a micro sdcard adaptor to replace or change it.
+* Only tested with lasers with PWM. Non-PWM spindle control not ported.
+* These are fixed PWM config values. To change these you'll have to change ```SPINDLE_PWM_*``` in config.h and rebuild.
+  * Pin 2.4
+  * 40 kHz
+  * PWM off value: 0%
+  * Mimimum PWM value: 0%
+  * Maximum PWM value: 100%
+* These are defaults for easy-to-change config values.
+  * Laser mode: ON ($32)
+  * Minimum S value: 0.0 ($31)
+  * Maximum S value: 1.0 ($30)
+* Homing not tested
+* Hard limits not yet ported
+* Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
+
+Build notes:
+* Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
+* Make produces 2 files:
+  * ```build/firmware.bin```: this is compatible with the sdcard bootloader.
+  * ```build/grbl.hex```: this is not compatible with the sdcard bootloader. It loads using Flash Magic 
+    and is primarilly for developers who don't want to keep swapping sdcards. If you flash this,
+    then you'll have to reflash the bootloader if you want to go back.
 ***
 Grbl is a no-compromise, high performance, low cost alternative to parallel-port-based motion control for CNC milling. This version of Grbl runs on an Arduino with a 328p processor (Uno, Duemilanove, Nano, Micro, etc).
 
