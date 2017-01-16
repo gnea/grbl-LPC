@@ -49,6 +49,8 @@ void serialInterrupt(uint32_t event);
 void legacy_ISR(uint8_t data);
 uint8_t arm_rx_buf[1];
 
+bool lastDtr = false;
+
 // Returns the number of bytes available in the RX serial buffer.
 uint16_t serial_get_rx_buffer_available()
 {
@@ -80,10 +82,18 @@ uint8_t serial_get_tx_buffer_count()
 void serial_init()
 {
 #ifdef USE_USB
-  usbSerialInit([](const U8* data, unsigned len) {
-    while(len--)
-      legacy_ISR(*data++);
-  });
+  usbSerialInit(
+    [](bool dtr, bool rts) {
+      if (dtr != lastDtr)
+      {
+        lastDtr = dtr;
+        mc_reset();
+      }
+    },
+    [](const U8* data, unsigned len) {
+      while (len--)
+        legacy_ISR(*data++);
+    });
 #else
   int32_t uartFlags = ARM_USART_MODE_ASYNCHRONOUS |
                       ARM_USART_DATA_BITS_8 |

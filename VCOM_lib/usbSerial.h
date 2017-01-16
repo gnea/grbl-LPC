@@ -98,10 +98,13 @@ void VCOM_gets_echo(char *str); // gets string terminated in '\r' or '\n' and ec
 
 #include "serial_fifo.h"
 
+// Receives line state. Called by an interrupt.
+typedef void UsbSerialLineStateCallback(bool dtr, bool rts);
+
 // Receives serial data. Called by an interrupt.
 typedef void UsbSerialReadCallback(const U8* data, unsigned len);
 
-int usbSerialInit(UsbSerialReadCallback* usbSerialReadCallback); // run once in main b4 main loop starts.
+int usbSerialInit(UsbSerialLineStateCallback* usbSerialLineStateCallback, UsbSerialReadCallback* usbSerialReadCallback); // run once in main b4 main loop starts.
 
 /*
 	Writes one character to VCOM port

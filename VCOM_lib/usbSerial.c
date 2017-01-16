@@ -86,6 +86,7 @@ static U8 txdata[VCOM_FIFO_SIZE];
 static fifo_t txfifo;
 //static fifo_t rxfifo;
 
+static UsbSerialLineStateCallback* usbSerialLineStateCallback = nullptr;
 static UsbSerialReadCallback* usbSerialReadCallback = nullptr;
 
 // forward declaration of interrupt handler
@@ -299,10 +300,13 @@ static BOOL HandleClassRequest(TSetupPacket *pSetup, int *piLen, U8 **ppbData)
 		break;
 
 	// set control line state
-	case SET_CONTROL_LINE_STATE:
-		// bit0 = DTR, bit = RTS
-
-		break;
+	case SET_CONTROL_LINE_STATE: {
+	    bool dtr = (pSetup->wValue >> 0) & 1;
+	    bool rts = (pSetup->wValue >> 1) & 1;
+	    if (usbSerialLineStateCallback)
+			usbSerialLineStateCallback(dtr, rts);
+	    break;
+	}
 
 	default:
 		return FALSE;
@@ -376,8 +380,9 @@ void enable_USB_interrupts(void);
 	main
 	====
 **************************************************************************/
-int usbSerialInit(UsbSerialReadCallback* usbSerialReadCallback)
+int usbSerialInit(UsbSerialLineStateCallback* usbSerialLineStateCallback, UsbSerialReadCallback* usbSerialReadCallback)
 {
+	::usbSerialLineStateCallback = usbSerialLineStateCallback;
 	::usbSerialReadCallback = usbSerialReadCallback;
 
 	// initialise stack
