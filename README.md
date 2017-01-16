@@ -35,6 +35,7 @@ Build notes:
   * ```build/grbl.hex```: this is not compatible with the sdcard bootloader. It loads using Flash Magic 
     and is primarilly for developers who don't want to keep swapping sdcards. If you flash this,
     then you'll have to reflash the bootloader if you want to go back.
+
 ***
 Grbl is a no-compromise, high performance, low cost alternative to parallel-port-based motion control for CNC milling. This version of Grbl runs on an Arduino with a 328p processor (Uno, Duemilanove, Nano, Micro, etc).
 
