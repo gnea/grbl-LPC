@@ -112,6 +112,7 @@ void serial_init()
 #endif
 }
 
+/*
 void legacy_serial_init()
 {
   // Set baud rate
@@ -130,6 +131,7 @@ void legacy_serial_init()
 
   // defaults to 8-bit, no parity, 1 stop bit
 }
+*/
 
 // Writes one byte to the TX serial buffer. Called by main program.
 void serial_write(uint8_t data) {
@@ -154,7 +156,7 @@ void serial_write(uint8_t data) {
   serialDriver.Send(serial_tx_buffer, 1);
 #endif
 }
-
+/*
 // Writes one byte to the TX serial buffer. Called by main program.
 void legacy_serial_write(uint8_t data) {
   // Calculate next head
@@ -174,7 +176,7 @@ void legacy_serial_write(uint8_t data) {
   // Enable Data Register Empty Interrupt to make sure tx-streaming is running
   UCSR0B |=  (1 << UDRIE0);
 }
-
+*/
 //Device driver interrupt
 // The CMSIS Driver doesn't have seperate interrupts/callbacks available for TX and RX but instead
 // is a single composite interrupt.
@@ -190,6 +192,7 @@ void serialInterrupt(uint32_t event) {
 
 //We don't use TX interrupts directly with the ARM Driver.
 // Data Register Empty Interrupt handler
+/*
 void legacy_TX_ISR(void* SERIAL_UDRE)
 {
   uint8_t tail = serial_tx_buffer_tail; // Temporary serial_tx_buffer_tail (to optimize for volatile)
@@ -206,7 +209,7 @@ void legacy_TX_ISR(void* SERIAL_UDRE)
   // Turn off Data Register Empty Interrupt to stop tx-streaming if this concludes the transfer
   if (tail == serial_tx_buffer_head) { UCSR0B &= ~(1 << UDRIE0); }
 }
-
+*/
 
 // Fetches the first byte in the serial read buffer. Called by main program.
 uint8_t serial_read()
