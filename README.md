@@ -30,6 +30,7 @@ New configuration settings
 
 Build notes:
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
+* Run ```git submodule init``` and ```git submodule update``` before building.
 * Make produces 2 files:
   * ```build/firmware.bin```: this is compatible with the sdcard bootloader.
   * ```build/grbl.hex```: this is not compatible with the sdcard bootloader. It loads using Flash Magic 
