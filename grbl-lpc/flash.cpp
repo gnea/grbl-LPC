@@ -35,6 +35,8 @@ void eeprom_init()
 
 void eeprom_commit()
 {
+    if (!memcmp(flash_buffer, flash_memory, flash_size))
+        return;
     unsigned prepCommand[5] = {
         50,
         flash_sector,
