@@ -28,7 +28,7 @@ typedef struct _PWM_Channel_Config {
     uint32_t LER_Enable_Mask;
                                   //PWM Output Mapping  PWM1   PWM2   PWM3   PWM4   PWM5   PWM6
     uint32_t PINSEL3_Enable_Mask; //For PWM support on (P1.18, P1.20, P1.21, P1.23, P1.24, P1.26)
-    uint32_t PINSEL4_Enable_Mask; //For PWM support on (P2.0,  P2.1,  P2.2,  P2.3,  P2.4,  P2.6)
+    uint32_t PINSEL4_Enable_Mask; //For PWM support on (P2.0,  P2.1,  P2.2,  P2.3,  P2.4,  P2.5)
 } const PWM_Channel_Config;
 
 extern PWM_Channel_Config PWM1_CH1;

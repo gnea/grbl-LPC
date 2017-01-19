@@ -88,7 +88,7 @@ const PWM_Channel_Config PWM1_CH6 = {
     (1 << 14),          //PWM Enable
     (1 << 6),           //Latch Enable Register
     (0x2 << 20),        //PINSEL3 - P1.26
-    (0x1 << 10)         //PINSEL4 - P2.6
+    (0x1 << 10)         //PINSEL4 - P2.5
 };
 
 

@@ -710,7 +710,7 @@
 //
 // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
 // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
-// Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.6
+// Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
 #define SPINDLE_PWM_CHANNEL           PWM1_CH5
 #define SPINDLE_PWM_USE_PRIMARY_PIN   false
 #define SPINDLE_PWM_USE_SECONDARY_PIN true
