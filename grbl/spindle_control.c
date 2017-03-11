@@ -191,7 +191,8 @@ void spindle_stop()
       }
       spindle_set_speed(spindle_compute_pwm_value(rpm));
     #endif
-    #if defined(USE_SPINDLE_DIR_AS_ENABLE_PIN) || !defined(VARIABLE_SPINDLE)
+    #if (defined(USE_SPINDLE_DIR_AS_ENABLE_PIN) && \
+        !defined(SPINDLE_ENABLE_OFF_WITH_ZERO_SPEED)) || !defined(VARIABLE_SPINDLE)
       // NOTE: Without variable spindle, the enable bit should just turn on or off, regardless
       // if the spindle speed value is zero, as its ignored anyhow.
       /* not ported
