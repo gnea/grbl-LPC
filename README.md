@@ -1,4 +1,5 @@
-![GitHub Logo](/doc/media/Grbl Logo 250px.png)
+![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
+
 ***
 _Click the `Release` tab to download pre-compiled `.bin` files or just [click here](https://github.com/gnea/grbl-LPC/releases)_
 ***
@@ -57,12 +58,12 @@ Grbl includes full acceleration management with look ahead. That means the contr
 ***
 
 ### Official Supporters of the Grbl CNC Project
-![Official Supporters](https://dl.dropboxusercontent.com/u/2221997/Contributors.png)
+![Official Supporters](https://github.com/gnea/gnea-Media/blob/master/Contributors.png?raw=true)
 
 
 ***
 
-##Update Summary for v1.1
+## Update Summary for v1.1
 - **IMPORTANT:** Your EEPROM will be wiped and restored with new settings. This is due to the addition of two new spindle speed '$' settings.
 
 - **Real-time Overrides** : Alters the machine running state immediately with feed, rapid, spindle speed, spindle stop, and coolant toggle controls. This awesome new feature is common only on industrial machines, often used to optimize speeds and feeds while a job is running. Most hobby CNC's try to mimic this behavior, but usually have large amounts of lag. Grbl executes overrides in realtime and within tens of milliseconds.
