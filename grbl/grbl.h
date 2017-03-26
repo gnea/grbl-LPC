@@ -39,7 +39,7 @@
 #include <stdbool.h>
 
 // Define the Grbl system include files. NOTE: Do not alter organization.
-#include "debug.h"
+//#include "debug.h" // want to use the LED Pins for DC Controller and so on
 #include "config.h"
 #include "delay.h"
 #include "nuts_bolts.h"

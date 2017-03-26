@@ -64,7 +64,7 @@ void set_current(uint8_t motor, float amps)
 #if defined(CURRENT_I2C) && defined(CURRENT_MCP44XX_ADDR)
     uint8_t command[] = {
         uint8_t(wiperRegs[motor] << 4),
-        uint8_t(std::min(255.0, std::max(0.0, std::round(amps * CURRENT_FACTOR)))),
+        uint8_t(std::min(255.0, std::max(0.0, round(amps * CURRENT_FACTOR)))),
     };
     CURRENT_I2C.MasterTransmit(CURRENT_MCP44XX_ADDR, command, sizeof(command), false);
     while (CURRENT_I2C.GetStatus().busy)

@@ -671,11 +671,32 @@
 // hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
 // hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
 
+// Spindle Port definitions for CNC3040 cia extern DC Motor Controller i.e. Pololu 36v15
+// use LED Line for outputs (deactivate debug.h)
+// GND   |  1.22  |  1.23  |  2.12  | 2.11   | 4.28
+//       |  SPDIR |  SPSPD |  FLOOD | MIST   | SPEN
+
 // Define spindle enable and spindle direction output pins.
-/* not ported
-#define SPINDLE_ENABLE_DDR    DDRB
-#define SPINDLE_ENABLE_PORT   PORTB
+// #define SPINDLE_ENABLE_DDR    LPC_GPIO4->FIODIR
+// #define SPINDLE_ENABLE_PORT   LPC_GPIO4->FIOPIN
+// #define SPINDLE_ENABLE_BIT    28  // LPC Pin 4.28 for spindle enable
+
+#define SPINDLE_DIRECTION_DDR   LPC_GPIO1->FIODIR
+#define SPINDLE_DIRECTION_PORT  LPC_GPIO1->FIOPIN
+#define SPINDLE_DIRECTION_BIT   22  // LPC Pin 1.22 for spindle direction via Pololu DC Motor Driver
+
+// Define flood and mist coolant enable output pins.
+#define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
+#define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
+#define COOLANT_FLOOD_BIT   12  // LPC Pin 2.12
+
+#define COOLANT_MIST_DDR   LPC_GPIO2->FIODIR
+#define COOLANT_MIST_PORT  LPC_GPIO2->FIOPIN
+#define COOLANT_MIST_BIT   11  // LPC Pin 2.11
+
+
 // Z Limit pin and spindle PWM/enable pin swapped to access hardware PWM on Pin 11.
+/*
 #ifdef VARIABLE_SPINDLE
   #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
     // If enabled, spindle direction pin now used as spindle enable, while PWM remains on D11.
@@ -692,14 +713,6 @@
   #define SPINDLE_DIRECTION_BIT   5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
 #endif
 */
-
-// Define flood and mist coolant enable output pins.
-#define COOLANT_FLOOD_DDR   NotUsed
-#define COOLANT_FLOOD_PORT  NotUsed
-#define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-#define COOLANT_MIST_DDR   NotUsed
-#define COOLANT_MIST_PORT  NotUsed
-#define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
 
 // Define user-control controls (cycle start, reset, feed hold) input pins.
 // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -728,9 +741,9 @@
 // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
 // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
 // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-#define SPINDLE_PWM_CHANNEL           PWM1_CH5
-#define SPINDLE_PWM_USE_PRIMARY_PIN   false
-#define SPINDLE_PWM_USE_SECONDARY_PIN true
+#define SPINDLE_PWM_CHANNEL           PWM1_CH4
+#define SPINDLE_PWM_USE_PRIMARY_PIN   true
+#define SPINDLE_PWM_USE_SECONDARY_PIN false
 
 // Stepper current control
 #define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
@@ -739,24 +752,24 @@
 #define CURRENT_FACTOR 113.33           // Convert amps to digipot value
 
 // Paste default settings definitions here.
-#define DEFAULT_X_STEPS_PER_MM 158.0
-#define DEFAULT_Y_STEPS_PER_MM 158.0
-#define DEFAULT_Z_STEPS_PER_MM 158.0
-#define DEFAULT_X_MAX_RATE 30000 // mm/min
-#define DEFAULT_Y_MAX_RATE 30000 // mm/min
+#define DEFAULT_X_STEPS_PER_MM 800.0
+#define DEFAULT_Y_STEPS_PER_MM 800.0
+#define DEFAULT_Z_STEPS_PER_MM 800.0
+#define DEFAULT_X_MAX_RATE 1500 // mm/min
+#define DEFAULT_Y_MAX_RATE 1500 // mm/min
 #define DEFAULT_Z_MAX_RATE 500.0 // mm/min
 #define DEFAULT_X_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
 #define DEFAULT_Y_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
 #define DEFAULT_Z_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_X_CURRENT 0.0 // amps
-#define DEFAULT_Y_CURRENT 0.0 // amps
-#define DEFAULT_Z_CURRENT 0.0 // amps
+#define DEFAULT_X_CURRENT 2.0 // amps
+#define DEFAULT_Y_CURRENT 2.0 // amps
+#define DEFAULT_Z_CURRENT 2.0 // amps
 #define DEFAULT_A_CURRENT 0.0  // amps
-#define DEFAULT_X_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_Z_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_SPINDLE_RPM_MAX 1.0 // rpm
-#define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
+#define DEFAULT_X_MAX_TRAVEL 300.0 // mm
+#define DEFAULT_Y_MAX_TRAVEL 400.0 // mm
+#define DEFAULT_Z_MAX_TRAVEL 100.0 // mm
+#define DEFAULT_SPINDLE_RPM_MAX 12000.0 // rpm
+#define DEFAULT_SPINDLE_RPM_MIN 100.0 // rpm
 #define DEFAULT_STEP_PULSE_MICROSECONDS 1
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
@@ -770,7 +783,7 @@
 #define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
 #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
 #define DEFAULT_INVERT_PROBE_PIN 0 // false
-#define DEFAULT_LASER_MODE 1 // true
+#define DEFAULT_LASER_MODE 0 // true
 #define DEFAULT_HOMING_ENABLE 0  // false
 #define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
 #define DEFAULT_HOMING_FEED_RATE 25.0 // mm/min
