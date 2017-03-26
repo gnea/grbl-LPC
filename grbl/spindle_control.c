@@ -27,22 +27,20 @@
   static float pwm_gradient; // Precalulated value to speed up rpm to PWM conversions.
 #endif
 
-
 void spindle_init()
 {
   #ifdef VARIABLE_SPINDLE
     pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, SPINDLE_PWM_PERIOD, 0);
     pwm_enable(&SPINDLE_PWM_CHANNEL);
 
-    /* not ported
     // Configure variable spindle PWM and enable pin, if requried. On the Uno, PWM and enable are
     // combined unless configured otherwise.
     #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
-      SPINDLE_ENABLE_DDR |= (1<<SPINDLE_ENABLE_BIT); // Configure as output pin.
+      // SPINDLE_ENABLE_DDR |= (1<<SPINDLE_ENABLE_BIT); // Configure as output pin.
     #else
+   	//SPINDLE_DIRECTION_PORT &= (~(3 << 12));
       SPINDLE_DIRECTION_DDR |= (1<<SPINDLE_DIRECTION_BIT); // Configure as output pin.
     #endif
-    */
 
     pwm_gradient = (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)/(settings.rpm_max-settings.rpm_min);
 
@@ -175,13 +173,11 @@ void spindle_stop()
   } else {
   
     #ifndef USE_SPINDLE_DIR_AS_ENABLE_PIN
-      /* not ported
       if (state == SPINDLE_ENABLE_CW) {
         SPINDLE_DIRECTION_PORT &= ~(1<<SPINDLE_DIRECTION_BIT);
       } else {
         SPINDLE_DIRECTION_PORT |= (1<<SPINDLE_DIRECTION_BIT);
       }
-      */
     #endif
   
     #ifdef VARIABLE_SPINDLE
