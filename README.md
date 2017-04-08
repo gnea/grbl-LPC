@@ -20,7 +20,6 @@ Usage notes:
   * Laser mode: ON ($32)
   * Minimum S value: 0.0 ($31)
   * Maximum S value: 1.0 ($30)
-* Homing not tested
 * Hard limits not yet ported
 * Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
 

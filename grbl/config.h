@@ -660,9 +660,9 @@
 
 // Define homing/hard limit switch input pins and limit interrupt vectors.
 // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
-#define LIMIT_DDR         LPC_GPIO0->FIODIR
-#define LIMIT_PIN         LPC_GPIO0->FIOPIN
-#define LIMIT_PORT        LPC_GPIO0->FIOPIN
+#define LIMIT_DDR         LPC_GPIO1->FIODIR
+#define LIMIT_PIN         LPC_GPIO1->FIOPIN
+#define LIMIT_PORT        LPC_GPIO1->FIOPIN
 #define X_LIMIT_BIT       25  // X-MIN=24, X-MAX=25
 #define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
 #define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
