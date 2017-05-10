@@ -86,6 +86,7 @@ void settings_restore(uint8_t restore_flag) {
     settings.junction_deviation = DEFAULT_JUNCTION_DEVIATION;
     settings.arc_tolerance = DEFAULT_ARC_TOLERANCE;
 
+    settings.spindle_pwm_freq = DEFAULT_SPINDLE_PWM_FREQ;
     settings.rpm_max = DEFAULT_SPINDLE_RPM_MAX;
     settings.rpm_min = DEFAULT_SPINDLE_RPM_MIN;
 
@@ -317,6 +318,7 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
           return(STATUS_SETTING_DISABLED);
         #endif
         break;
+      case 33: settings.spindle_pwm_freq = value; spindle_init(); break; // Re-initialize spindle pwm calibration
       default:
         return(STATUS_INVALID_STATEMENT);
     }

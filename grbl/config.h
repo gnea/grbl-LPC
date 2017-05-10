@@ -36,6 +36,7 @@
 // one configuration file by placing their specific defaults and pin map at the bottom of this file.
 // If doing so, simply comment out these two defines and see instructions below.
 // #define DEFAULTS_GENERIC
+#define DEFAULTS_K40
 // #define CPU_MAP_ATMEGA328P // Arduino Uno CPU
 
 // Serial baud rate
@@ -756,9 +757,9 @@
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Z_MAX_TRAVEL 50.0 // mm
 #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
-#define DEFAULT_SPINDLE_RPM_MAX 1.0 // rpm
+#define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
-#define DEFAULT_STEP_PULSE_MICROSECONDS 1
+#define DEFAULT_STEP_PULSE_MICROSECONDS 10
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
 #define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)

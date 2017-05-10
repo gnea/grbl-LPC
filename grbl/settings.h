@@ -92,6 +92,7 @@ typedef struct {
   float junction_deviation;
   float arc_tolerance;
 
+  uint16_t spindle_pwm_freq;
   float rpm_max;
   float rpm_min;
 

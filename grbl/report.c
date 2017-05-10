@@ -71,6 +71,7 @@ static void report_util_setting_string(uint8_t n) {
     case 30: printPgmString(PSTR("rpm max")); break;
     case 31: printPgmString(PSTR("rpm min")); break;
     case 32: printPgmString(PSTR("laser")); break;
+    case 33: printPgmString(PSTR("spindle_pwm_freq")); break;
     default:
       n -= AXIS_SETTINGS_START_VAL;
       uint8_t idx = 0;
@@ -94,6 +95,11 @@ static void report_util_setting_string(uint8_t n) {
 static void report_util_uint8_setting(uint8_t n, int val) { 
   report_util_setting_prefix(n); 
   print_uint8_base10(val); 
+  report_util_line_feed(); // report_util_setting_string(n); 
+}
+static void report_util_uint32_setting(uint8_t n, int val) { 
+  report_util_setting_prefix(n); 
+  print_uint32_base10(val); 
   report_util_line_feed(); // report_util_setting_string(n); 
 }
 static void report_util_float_setting(uint8_t n, float val, uint8_t n_decimal) { 
@@ -208,6 +214,7 @@ void report_grbl_settings() {
   #else
     report_util_uint8_setting(32,0);
   #endif
+  report_util_uint32_setting(33,settings.spindle_pwm_freq);
   // Print axis settings
   uint8_t idx, set_idx;
   uint8_t val = AXIS_SETTINGS_START_VAL;

@@ -10,20 +10,22 @@ Usage notes:
   If it doesn't, try installing VCOM_lib/usbser.inf.
 * This doesn't pass the sdcard to the host. Once installed you need to use a micro sdcard adaptor to replace or change it.
 * Only tested with lasers with PWM. Non-PWM spindle control not ported.
-* These are fixed PWM config values. To change these you'll have to change ```SPINDLE_PWM_*``` in config.h and rebuild.
-  * Pin 2.4
-  * 40 kHz
+* This special version supports setting PWM frequency by $33. Default is 5000 Hz. Pin can only be changes in config.h.
+  * Pin 2.5
+  * 5 kHz
   * PWM off value: 0%
   * Mimimum PWM value: 0%
   * Maximum PWM value: 100%
 * These are defaults for easy-to-change config values.
-  * Laser mode: ON ($32)
+  * Maximum S value: 1000.0 ($30)
   * Minimum S value: 0.0 ($31)
-  * Maximum S value: 1.0 ($30)
+  * Laser mode: 1 ($32)
+  * Laser PWM frequency: 5000 ($33)
 * Hard limits not yet ported
 * Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
 
 New configuration settings
+* $33 is PWM frequency in Hz
 * $140, $141, $142 are X, Y, Z current (amps)
 * Default to 0.0 A to avoid burning out your motors
 * Your motors will likely stall if you don't set these!
