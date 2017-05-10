@@ -36,7 +36,6 @@
 // one configuration file by placing their specific defaults and pin map at the bottom of this file.
 // If doing so, simply comment out these two defines and see instructions below.
 // #define DEFAULTS_GENERIC
-#define DEFAULTS_K40
 // #define CPU_MAP_ATMEGA328P // Arduino Uno CPU
 
 // Serial baud rate
@@ -667,7 +666,7 @@
 #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
 #define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
 #define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
-#define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT) //|(1<<Z_LIMIT_BIT)) // All limit bits
+#define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)) //|(1<<Z_LIMIT_BIT)) // All limit bits
 // hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
 // hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
 // hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
