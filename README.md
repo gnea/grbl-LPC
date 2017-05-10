@@ -1,7 +1,7 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 
 ***
-_Click the `Release` tab to download pre-compiled `.bin` files or just [click here](https://github.com/gnea/grbl-LPC/releases)_
+_Click the `Release` tab to download pre-compiled `.bin` files or just [click here](https://github.com/cprezzi/grbl-LPC/releases)_
 ***
 This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
 
