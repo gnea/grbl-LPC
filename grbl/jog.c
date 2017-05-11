@@ -33,11 +33,11 @@ uint8_t jog_execute(plan_line_data_t *pl_data, parser_block_t *gc_block)
   #endif
 
   if (bit_istrue(settings.flags,BITFLAG_SOFT_LIMIT_ENABLE)) {
-    if (system_check_travel_limits(gc_block->values.xyz)) { return(STATUS_TRAVEL_EXCEEDED); }
+    if (system_check_travel_limits(gc_block->values.xyza)) { return(STATUS_TRAVEL_EXCEEDED); }
   }
 
   // Valid jog command. Plan, set state, and execute.
-  mc_line(gc_block->values.xyz,pl_data);
+  mc_line(gc_block->values.xyza,pl_data);
   if (sys.state == STATE_IDLE) {
     if (plan_get_current_block() != NULL) { // Check if there is a block to execute.
       sys.state = STATE_JOG;

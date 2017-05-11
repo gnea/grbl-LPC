@@ -80,7 +80,7 @@ uint8_t gc_execute_line(char *line)
   uint8_t coord_select = 0; // Tracks G10 P coordinate selection for execution
 
   // Initialize bitflag tracking variables for axis indices compatible operations.
-  uint8_t axis_words = 0; // XYZ tracking
+  uint8_t axis_words = 0; // XYZA tracking
   uint8_t ijk_words = 0; // IJK tracking
 
   // Initialize command and value words and parser flags variables.
@@ -296,7 +296,7 @@ uint8_t gc_execute_line(char *line)
            legal g-code words and stores their value. Error-checking is performed later since some
            words (I,J,K,L,P,R) have multiple connotations and/or depend on the issued commands. */
         switch(letter){
-          // case 'A': // Not supported
+          case 'A': word_bit = WORD_A; gc_block.values.xyza[A_AXIS] = value; axis_words |= (1<<A_AXIS); break;
           // case 'B': // Not supported
           // case 'C': // Not supported
           // case 'D': // Not supported
@@ -316,9 +316,9 @@ uint8_t gc_execute_line(char *line)
 					  if (value > MAX_TOOL_NUMBER) { FAIL(STATUS_GCODE_MAX_VALUE_EXCEEDED); }
             gc_block.values.t = int_value;
 						break;
-          case 'X': word_bit = WORD_X; gc_block.values.xyz[X_AXIS] = value; axis_words |= (1<<X_AXIS); break;
-          case 'Y': word_bit = WORD_Y; gc_block.values.xyz[Y_AXIS] = value; axis_words |= (1<<Y_AXIS); break;
-          case 'Z': word_bit = WORD_Z; gc_block.values.xyz[Z_AXIS] = value; axis_words |= (1<<Z_AXIS); break;
+          case 'X': word_bit = WORD_X; gc_block.values.xyza[X_AXIS] = value; axis_words |= (1<<X_AXIS); break;
+          case 'Y': word_bit = WORD_Y; gc_block.values.xyza[Y_AXIS] = value; axis_words |= (1<<Y_AXIS); break;
+          case 'Z': word_bit = WORD_Z; gc_block.values.xyza[Z_AXIS] = value; axis_words |= (1<<Z_AXIS); break;
           default: FAIL(STATUS_GCODE_UNSUPPORTED_COMMAND);
         }
 
@@ -475,7 +475,7 @@ uint8_t gc_execute_line(char *line)
   if (gc_block.modal.units == UNITS_MODE_INCHES) {
     for (idx=0; idx<N_AXIS; idx++) { // Axes indices are consistent, so loop may be used.
       if (bit_istrue(axis_words,bit(idx)) ) {
-        gc_block.values.xyz[idx] *= MM_PER_INCH;
+        gc_block.values.xyza[idx] *= MM_PER_INCH;
       }
     }
   }
@@ -549,11 +549,11 @@ uint8_t gc_execute_line(char *line)
           if (gc_block.values.l == 20) {
             // L20: Update coordinate system axis at current position (with modifiers) with programmed value
             // WPos = MPos - WCS - G92 - TLO  ->  WCS = MPos - G92 - TLO - WPos
-            gc_block.values.ijk[idx] = gc_state.position[idx]-gc_state.coord_offset[idx]-gc_block.values.xyz[idx];
+            gc_block.values.ijk[idx] = gc_state.position[idx]-gc_state.coord_offset[idx]-gc_block.values.xyza[idx];
             if (idx == TOOL_LENGTH_OFFSET_AXIS) { gc_block.values.ijk[idx] -= gc_state.tool_length_offset; }
           } else {
             // L2: Update coordinate system axis to programmed value.
-            gc_block.values.ijk[idx] = gc_block.values.xyz[idx];
+            gc_block.values.ijk[idx] = gc_block.values.xyza[idx];
           }
         } // Else, keep current stored value.
       }
@@ -567,10 +567,10 @@ uint8_t gc_execute_line(char *line)
       for (idx=0; idx<N_AXIS; idx++) { // Axes indices are consistent, so loop may be used.
         if (bit_istrue(axis_words,bit(idx)) ) {
           // WPos = MPos - WCS - G92 - TLO  ->  G92 = MPos - WCS - TLO - WPos
-          gc_block.values.xyz[idx] = gc_state.position[idx]-block_coord_system[idx]-gc_block.values.xyz[idx];
-          if (idx == TOOL_LENGTH_OFFSET_AXIS) { gc_block.values.xyz[idx] -= gc_state.tool_length_offset; }
+          gc_block.values.xyza[idx] = gc_state.position[idx]-block_coord_system[idx]-gc_block.values.xyza[idx];
+          if (idx == TOOL_LENGTH_OFFSET_AXIS) { gc_block.values.xyza[idx] -= gc_state.tool_length_offset; }
         } else {
-          gc_block.values.xyz[idx] = gc_state.coord_offset[idx];
+          gc_block.values.xyza[idx] = gc_state.coord_offset[idx];
         }
       }
       break;
@@ -585,17 +585,17 @@ uint8_t gc_execute_line(char *line)
         if (axis_words) {
           for (idx=0; idx<N_AXIS; idx++) { // Axes indices are consistent, so loop may be used to save flash space.
             if ( bit_isfalse(axis_words,bit(idx)) ) {
-              gc_block.values.xyz[idx] = gc_state.position[idx]; // No axis word in block. Keep same axis position.
+              gc_block.values.xyza[idx] = gc_state.position[idx]; // No axis word in block. Keep same axis position.
             } else {
               // Update specified value according to distance mode or ignore if absolute override is active.
               // NOTE: G53 is never active with G28/30 since they are in the same modal group.
               if (gc_block.non_modal_command != NON_MODAL_ABSOLUTE_OVERRIDE) {
                 // Apply coordinate offsets based on distance mode.
                 if (gc_block.modal.distance == DISTANCE_MODE_ABSOLUTE) {
-                  gc_block.values.xyz[idx] += block_coord_system[idx] + gc_state.coord_offset[idx];
-                  if (idx == TOOL_LENGTH_OFFSET_AXIS) { gc_block.values.xyz[idx] += gc_state.tool_length_offset; }
+                  gc_block.values.xyza[idx] += block_coord_system[idx] + gc_state.coord_offset[idx];
+                  if (idx == TOOL_LENGTH_OFFSET_AXIS) { gc_block.values.xyza[idx] += gc_state.tool_length_offset; }
                 } else {  // Incremental mode
-                  gc_block.values.xyz[idx] += gc_state.position[idx];
+                  gc_block.values.xyza[idx] += gc_state.position[idx];
                 }
               }
             }
@@ -684,12 +684,12 @@ uint8_t gc_execute_line(char *line)
 
           // Calculate the change in position along each selected axis
           float x,y;
-          x = gc_block.values.xyz[axis_0]-gc_state.position[axis_0]; // Delta x between current position and target
-          y = gc_block.values.xyz[axis_1]-gc_state.position[axis_1]; // Delta y between current position and target
+          x = gc_block.values.xyza[axis_0]-gc_state.position[axis_0]; // Delta x between current position and target
+          y = gc_block.values.xyza[axis_1]-gc_state.position[axis_1]; // Delta y between current position and target
 
           if (value_words & bit(WORD_R)) { // Arc Radius Mode
             bit_false(value_words,bit(WORD_R));
-            if (isequal_position_vector(gc_state.position, gc_block.values.xyz)) { FAIL(STATUS_GCODE_INVALID_TARGET); } // [Invalid target]
+            if (isequal_position_vector(gc_state.position, gc_block.values.xyza)) { FAIL(STATUS_GCODE_INVALID_TARGET); } // [Invalid target]
 
             // Convert radius value to proper units.
             if (gc_block.modal.units == UNITS_MODE_INCHES) { gc_block.values.r *= MM_PER_INCH; }
@@ -816,7 +816,7 @@ uint8_t gc_execute_line(char *line)
           //   an error, it issues an alarm to prevent further motion to the probe. It's also done there to
           //   allow the planner buffer to empty and move off the probe trigger before another probing cycle.
           if (!axis_words) { FAIL(STATUS_GCODE_NO_AXIS_WORDS); } // [No axis words]
-          if (isequal_position_vector(gc_state.position, gc_block.values.xyz)) { FAIL(STATUS_GCODE_INVALID_TARGET); } // [Invalid target]
+          if (isequal_position_vector(gc_state.position, gc_block.values.xyza)) { FAIL(STATUS_GCODE_INVALID_TARGET); } // [Invalid target]
           break;
       }
     }
@@ -832,7 +832,7 @@ uint8_t gc_execute_line(char *line)
   } else {
     bit_false(value_words,(bit(WORD_N)|bit(WORD_F)|bit(WORD_S)|bit(WORD_T))); // Remove single-meaning value words.
   }
-  if (axis_command) { bit_false(value_words,(bit(WORD_X)|bit(WORD_Y)|bit(WORD_Z))); } // Remove axis words.
+  if (axis_command) { bit_false(value_words,(bit(WORD_X)|bit(WORD_Y)|bit(WORD_Z)|bit(WORD_A))); } // Remove axis words.
   if (value_words) { FAIL(STATUS_GCODE_UNUSED_WORDS); } // [Unused words]
 
   /* -------------------------------------------------------------------------------------
@@ -861,7 +861,7 @@ uint8_t gc_execute_line(char *line)
     plan_data.condition = (gc_state.modal.spindle | gc_state.modal.coolant);
 
     uint8_t status = jog_execute(&plan_data, &gc_block);
-    if (status == STATUS_OK) { memcpy(gc_state.position, gc_block.values.xyz, sizeof(gc_block.values.xyz)); }
+    if (status == STATUS_OK) { memcpy(gc_state.position, gc_block.values.xyza, sizeof(gc_block.values.xyza)); }
     return(status);
   }
   
@@ -985,10 +985,10 @@ uint8_t gc_execute_line(char *line)
   if (axis_command == AXIS_COMMAND_TOOL_LENGTH_OFFSET ) { // Indicates a change.
     gc_state.modal.tool_length = gc_block.modal.tool_length;
     if (gc_state.modal.tool_length == TOOL_LENGTH_OFFSET_CANCEL) { // G49
-      gc_block.values.xyz[TOOL_LENGTH_OFFSET_AXIS] = 0.0;
+      gc_block.values.xyza[TOOL_LENGTH_OFFSET_AXIS] = 0.0;
     } // else G43.1
-    if ( gc_state.tool_length_offset != gc_block.values.xyz[TOOL_LENGTH_OFFSET_AXIS] ) {
-      gc_state.tool_length_offset = gc_block.values.xyz[TOOL_LENGTH_OFFSET_AXIS];
+    if ( gc_state.tool_length_offset != gc_block.values.xyza[TOOL_LENGTH_OFFSET_AXIS] ) {
+      gc_state.tool_length_offset = gc_block.values.xyza[TOOL_LENGTH_OFFSET_AXIS];
       system_flag_wco_change();
     }
   }
@@ -1022,7 +1022,7 @@ uint8_t gc_execute_line(char *line)
       // Move to intermediate position before going home. Obeys current coordinate system and offsets
       // and absolute and incremental modes.
       pl_data->condition |= PL_COND_FLAG_RAPID_MOTION; // Set rapid motion condition flag.
-      if (axis_command) { mc_line(gc_block.values.xyz, pl_data); }
+      if (axis_command) { mc_line(gc_block.values.xyza, pl_data); }
       mc_line(gc_block.values.ijk, pl_data);
       memcpy(gc_state.position, gc_block.values.ijk, N_AXIS*sizeof(float));
       break;
@@ -1033,7 +1033,7 @@ uint8_t gc_execute_line(char *line)
       settings_write_coord_data(SETTING_INDEX_G30,gc_state.position,false,true);
       break;
     case NON_MODAL_SET_COORDINATE_OFFSET:
-      memcpy(gc_state.coord_offset,gc_block.values.xyz,sizeof(gc_block.values.xyz));
+      memcpy(gc_state.coord_offset,gc_block.values.xyza,sizeof(gc_block.values.xyza));
       system_flag_wco_change();
       break;
     case NON_MODAL_RESET_COORDINATE_OFFSET:
@@ -1051,27 +1051,27 @@ uint8_t gc_execute_line(char *line)
     if (axis_command == AXIS_COMMAND_MOTION_MODE) {
       uint8_t gc_update_pos = GC_UPDATE_POS_TARGET;
       if (gc_state.modal.motion == MOTION_MODE_LINEAR) {
-        mc_line(gc_block.values.xyz, pl_data);
+        mc_line(gc_block.values.xyza, pl_data);
       } else if (gc_state.modal.motion == MOTION_MODE_SEEK) {
         pl_data->condition |= PL_COND_FLAG_RAPID_MOTION; // Set rapid motion condition flag.
-        mc_line(gc_block.values.xyz, pl_data);
+        mc_line(gc_block.values.xyza, pl_data);
       } else if ((gc_state.modal.motion == MOTION_MODE_CW_ARC) || (gc_state.modal.motion == MOTION_MODE_CCW_ARC)) {
-        mc_arc(gc_block.values.xyz, pl_data, gc_state.position, gc_block.values.ijk, gc_block.values.r,
+        mc_arc(gc_block.values.xyza, pl_data, gc_state.position, gc_block.values.ijk, gc_block.values.r,
             axis_0, axis_1, axis_linear, bit_istrue(gc_parser_flags,GC_PARSER_ARC_IS_CLOCKWISE));
       } else {
-        // NOTE: gc_block.values.xyz is returned from mc_probe_cycle with the updated position value. So
+        // NOTE: gc_block.values.xyza is returned from mc_probe_cycle with the updated position value. So
         // upon a successful probing cycle, the machine position and the returned value should be the same.
         #ifndef ALLOW_FEED_OVERRIDE_DURING_PROBE_CYCLES
           pl_data->condition |= PL_COND_FLAG_NO_FEED_OVERRIDE;
         #endif
-        gc_update_pos = mc_probe_cycle(gc_block.values.xyz, pl_data, gc_parser_flags);
+        gc_update_pos = mc_probe_cycle(gc_block.values.xyza, pl_data, gc_parser_flags);
       }  
      
       // As far as the parser is concerned, the position is now == target. In reality the
       // motion control system might still be processing the action and the real tool position
       // in any intermediate location.
       if (gc_update_pos == GC_UPDATE_POS_TARGET) {
-        memcpy(gc_state.position, gc_block.values.xyz, sizeof(gc_block.values.xyz)); // gc_state.position[] = gc_block.values.xyz[]
+        memcpy(gc_state.position, gc_block.values.xyza, sizeof(gc_block.values.xyza)); // gc_state.position[] = gc_block.values.xyza[]
       } else if (gc_update_pos == GC_UPDATE_POS_SYSTEM) {
         gc_sync_position(); // gc_state.position[] = sys_position
       } // == GC_UPDATE_POS_NONE

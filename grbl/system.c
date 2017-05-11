@@ -185,6 +185,9 @@ uint8_t system_execute_line(char *line)
                 case 'X': mc_homing_cycle(HOMING_CYCLE_X); break;
                 case 'Y': mc_homing_cycle(HOMING_CYCLE_Y); break;
                 case 'Z': mc_homing_cycle(HOMING_CYCLE_Z); break;
+                case 'A': mc_homing_cycle(HOMING_CYCLE_A); break;
+                //case 'B': mc_homing_cycle(HOMING_CYCLE_B); break;
+                //case 'C': mc_homing_cycle(HOMING_CYCLE_C); break;
                 default: return(STATUS_INVALID_STATEMENT);
               }
           #endif

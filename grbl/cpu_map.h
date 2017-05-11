@@ -144,8 +144,162 @@
 
   // NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
   #define SPINDLE_PWM_DDR	  DDRB
-  #define SPINDLE_PWM_PORT  PORTB
+  #define SPINDLE_PWM_PORT    PORTB
   #define SPINDLE_PWM_BIT	  3    // Uno Digital Pin 11
+
+#endif
+
+
+#ifdef CPU_MAP_LPC1769 // (Boards with NXP-LPC1769 MCU, like Smoothieboard, Cohesion3D, MKS SBase) Only supported by grbl_LPC
+
+  // Define serial port pins and interrupt vectors.
+  #define SERIAL_RX     USART_RX_vect
+  #define SERIAL_UDRE   USART_UDRE_vect
+
+  // Define step pulse output pins. NOTE: All step bit pins must be on the same port.
+  #define STEP_DDR        LPC_GPIO2->FIODIR
+  #define STEP_PORT       LPC_GPIO2->FIOPIN
+  #define X_STEP_BIT      0
+  #define Y_STEP_BIT      1
+  #define Z_STEP_BIT      2
+  #define A_STEP_BIT      3
+  //#define B_STEP_BIT      8
+  //#define C_STEP_BIT      9
+  #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
+
+  // Define step direction output pins. NOTE: All direction pins must be on the same port.
+  #define DIRECTION_DDR     LPC_GPIO0->FIODIR
+  #define DIRECTION_PORT    LPC_GPIO0->FIOPIN
+  #define X_DIRECTION_BIT   5
+  #define Y_DIRECTION_BIT   11
+  #define Z_DIRECTION_BIT   20
+  #define A_DIRECTION_BIT   22
+  //#define B_DIRECTION_BIT   13
+  //#define C_DIRECTION_BIT   NotUsed
+  #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
+
+  // Define stepper driver enable/disable output pin.
+  #define STEPPERS_DISABLE_DDR    LPC_GPIO0->FIODIR
+  #define STEPPERS_DISABLE_PORT   LPC_GPIO0->FIOPIN
+  #define X_DISABLE_BIT           4
+  #define Y_DISABLE_BIT           10
+  #define Z_DISABLE_BIT           19
+  #define A_DISABLE_BIT           21
+  //#define B_DISABLE_BIT           29
+  //#define C_DISABLE_BIT           NotUsed
+  #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
+
+  // Define homing/hard limit switch input pins and limit interrupt vectors.
+  // NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
+  #define LIMIT_DDR         LPC_GPIO1->FIODIR
+  #define LIMIT_PIN         LPC_GPIO1->FIOPIN
+  #define LIMIT_PORT        LPC_GPIO1->FIOPIN
+  #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
+  #define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
+  #define Z_LIMIT_BIT	    29  // Z-MIN=28, Z-MAX=29
+  #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  //#define B_LIMIT_BIT       NotUsed
+  //#define C_LIMIT_BIT 	  NotUsed
+  #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
+  // hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
+  // hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
+  // hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
+
+  // Define spindle enable and spindle direction output pins.
+  /* not ported
+  #define SPINDLE_ENABLE_DDR    DDRB
+  #define SPINDLE_ENABLE_PORT   PORTB
+  // Z Limit pin and spindle PWM/enable pin swapped to access hardware PWM on Pin 11.
+  #ifdef VARIABLE_SPINDLE
+    #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
+      // If enabled, spindle direction pin now used as spindle enable, while PWM remains on D11.
+      #define SPINDLE_ENABLE_BIT    5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
+    #else
+      #define SPINDLE_ENABLE_BIT    3  // Uno Digital Pin 11
+    #endif
+  #else
+    #define SPINDLE_ENABLE_BIT    4  // Uno Digital Pin 12
+  #endif
+  #ifndef USE_SPINDLE_DIR_AS_ENABLE_PIN
+    #define SPINDLE_DIRECTION_DDR   DDRB
+    #define SPINDLE_DIRECTION_PORT  PORTB
+    #define SPINDLE_DIRECTION_BIT   5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
+  #endif
+  */
+
+  // Define flood and mist coolant enable output pins.
+  #define COOLANT_FLOOD_DDR   NotUsed
+  #define COOLANT_FLOOD_PORT  NotUsed
+  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
+  #define COOLANT_MIST_DDR   NotUsed
+  #define COOLANT_MIST_PORT  NotUsed
+  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
+
+  // Define user-control controls (cycle start, reset, feed hold) input pins.
+  // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
+  #define CONTROL_DDR       NotUsed
+  #define CONTROL_PIN       NotUsed
+  #define CONTROL_PORT      NotUsed
+  #define CONTROL_RESET_BIT         0  // Uno Analog Pin 0
+  #define CONTROL_FEED_HOLD_BIT     1  // Uno Analog Pin 1
+  #define CONTROL_CYCLE_START_BIT   2  // Uno Analog Pin 2
+  #define CONTROL_SAFETY_DOOR_BIT   1  // Uno Analog Pin 1 NOTE: Safety door is shared with feed hold. Enabled by config define.
+  #define CONTROL_INT       PCIE1  // Pin change interrupt enable pin
+  #define CONTROL_INT_vect  PCINT1_vect
+  #define CONTROL_PCMSK     NotUsed // Pin change interrupt register
+  #define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
+  #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
+
+  // Define probe switch input pin.
+  #define PROBE_DDR       NotUsed
+  #define PROBE_PIN       NotUsed
+  #define PROBE_PORT      NotUsed
+  #define PROBE_BIT       5  // Uno Analog Pin 5
+  #define PROBE_MASK      (1<<PROBE_BIT)
+
+  // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
+  //
+  // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
+  // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
+  // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6
+  #define SPINDLE_PWM_USE_PRIMARY_PIN   false
+  #define SPINDLE_PWM_USE_SECONDARY_PIN true
+
+  // Stepper current control
+  #ifndef BOARD_C3D
+    #define CURRENT_I2C Driver_I2C1       // I2C driver for current control. Comment out to disable (for C3d boards!)
+  #endif
+  #define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
+  #define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
+  #define CURRENT_FACTOR 113.33           // Convert amps to digipot value
+
+  // Variable spindle configuration below. Do not change unless you know what you are doing.
+  // NOTE: Only used when variable spindle is enabled.
+  #define SPINDLE_PWM_MAX_VALUE     255 // Don't change. 328p fast PWM mode fixes top value as 255.
+  #ifndef SPINDLE_PWM_MIN_VALUE
+    #define SPINDLE_PWM_MIN_VALUE   1   // Must be greater than zero.
+  #endif
+  //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
+  #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
+  #define SPINDLE_TCCRA_REGISTER	TCCR2A
+  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_OCR_REGISTER      OCR2A
+  #define SPINDLE_COMB_BIT	        COM2A1
+
+  // Prescaled, 8-bit Fast PWM mode.
+  /* not used
+  #define SPINDLE_TCCRA_INIT_MASK   ((1<<WGM20) | (1<<WGM21))  // Configures fast PWM mode.
+  // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS20)               // Disable prescaler -> 62.5kHz
+  // #define SPINDLE_TCCRB_INIT_MASK   (1<<CS21)               // 1/8 prescaler -> 7.8kHz (Used in v0.9)
+  // #define SPINDLE_TCCRB_INIT_MASK   ((1<<CS21) | (1<<CS20)) // 1/32 prescaler -> 1.96kHz
+  #define SPINDLE_TCCRB_INIT_MASK      (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
+
+  // NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
+  #define SPINDLE_PWM_DDR	  DDRB
+  #define SPINDLE_PWM_PORT    PORTB
+  #define SPINDLE_PWM_BIT	  3    // Uno Digital Pin 11
+  */
 
 #endif
 

@@ -35,8 +35,11 @@
 // NOTE: OEMs can avoid the need to maintain/update the defaults.h and cpu_map.h files and use only
 // one configuration file by placing their specific defaults and pin map at the bottom of this file.
 // If doing so, simply comment out these two defines and see instructions below.
-// #define DEFAULTS_GENERIC
-// #define CPU_MAP_ATMEGA328P // Arduino Uno CPU
+#define CPU_MAP_LPC1769 // NXP LPC1769 boards (like Smoothieboard, Cohesion3D, MKS SBase)
+#define BOARD_C3D       // For boards without i2c stepper current chip (like Cohesion3D).
+//#define DEFAULTS_GENERIC
+#define DEFAULTS_K40
+//#define DEFAULTS_FABKIT
 
 // Serial baud rate
 // #define BAUD_RATE 230400
@@ -359,6 +362,7 @@
 //      pwm = scaled value. settings.rpm_min scales to SPINDLE_PWM_MIN_VALUE. settings.rpm_max
 //            scales to SPINDLE_PWM_MAX_VALUE.
 
+// Not needed anymore, as spindle PWM frequency is set by $33 param
 //#define SPINDLE_PWM_PERIOD        (SystemCoreClock / 40000)         // SystemCoreClock / frequency
 #define SPINDLE_PWM_OFF_VALUE     0.0    // SPINDLE_PWM_PERIOD * fraction
 //#define SPINDLE_PWM_MIN_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
@@ -629,154 +633,5 @@
    below.
 */
 
-// Paste CPU_MAP definitions here.
-// Define serial port pins and interrupt vectors.
-#define SERIAL_RX     USART_RX_vect
-#define SERIAL_UDRE   USART_UDRE_vect
-
-// Define step pulse output pins. NOTE: All step bit pins must be on the same port.
-#define STEP_DDR        LPC_GPIO2->FIODIR
-#define STEP_PORT       LPC_GPIO2->FIOPIN
-#define X_STEP_BIT      0
-#define Y_STEP_BIT      1
-#define Z_STEP_BIT      2
-#define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)) // All step bits
-
-// Define step direction output pins. NOTE: All direction pins must be on the same port.
-#define DIRECTION_DDR     LPC_GPIO0->FIODIR
-#define DIRECTION_PORT    LPC_GPIO0->FIOPIN
-#define X_DIRECTION_BIT   5
-#define Y_DIRECTION_BIT   11
-#define Z_DIRECTION_BIT   20
-#define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)) // All direction bits
-
-// Define stepper driver enable/disable output pin.
-#define STEPPERS_DISABLE_DDR    LPC_GPIO0->FIODIR
-#define STEPPERS_DISABLE_PORT   LPC_GPIO0->FIOPIN
-#define X_DISABLE_BIT           4
-#define Y_DISABLE_BIT           10
-#define Z_DISABLE_BIT           19
-#define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT))
-
-// Define homing/hard limit switch input pins and limit interrupt vectors.
-// NOTE: All limit bit pins must be on the same port, but not on a port with other input pins (CONTROL).
-#define LIMIT_DDR         LPC_GPIO1->FIODIR
-#define LIMIT_PIN         LPC_GPIO1->FIOPIN
-#define LIMIT_PORT        LPC_GPIO1->FIOPIN
-#define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
-#define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
-#define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
-#define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)) //|(1<<Z_LIMIT_BIT)) // All limit bits
-// hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
-// hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
-// hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
-
-// Define spindle enable and spindle direction output pins.
-/* not ported
-#define SPINDLE_ENABLE_DDR    DDRB
-#define SPINDLE_ENABLE_PORT   PORTB
-// Z Limit pin and spindle PWM/enable pin swapped to access hardware PWM on Pin 11.
-#ifdef VARIABLE_SPINDLE
-  #ifdef USE_SPINDLE_DIR_AS_ENABLE_PIN
-    // If enabled, spindle direction pin now used as spindle enable, while PWM remains on D11.
-    #define SPINDLE_ENABLE_BIT    5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
-  #else
-    #define SPINDLE_ENABLE_BIT    3  // Uno Digital Pin 11
-  #endif
-#else
-  #define SPINDLE_ENABLE_BIT    4  // Uno Digital Pin 12
-#endif
-#ifndef USE_SPINDLE_DIR_AS_ENABLE_PIN
-  #define SPINDLE_DIRECTION_DDR   DDRB
-  #define SPINDLE_DIRECTION_PORT  PORTB
-  #define SPINDLE_DIRECTION_BIT   5  // Uno Digital Pin 13 (NOTE: D13 can't be pulled-high input due to LED.)
-#endif
-*/
-
-// Define flood and mist coolant enable output pins.
-#define COOLANT_FLOOD_DDR   NotUsed
-#define COOLANT_FLOOD_PORT  NotUsed
-#define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-#define COOLANT_MIST_DDR   NotUsed
-#define COOLANT_MIST_PORT  NotUsed
-#define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
-
-// Define user-control controls (cycle start, reset, feed hold) input pins.
-// NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
-#define CONTROL_DDR       NotUsed
-#define CONTROL_PIN       NotUsed
-#define CONTROL_PORT      NotUsed
-#define CONTROL_RESET_BIT         0  // Uno Analog Pin 0
-#define CONTROL_FEED_HOLD_BIT     1  // Uno Analog Pin 1
-#define CONTROL_CYCLE_START_BIT   2  // Uno Analog Pin 2
-#define CONTROL_SAFETY_DOOR_BIT   1  // Uno Analog Pin 1 NOTE: Safety door is shared with feed hold. Enabled by config define.
-#define CONTROL_INT       PCIE1  // Pin change interrupt enable pin
-#define CONTROL_INT_vect  PCINT1_vect
-#define CONTROL_PCMSK     NotUsed // Pin change interrupt register
-#define CONTROL_MASK      ((1<<CONTROL_RESET_BIT)|(1<<CONTROL_FEED_HOLD_BIT)|(1<<CONTROL_CYCLE_START_BIT)|(1<<CONTROL_SAFETY_DOOR_BIT))
-#define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
-
-// Define probe switch input pin.
-#define PROBE_DDR       NotUsed
-#define PROBE_PIN       NotUsed
-#define PROBE_PORT      NotUsed
-#define PROBE_BIT       5  // Uno Analog Pin 5
-#define PROBE_MASK      (1<<PROBE_BIT)
-
-// The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
-//
-// PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
-// Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
-// Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-#define SPINDLE_PWM_CHANNEL           PWM1_CH6
-#define SPINDLE_PWM_USE_PRIMARY_PIN   false
-#define SPINDLE_PWM_USE_SECONDARY_PIN true
-
-// Stepper current control
-//#define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
-#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
-#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
-#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
-
-// Paste default settings definitions here.
-#define DEFAULT_X_STEPS_PER_MM 160.0
-#define DEFAULT_Y_STEPS_PER_MM 160.0
-#define DEFAULT_Z_STEPS_PER_MM 160.0
-#define DEFAULT_X_MAX_RATE 24000 // mm/min
-#define DEFAULT_Y_MAX_RATE 24000 // mm/min
-#define DEFAULT_Z_MAX_RATE 24000 // mm/min
-#define DEFAULT_X_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_Y_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_Z_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_X_CURRENT 0.0 // amps
-#define DEFAULT_Y_CURRENT 0.0 // amps
-#define DEFAULT_Z_CURRENT 0.0 // amps
-#define DEFAULT_A_CURRENT 0.0  // amps
-#define DEFAULT_X_MAX_TRAVEL 300.0 // mm
-#define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_Z_MAX_TRAVEL 50.0 // mm
-#define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
-#define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
-#define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
-#define DEFAULT_STEP_PULSE_MICROSECONDS 10
-#define DEFAULT_STEPPING_INVERT_MASK 0
-#define DEFAULT_DIRECTION_INVERT_MASK 0
-#define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
-#define DEFAULT_STATUS_REPORT_MASK 0 // WPos enabled
-#define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
-#define DEFAULT_ARC_TOLERANCE 0.002 // mm
-#define DEFAULT_REPORT_INCHES 0 // false
-#define DEFAULT_INVERT_ST_ENABLE 0 // false
-#define DEFAULT_INVERT_LIMIT_PINS 1 // false
-#define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
-#define DEFAULT_HARD_LIMIT_ENABLE 0  // false
-#define DEFAULT_INVERT_PROBE_PIN 0 // false
-#define DEFAULT_LASER_MODE 1 // true
-#define DEFAULT_HOMING_ENABLE 0  // false
-#define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
-#define DEFAULT_HOMING_FEED_RATE 50.0 // mm/min
-#define DEFAULT_HOMING_SEEK_RATE 6000.0 // mm/min
-#define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
-#define DEFAULT_HOMING_PULLOFF 1.0 // mm
 
 #endif

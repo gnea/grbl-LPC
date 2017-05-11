@@ -32,15 +32,33 @@
   #define DEFAULT_X_STEPS_PER_MM 250.0
   #define DEFAULT_Y_STEPS_PER_MM 250.0
   #define DEFAULT_Z_STEPS_PER_MM 250.0
+  #define DEFAULT_A_STEPS_PER_MM 160.0
+  //#define DEFAULT_B_STEPS_PER_MM 160.0
+  //#define DEFAULT_C_STEPS_PER_MM 160.0
   #define DEFAULT_X_MAX_RATE 500.0 // mm/min
   #define DEFAULT_Y_MAX_RATE 500.0 // mm/min
   #define DEFAULT_Z_MAX_RATE 500.0 // mm/min
+  #define DEFAULT_A_MAX_RATE 500.0 // mm/min
+  //#define DEFAULT_B_MAX_RATE 500.0 // mm/min
+  //#define DEFAULT_C_MAX_RATE 500.0 // mm/min
   #define DEFAULT_X_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Y_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Z_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_A_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  //#define DEFAULT_B_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  //#define DEFAULT_C_ACCELERATION (10.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_X_CURRENT 0.6 // amps
+  #define DEFAULT_Y_CURRENT 0.6 // amps
+  #define DEFAULT_Z_CURRENT 0.0 // amps
+  #define DEFAULT_A_CURRENT 0.0 // amps
+  //#define DEFAULT_B_CURRENT 0.0 // amps
+  //#define DEFAULT_C_CURRENT 0.0 // amps
   #define DEFAULT_X_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_A_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
+  //#define DEFAULT_B_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
+  //#define DEFAULT_C_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
@@ -71,19 +89,33 @@
   #define DEFAULT_X_STEPS_PER_MM 160.0
   #define DEFAULT_Y_STEPS_PER_MM 160.0
   #define DEFAULT_Z_STEPS_PER_MM 160.0
+  #define DEFAULT_A_STEPS_PER_MM 160.0
+  //#define DEFAULT_B_STEPS_PER_MM 160.0
+  //#define DEFAULT_C_STEPS_PER_MM 160.0
   #define DEFAULT_X_MAX_RATE 24000.0 // mm/min
   #define DEFAULT_Y_MAX_RATE 24000.0 // mm/min
   #define DEFAULT_Z_MAX_RATE 24000.0 // mm/min
+  #define DEFAULT_A_MAX_RATE 24000.0 // mm/min
+  //#define DEFAULT_B_MAX_RATE 24000.0 // mm/min
+  //#define DEFAULT_C_MAX_RATE 24000.0 // mm/min
   #define DEFAULT_X_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Y_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
   #define DEFAULT_Z_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
-  #define DEFAULT_X_CURRENT 0.0 // amps
-  #define DEFAULT_Y_CURRENT 0.0 // amps
+  #define DEFAULT_A_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  //#define DEFAULT_B_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  //#define DEFAULT_C_ACCELERATION (2500.0*60*60) // 10*60*60 mm/min^2 = 10 mm/sec^2
+  #define DEFAULT_X_CURRENT 0.6 // amps
+  #define DEFAULT_Y_CURRENT 0.6 // amps
   #define DEFAULT_Z_CURRENT 0.0 // amps
-  #define DEFAULT_A_CURRENT 0.0  // amps
+  #define DEFAULT_A_CURRENT 0.0 // amps
+  //#define DEFAULT_B_CURRENT 0.0 // amps
+  //#define DEFAULT_C_CURRENT 0.0 // amps
   #define DEFAULT_X_MAX_TRAVEL 300.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
-  #define DEFAULT_Z_MAX_TRAVEL 50.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_Z_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_A_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
+  //#define DEFAULT_B_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
+  //#define DEFAULT_C_MAX_TRAVEL 1.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
@@ -109,6 +141,49 @@
   #define DEFAULT_HOMING_PULLOFF 1.0 // mm
 #endif
 
+#ifdef DEFAULTS_FABKIT
+  // Paste default settings definitions here.
+  #define DEFAULT_X_STEPS_PER_MM 80.0
+  #define DEFAULT_Y_STEPS_PER_MM 80.0
+  #define DEFAULT_Z_STEPS_PER_MM 640.0
+  #define DEFAULT_X_MAX_RATE 30000 // mm/min
+  #define DEFAULT_Y_MAX_RATE 4500 // mm/min
+  #define DEFAULT_Z_MAX_RATE 1200 // mm/min
+  #define DEFAULT_X_ACCELERATION (4000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+  #define DEFAULT_Y_ACCELERATION (250.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+  #define DEFAULT_Z_ACCELERATION (150.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+  #define DEFAULT_X_CURRENT 1.5 // amps
+  #define DEFAULT_Y_CURRENT 1.5 // amps
+  #define DEFAULT_Z_CURRENT 1.5 // amps
+  #define DEFAULT_A_CURRENT 0.0  // amps
+  #define DEFAULT_X_MAX_TRAVEL 680.0 // mm
+  #define DEFAULT_Y_MAX_TRAVEL 460.0 // mm
+  #define DEFAULT_Z_MAX_TRAVEL 150.0 // mm
+  #define DEFAULT_SPINDLE_PWM_FREQ 50000 // Hz
+  #define DEFAULT_SPINDLE_RPM_MAX 0.7 // rpm
+  #define DEFAULT_SPINDLE_RPM_MIN 0.08 // rpm
+  #define DEFAULT_STEP_PULSE_MICROSECONDS 1
+  #define DEFAULT_STEPPING_INVERT_MASK 0
+  #define DEFAULT_DIRECTION_INVERT_MASK 2
+  #define DEFAULT_STEPPER_IDLE_LOCK_TIME 255 // msec (0-254, 255 keeps steppers enabled)
+  #define DEFAULT_STATUS_REPORT_MASK 0 // WPos enabled
+  #define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
+  #define DEFAULT_ARC_TOLERANCE 0.002 // mm
+  #define DEFAULT_REPORT_INCHES 0 // false
+  #define DEFAULT_INVERT_ST_ENABLE 0 // false
+  #define DEFAULT_INVERT_LIMIT_PINS 1 // false
+  #define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
+  #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
+  #define DEFAULT_INVERT_PROBE_PIN 0 // false
+  #define DEFAULT_LASER_MODE 1 // true
+  #define DEFAULT_HOMING_ENABLE 1  // false
+  #define DEFAULT_HOMING_DIR_MASK 1 // move positive dir
+  #define DEFAULT_HOMING_FEED_RATE 60.0 // mm/min
+  #define DEFAULT_HOMING_SEEK_RATE 6000.0 // mm/min
+  #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
+  #define DEFAULT_HOMING_PULLOFF 1.0 // mm
+#endif
+
 #ifdef DEFAULTS_SHERLINE_5400
   // Description: Sherline 5400 mill with three NEMA 23 Keling  KL23H256-21-8B 185 oz-in stepper motors,
   // driven by three Pololu A4988 stepper drivers with a 30V, 6A power supply at 1.5A per winding.
@@ -127,6 +202,7 @@
   #define DEFAULT_X_MAX_TRAVEL 225.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 125.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 170.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 2800.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -172,6 +248,7 @@
   #define DEFAULT_X_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -217,6 +294,7 @@
   #define DEFAULT_X_MAX_TRAVEL 290.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 290.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 100.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -261,6 +339,7 @@
   #define DEFAULT_X_MAX_TRAVEL 425.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 465.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 80.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -306,6 +385,7 @@
   #define DEFAULT_X_MAX_TRAVEL 290.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 290.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 100.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -351,6 +431,7 @@
   #define DEFAULT_X_MAX_TRAVEL 740.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 790.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 100.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -394,6 +475,7 @@
   #define DEFAULT_X_MAX_TRAVEL 190.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 180.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 150.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 10000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -433,6 +515,7 @@
   #define DEFAULT_X_MAX_TRAVEL 500.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 750.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 80.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -472,6 +555,7 @@
   #define DEFAULT_X_MAX_TRAVEL 1000.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Y_MAX_TRAVEL 1000.0 // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 1000.0 // mm NOTE: Must be a positive value.
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
   #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
   #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
