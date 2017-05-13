@@ -25,13 +25,21 @@
 
 #ifdef VARIABLE_SPINDLE
   static float pwm_gradient; // Precalulated value to speed up rpm to PWM conversions.
+  float spindle_pwm_period;
+  float spindle_pwm_off_value;
+  float spindle_pwm_min_value;
+  float spindle_pwm_max_value;
 #endif
 
 
 void spindle_init()
 {
   #ifdef VARIABLE_SPINDLE
-    pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, SPINDLE_PWM_PERIOD, 0);
+    spindle_pwm_period = (SystemCoreClock / settings.spindle_pwm_freq);
+    spindle_pwm_off_value = (spindle_pwm_period * settings.spindle_pwm_off_value / 100);
+    spindle_pwm_min_value = (spindle_pwm_period * settings.spindle_pwm_min_value / 100);
+    spindle_pwm_max_value = (spindle_pwm_period * settings.spindle_pwm_max_value / 100);
+    pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, spindle_pwm_period, 0);
     pwm_enable(&SPINDLE_PWM_CHANNEL);
 
     /* not ported
@@ -44,7 +52,7 @@ void spindle_init()
     #endif
     */
 
-    pwm_gradient = (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)/(settings.rpm_max-settings.rpm_min);
+    pwm_gradient = (spindle_pwm_max_value-spindle_pwm_min_value)/(settings.rpm_max-settings.rpm_min);
 
   #else
     /* not ported
@@ -134,21 +142,21 @@ void spindle_stop()
     rpm *= (0.010*sys.spindle_speed_ovr); // Scale by spindle speed override value.
     if (rpm <= 0) {
       sys.spindle_speed = 0;
-      pwm_value = SPINDLE_PWM_OFF_VALUE;
+      pwm_value = spindle_pwm_off_value;
     }
     else if (rpm <= settings.rpm_min) {
       sys.spindle_speed = settings.rpm_min;
-      pwm_value = SPINDLE_PWM_MIN_VALUE;
+      pwm_value = spindle_pwm_min_value;
     }
     else if (rpm >= settings.rpm_max) {
       sys.spindle_speed = settings.rpm_max;
-      pwm_value = SPINDLE_PWM_MAX_VALUE - 1;
+      pwm_value = spindle_pwm_max_value - 1;
     }
     else {
       sys.spindle_speed = rpm;
-      pwm_value = floor((rpm - settings.rpm_min) * pwm_gradient) + SPINDLE_PWM_MIN_VALUE;
-      if(pwm_value >= SPINDLE_PWM_MAX_VALUE)
-        pwm_value = SPINDLE_PWM_MAX_VALUE - 1;
+      pwm_value = floor((rpm - settings.rpm_min) * pwm_gradient) + spindle_pwm_min_value;
+      if(pwm_value >= spindle_pwm_max_value)
+        pwm_value = spindle_pwm_max_value - 1;
     }
     return(pwm_value);
   }

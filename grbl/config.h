@@ -359,11 +359,6 @@
 //      pwm = scaled value. settings.rpm_min scales to SPINDLE_PWM_MIN_VALUE. settings.rpm_max
 //            scales to SPINDLE_PWM_MAX_VALUE.
 
-#define SPINDLE_PWM_PERIOD        (SystemCoreClock / 40000)         // SystemCoreClock / frequency
-#define SPINDLE_PWM_OFF_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
-#define SPINDLE_PWM_MIN_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
-#define SPINDLE_PWM_MAX_VALUE     (SPINDLE_PWM_PERIOD * 1.0)  // SPINDLE_PWM_PERIOD * fraction
-
 // Used by variable spindle output only. This forces the PWM output to a minimum duty cycle when enabled.
 // The PWM pin will still read 0V when the spindle is disabled. Most users will not need this option, but
 // it may be useful in certain scenarios. This minimum PWM settings coincides with the spindle rpm minimum
@@ -755,13 +750,17 @@
 #define DEFAULT_X_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Z_MAX_TRAVEL 200.0 // mm
+#define DEFAULT_SPINDLE_PWM_FREQ          5000        // Hz
+#define DEFAULT_SPINDLE_PWM_OFF_VALUE     0.0         // Percent
+#define DEFAULT_SPINDLE_PWM_MIN_VALUE     0.0         // Percent
+#define DEFAULT_SPINDLE_PWM_MAX_VALUE     100.0       // Percent
 #define DEFAULT_SPINDLE_RPM_MAX 1.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
 #define DEFAULT_STEP_PULSE_MICROSECONDS 1
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
 #define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
-#define DEFAULT_STATUS_REPORT_MASK 1 // MPos enabled
+#define DEFAULT_STATUS_REPORT_MASK 0 // WPos enabled
 #define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
 #define DEFAULT_ARC_TOLERANCE 0.002 // mm
 #define DEFAULT_REPORT_INCHES 0 // false

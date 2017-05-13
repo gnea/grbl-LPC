@@ -1,7 +1,8 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 
 ***
-_Click the `Release` tab to download pre-compiled `.bin` files or just [click here](https://github.com/gnea/grbl-LPC/releases)_
+Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
+Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
 ***
 This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
 
@@ -10,13 +11,8 @@ Usage notes:
   If it doesn't, try installing VCOM_lib/usbser.inf.
 * This doesn't pass the sdcard to the host. Once installed you need to use a micro sdcard adaptor to replace or change it.
 * Only tested with lasers with PWM. Non-PWM spindle control not ported.
-* These are fixed PWM config values. To change these you'll have to change ```SPINDLE_PWM_*``` in config.h and rebuild.
-  * Pin 2.4
-  * 40 kHz
-  * PWM off value: 0%
-  * Mimimum PWM value: 0%
-  * Maximum PWM value: 100%
 * These are defaults for easy-to-change config values.
+  * WPos enabled for LaserWeb compatability ($10=0)
   * Laser mode: ON ($32)
   * Minimum S value: 0.0 ($31)
   * Maximum S value: 1.0 ($30)
@@ -24,9 +20,13 @@ Usage notes:
 * Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
 
 New configuration settings
+* $33 is PWM frequency in Hz
+* $34 is PWM off value in %
+* $35 is PWM min value in %
+* $36 is PWM max value in %
 * $140, $141, $142 are X, Y, Z current (amps)
-* Default to 0.0 A to avoid burning out your motors
-* Your motors will likely stall if you don't set these!
+  * Default to 0.0 A to avoid burning out your motors
+  * Your motors will likely stall if you don't set these!
 
 Build notes:
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
