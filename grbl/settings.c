@@ -87,6 +87,9 @@ void settings_restore(uint8_t restore_flag) {
     settings.arc_tolerance = DEFAULT_ARC_TOLERANCE;
 
     settings.spindle_pwm_freq = DEFAULT_SPINDLE_PWM_FREQ;
+    settings.spindle_pwm_off_value = DEFAULT_SPINDLE_PWM_OFF_VALUE;
+    settings.spindle_pwm_min_value = DEFAULT_SPINDLE_PWM_MIN_VALUE;
+    settings.spindle_pwm_max_value = DEFAULT_SPINDLE_PWM_MAX_VALUE;
     settings.rpm_max = DEFAULT_SPINDLE_RPM_MAX;
     settings.rpm_min = DEFAULT_SPINDLE_RPM_MIN;
 
@@ -319,6 +322,9 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
         #endif
         break;
       case 33: settings.spindle_pwm_freq = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 34: settings.spindle_pwm_off_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 35: settings.spindle_pwm_min_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 36: settings.spindle_pwm_max_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
       default:
         return(STATUS_INVALID_STATEMENT);
     }
