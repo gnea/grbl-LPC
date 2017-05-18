@@ -100,7 +100,7 @@
   #define DEFAULT_Y_MAX_TRAVEL 200.0        // mm NOTE: Must be a positive value.
   #define DEFAULT_Z_MAX_TRAVEL 50.0         // mm NOTE: Must be a positive value.
   #define DEFAULT_A_MAX_TRAVEL 100.0        // mm NOTE: Must be a positive value.
-  #define DEFAULT_SPINDLE_PWM_FREQ 5000     // Hz
+  #define DEFAULT_SPINDLE_PWM_FREQ 5000     // Hz (2000 - 20000)
   #define DEFAULT_SPINDLE_PWM_OFF_VALUE 0   // %
   #define DEFAULT_SPINDLE_PWM_MIN_VALUE 1   // %
   #define DEFAULT_SPINDLE_PWM_MAX_VALUE 100 // %
@@ -108,7 +108,7 @@
   #define DEFAULT_SPINDLE_RPM_MIN 0.0       // rpm (S-value)
   #define DEFAULT_STEP_PULSE_MICROSECONDS 10
   #define DEFAULT_STEPPING_INVERT_MASK 0
-  #define DEFAULT_DIRECTION_INVERT_MASK 0
+  #define DEFAULT_DIRECTION_INVERT_MASK 3   // 3 = invert X+Y
   #define DEFAULT_STEPPER_IDLE_LOCK_TIME 255// msec (0-254, 255 keeps steppers enabled)
   #define DEFAULT_STATUS_REPORT_MASK 0      // WPos enabled
   #define DEFAULT_JUNCTION_DEVIATION 0.01   // mm
@@ -159,7 +159,7 @@
   #define DEFAULT_SPINDLE_RPM_MIN 0.08      // rpm (S-value)
   #define DEFAULT_STEP_PULSE_MICROSECONDS 1
   #define DEFAULT_STEPPING_INVERT_MASK 0
-  #define DEFAULT_DIRECTION_INVERT_MASK 2
+  #define DEFAULT_DIRECTION_INVERT_MASK 2   // 2 = invert Y
   #define DEFAULT_STEPPER_IDLE_LOCK_TIME 255// msec (0-254, 255 keeps steppers enabled)
   #define DEFAULT_STATUS_REPORT_MASK 0      // WPos enabled
   #define DEFAULT_JUNCTION_DEVIATION 0.01   // mm
