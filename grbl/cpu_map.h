@@ -269,10 +269,10 @@
   // Stepper current control
   #ifndef BOARD_C3D
     #define CURRENT_I2C Driver_I2C1       // I2C driver for current control. Comment out to disable (for C3d boards!)
+    #define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
+    #define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
+    #define CURRENT_FACTOR 113.33           // Convert amps to digipot value
   #endif
-  #define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
-  #define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
-  #define CURRENT_FACTOR 113.33           // Convert amps to digipot value
 
   // Variable spindle configuration below. Do not change unless you know what you are doing.
   // NOTE: Only used when variable spindle is enabled.

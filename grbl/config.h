@@ -111,10 +111,11 @@
 // #define HOMING_CYCLE_2                         // OPTIONAL: Uncomment and add axes mask to enable
 
 // NOTE: The following are two examples to setup homing for 2-axis machines.
-#define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
+//#define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
 
 // #define HOMING_CYCLE_0 (1<<X_AXIS)  // COREXY COMPATIBLE: First home X
 // #define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
+// Homing cycle pattern is defined in Machine defaults!!!
 
 // Number of homing cycles performed after when the machine initially jogs to limit switches.
 // This help in preventing overshoot and should improve repeatability. This value should be one or
@@ -361,12 +362,6 @@
 //  else
 //      pwm = scaled value. settings.rpm_min scales to SPINDLE_PWM_MIN_VALUE. settings.rpm_max
 //            scales to SPINDLE_PWM_MAX_VALUE.
-
-// Not needed anymore, as spindle PWM frequency is set by $33 param
-//#define SPINDLE_PWM_PERIOD        (SystemCoreClock / 40000)         // SystemCoreClock / frequency
-#define SPINDLE_PWM_OFF_VALUE     0.0    // SPINDLE_PWM_PERIOD * fraction
-//#define SPINDLE_PWM_MIN_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
-//#define SPINDLE_PWM_MAX_VALUE     (SPINDLE_PWM_PERIOD * 1.0)  // SPINDLE_PWM_PERIOD * fraction
 
 // Used by variable spindle output only. This forces the PWM output to a minimum duty cycle when enabled.
 // The PWM pin will still read 0V when the spindle is disabled. Most users will not need this option, but

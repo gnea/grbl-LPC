@@ -25,10 +25,10 @@
 
 #ifdef VARIABLE_SPINDLE
   static float pwm_gradient; // Precalulated value to speed up rpm to PWM conversions.
-  static float spindle_pwm_period;
-  static float spindle_pwm_off_value;
-  static float spindle_pwm_min_value;
-  static float spindle_pwm_max_value;
+  float spindle_pwm_period;
+  float spindle_pwm_off_value;
+  float spindle_pwm_min_value;
+  float spindle_pwm_max_value;
 #endif
 
 
@@ -36,12 +36,10 @@ void spindle_init()
 {
   #ifdef VARIABLE_SPINDLE
     spindle_pwm_period = (SystemCoreClock / settings.spindle_pwm_freq);
-    spindle_pwm_off_value = (spindle_pwm_period * 0.0);    // SPINDLE_PWM_PERIOD * fraction
-    spindle_pwm_min_value = (spindle_pwm_period * 0.0);    // SPINDLE_PWM_PERIOD * fraction
-    spindle_pwm_max_value = (spindle_pwm_period * 1.0);    // SPINDLE_PWM_PERIOD * fraction
-
-    //pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, SPINDLE_PWM_PERIOD, 0);
-    pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, spindle_pwm_period, 0); //SPINDLE_PWM_PERIOD
+    spindle_pwm_off_value = (spindle_pwm_period * settings.spindle_pwm_off_value / 100);
+    spindle_pwm_min_value = (spindle_pwm_period * settings.spindle_pwm_min_value / 100);
+    spindle_pwm_max_value = (spindle_pwm_period * settings.spindle_pwm_max_value / 100);
+    pwm_init(&SPINDLE_PWM_CHANNEL, SPINDLE_PWM_USE_PRIMARY_PIN, SPINDLE_PWM_USE_SECONDARY_PIN, spindle_pwm_period, 0);
     pwm_enable(&SPINDLE_PWM_CHANNEL);
 
     /* not ported
@@ -54,7 +52,6 @@ void spindle_init()
     #endif
     */
 
-    //pwm_gradient = (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)/(settings.rpm_max-settings.rpm_min);
     pwm_gradient = (spindle_pwm_max_value-spindle_pwm_min_value)/(settings.rpm_max-settings.rpm_min);
 
   #else
