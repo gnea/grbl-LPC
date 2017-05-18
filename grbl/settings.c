@@ -337,6 +337,9 @@ uint8_t settings_store_global_setting(uint8_t parameter, float value) {
         #endif
         break;
       case 33: settings.spindle_pwm_freq = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 34: settings.spindle_pwm_off_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 35: settings.spindle_pwm_min_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
+      case 36: settings.spindle_pwm_max_value = value; spindle_init(); break; // Re-initialize spindle pwm calibration
       default:
         return(STATUS_INVALID_STATEMENT);
     }

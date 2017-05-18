@@ -142,21 +142,21 @@ void spindle_stop()
     rpm *= (0.010*sys.spindle_speed_ovr); // Scale by spindle speed override value.
     if (rpm <= 0) {
       sys.spindle_speed = 0;
-      pwm_value = spindle_pwm_off_value;    //SPINDLE_PWM_OFF_VALUE
+      pwm_value = spindle_pwm_off_value;
     }
     else if (rpm <= settings.rpm_min) {
       sys.spindle_speed = settings.rpm_min;
-      pwm_value = spindle_pwm_min_value;    //SPINDLE_PWM_MIN_VALUE
+      pwm_value = spindle_pwm_min_value;
     }
     else if (rpm >= settings.rpm_max) {
       sys.spindle_speed = settings.rpm_max;
-      pwm_value = spindle_pwm_max_value - 1;    //SPINDLE_PWM_MAX_VALUE
+      pwm_value = spindle_pwm_max_value - 1;
     }
     else {
       sys.spindle_speed = rpm;
-      pwm_value = floor((rpm - settings.rpm_min) * pwm_gradient) + spindle_pwm_min_value;   //SPINDLE_PWM_MIN_VALUE
-      if(pwm_value >= spindle_pwm_max_value)    //SPINDLE_PWM_MAX_VALUE
-        pwm_value = spindle_pwm_max_value - 1;  //SPINDLE_PWM_MAX_VALUE
+      pwm_value = floor((rpm - settings.rpm_min) * pwm_gradient) + spindle_pwm_min_value;
+      if(pwm_value >= spindle_pwm_max_value)
+        pwm_value = spindle_pwm_max_value - 1;
     }
     return(pwm_value);
   }
