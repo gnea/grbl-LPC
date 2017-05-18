@@ -765,8 +765,8 @@
 #define DEFAULT_ARC_TOLERANCE 0.002 // mm
 #define DEFAULT_REPORT_INCHES 0 // false
 #define DEFAULT_INVERT_ST_ENABLE 0 // false
-#define DEFAULT_INVERT_LIMIT_PINS 1 // false
-#define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
+#define DEFAULT_INVERT_LIMIT_PINS 3 // false
+#define DEFAULT_SOFT_LIMIT_ENABLE 1 // false
 #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
 #define DEFAULT_INVERT_PROBE_PIN 0 // false
 #define DEFAULT_LASER_MODE 1 // true
