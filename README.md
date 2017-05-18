@@ -1,7 +1,8 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 
 ***
-_Click the `Release` tab to download pre-compiled `.bin` files or just [click here](https://github.com/cprezzi/grbl-LPC/releases)_
+Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
+Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
 ***
 This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
 
@@ -12,23 +13,20 @@ Usage notes:
 * Only tested with lasers with PWM. Non-PWM spindle control not ported.
 * These are defaults for easy-to-change config values.
   * WPos enabled for LaserWeb compatability ($10=0)
-  * Maximum S value: 1000.0 ($30)
+  * Laser mode: ON ($32)
   * Minimum S value: 0.0 ($31)
-  * Laser mode: 1 ($32)
-* New configuration settings
-  * $33 is PWM frequency in Hz
-  * $34 is PWM off value in %
-  * $35 is PWM min value in %
-  * $36 is PWM max value in %
-  * $140 is X current (amps)
-  * $141 is Y current (amps)
-  * $142 is Z current (amps)
-  * Currents default to 0.0 amps to avoid burning out your motors/drivers
-  * Your motors will likely stall if you don't set these!
-
+  * Maximum S value: 1.0 ($30)
 * Hard limits not yet ported
 * Control inputs not yet ported (e.g. Cycle Start and Safety Door switches)
 
+New configuration settings
+* $33 is PWM frequency in Hz
+* $34 is PWM off value in %
+* $35 is PWM min value in %
+* $36 is PWM max value in %
+* $140, $141, $142 are X, Y, Z current (amps)
+  * Default to 0.0 A to avoid burning out your motors
+  * Your motors will likely stall if you don't set these!
 
 Build notes:
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
