@@ -37,6 +37,7 @@
 // If doing so, simply comment out these two defines and see instructions below.
 #define CPU_MAP_LPC1769 // NXP LPC1769 boards (like Smoothieboard, Cohesion3D, MKS SBase)
 #define BOARD_C3D       // For boards without i2c stepper current chip (like Cohesion3D).
+
 //#define DEFAULTS_GENERIC
 #define DEFAULTS_K40
 //#define DEFAULTS_FABKIT
@@ -132,6 +133,9 @@
 // for professional CNC machines, regardless of where the limit switches are located. Uncomment this
 // define to force Grbl to always set the machine origin at the homed location despite switch orientation.
 // #define HOMING_FORCE_SET_ORIGIN // Uncomment to enable.
+
+// Uncomment this define to force Grbl to always set the machine origin at bottom left.
+#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
 
 // Number of blocks Grbl executes upon startup. These blocks are stored in EEPROM, where the size
 // and addresses are defined in settings.h. With the current settings, up to 2 startup blocks may
