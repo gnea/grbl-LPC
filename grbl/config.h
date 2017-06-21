@@ -108,10 +108,10 @@
 // #define HOMING_CYCLE_2                         // OPTIONAL: Uncomment and add axes mask to enable
 
 // NOTE: The following are two examples to setup homing for 2-axis machines.
-#define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
+// #define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
 
-// #define HOMING_CYCLE_0 (1<<X_AXIS)  // COREXY COMPATIBLE: First home X
-// #define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
+#define HOMING_CYCLE_0 (1<<X_AXIS)  // COREXY COMPATIBLE: First home X
+#define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
 
 // Number of homing cycles performed after when the machine initially jogs to limit switches.
 // This help in preventing overshoot and should improve repeatability. This value should be one or
@@ -187,7 +187,7 @@
 // defined at (http://corexy.com/theory.html). Motors are assumed to positioned and wired exactly as
 // described, if not, motions may move in strange directions. Grbl requires the CoreXY A and B motors
 // have the same steps per mm internally.
-// #define COREXY // Default disabled. Uncomment to enable.
+#define COREXY // Default disabled. Uncomment to enable.
 
 // Inverts pin logic of the control command pins based on a mask. This essentially means you can use
 // normally-closed switches on the specified pins, rather than the default normally-open switches.
@@ -664,9 +664,9 @@
 #define LIMIT_PIN         LPC_GPIO1->FIOPIN
 #define LIMIT_PORT        LPC_GPIO1->FIOPIN
 #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
-#define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
+#define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
 #define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
-#define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)) //|(1<<Z_LIMIT_BIT)) // All limit bits
+#define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
 // hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
 // hard limits not ported    #define LIMIT_INT_vect   PCINT0_vect
 // hard limits not ported    #define LIMIT_PCMSK      PCMSK0 // Pin change interrupt register
@@ -734,9 +734,9 @@
 
 // Stepper current control
 //#define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
-#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
-#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
-#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
+//#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
+//#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
+//#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
 
 // Paste default settings definitions here.
 #define DEFAULT_X_STEPS_PER_MM 160.0
@@ -761,7 +761,7 @@
 #define DEFAULT_STEP_PULSE_MICROSECONDS 10
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
-#define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
+#define DEFAULT_STEPPER_IDLE_LOCK_TIME 255 // msec (0-254, 255 keeps steppers enabled)
 #define DEFAULT_STATUS_REPORT_MASK 0 // WPos enabled
 #define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
 #define DEFAULT_ARC_TOLERANCE 0.002 // mm
