@@ -129,6 +129,9 @@
 // define to force Grbl to always set the machine origin at the homed location despite switch orientation.
 // #define HOMING_FORCE_SET_ORIGIN // Uncomment to enable.
 
+// Uncomment this define to force Grbl to always set the machine origin at bottom left.
+#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
+
 // Number of blocks Grbl executes upon startup. These blocks are stored in EEPROM, where the size
 // and addresses are defined in settings.h. With the current settings, up to 2 startup blocks may
 // be stored and executed in order. These startup blocks would typically be used to set the g-code
@@ -358,11 +361,6 @@
 //  else
 //      pwm = scaled value. settings.rpm_min scales to SPINDLE_PWM_MIN_VALUE. settings.rpm_max
 //            scales to SPINDLE_PWM_MAX_VALUE.
-
-//#define SPINDLE_PWM_PERIOD        (SystemCoreClock / 40000)         // SystemCoreClock / frequency
-#define SPINDLE_PWM_OFF_VALUE     0.0    // SPINDLE_PWM_PERIOD * fraction
-//#define SPINDLE_PWM_MIN_VALUE     (SPINDLE_PWM_PERIOD * 0.0)    // SPINDLE_PWM_PERIOD * fraction
-//#define SPINDLE_PWM_MAX_VALUE     (SPINDLE_PWM_PERIOD * 1.0)  // SPINDLE_PWM_PERIOD * fraction
 
 // Used by variable spindle output only. This forces the PWM output to a minimum duty cycle when enabled.
 // The PWM pin will still read 0V when the spindle is disabled. Most users will not need this option, but
@@ -717,10 +715,10 @@
 #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
 
 // Define probe switch input pin.
-#define PROBE_DDR       NotUsed
-#define PROBE_PIN       NotUsed
-#define PROBE_PORT      NotUsed
-#define PROBE_BIT       5  // Uno Analog Pin 5
+#define PROBE_DDR       NotUsed // LPC_GPIO1->FIODIR
+#define PROBE_PIN       NotUsed // LPC_GPIO1->FIOPIN
+#define PROBE_PORT      NotUsed // LPC_GPIO1->FIOPIN
+#define PROBE_BIT       5
 #define PROBE_MASK      (1<<PROBE_BIT)
 
 // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
@@ -744,18 +742,21 @@
 #define DEFAULT_Z_STEPS_PER_MM 160.0
 #define DEFAULT_X_MAX_RATE 24000 // mm/min
 #define DEFAULT_Y_MAX_RATE 24000 // mm/min
-#define DEFAULT_Z_MAX_RATE 24000 // mm/min
+#define DEFAULT_Z_MAX_RATE 500.0 // mm/min
 #define DEFAULT_X_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
 #define DEFAULT_Y_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
 #define DEFAULT_Z_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_X_CURRENT 0.0 // amps
-#define DEFAULT_Y_CURRENT 0.0 // amps
+#define DEFAULT_X_CURRENT 0.4 // amps
+#define DEFAULT_Y_CURRENT 0.6 // amps
 #define DEFAULT_Z_CURRENT 0.0 // amps
 #define DEFAULT_A_CURRENT 0.0  // amps
 #define DEFAULT_X_MAX_TRAVEL 300.0 // mm
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
 #define DEFAULT_Z_MAX_TRAVEL 50.0 // mm
-#define DEFAULT_SPINDLE_PWM_FREQ 5000 // Hz
+#define DEFAULT_SPINDLE_PWM_FREQ          5000        // Hz
+#define DEFAULT_SPINDLE_PWM_OFF_VALUE     0.0         // Percent
+#define DEFAULT_SPINDLE_PWM_MIN_VALUE     0.0         // Percent
+#define DEFAULT_SPINDLE_PWM_MAX_VALUE     100.0       // Percent
 #define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
 #define DEFAULT_STEP_PULSE_MICROSECONDS 10
@@ -768,15 +769,15 @@
 #define DEFAULT_REPORT_INCHES 0 // false
 #define DEFAULT_INVERT_ST_ENABLE 0 // false
 #define DEFAULT_INVERT_LIMIT_PINS 1 // false
-#define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
+#define DEFAULT_SOFT_LIMIT_ENABLE 1 // false
 #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
 #define DEFAULT_INVERT_PROBE_PIN 0 // false
 #define DEFAULT_LASER_MODE 1 // true
-#define DEFAULT_HOMING_ENABLE 0  // false
-#define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
+#define DEFAULT_HOMING_ENABLE 1  // false
+#define DEFAULT_HOMING_DIR_MASK 1 // move positive dir
 #define DEFAULT_HOMING_FEED_RATE 50.0 // mm/min
 #define DEFAULT_HOMING_SEEK_RATE 6000.0 // mm/min
 #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
-#define DEFAULT_HOMING_PULLOFF 1.0 // mm
+#define DEFAULT_HOMING_PULLOFF 2.0 // mm
 
 #endif
