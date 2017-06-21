@@ -103,15 +103,15 @@
 // on separate pin, but homed in one cycle. Also, it should be noted that the function of hard limits
 // will not be affected by pin sharing.
 // NOTE: Defaults are set for a traditional 3-axis CNC machine. Z-axis first to clear, followed by X & Y.
-#define HOMING_CYCLE_0 (1<<Z_AXIS)                // REQUIRED: First move Z to clear workspace.
-#define HOMING_CYCLE_1 ((1<<X_AXIS)|(1<<Y_AXIS))  // OPTIONAL: Then move X,Y at the same time.
+//#define HOMING_CYCLE_0 (1<<Z_AXIS)                // REQUIRED: First move Z to clear workspace.
+//#define HOMING_CYCLE_1 ((1<<X_AXIS)|(1<<Y_AXIS))  // OPTIONAL: Then move X,Y at the same time.
 // #define HOMING_CYCLE_2                         // OPTIONAL: Uncomment and add axes mask to enable
 
 // NOTE: The following are two examples to setup homing for 2-axis machines.
 // #define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))  // NOT COMPATIBLE WITH COREXY: Homes both X-Y in one cycle. 
 
-// #define HOMING_CYCLE_0 (1<<X_AXIS)  // COREXY COMPATIBLE: First home X
-// #define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
+#define HOMING_CYCLE_0 (1<<X_AXIS)  // COREXY COMPATIBLE: First home X
+#define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
 
 // Number of homing cycles performed after when the machine initially jogs to limit switches.
 // This help in preventing overshoot and should improve repeatability. This value should be one or
@@ -128,6 +128,9 @@
 // for professional CNC machines, regardless of where the limit switches are located. Uncomment this
 // define to force Grbl to always set the machine origin at the homed location despite switch orientation.
 // #define HOMING_FORCE_SET_ORIGIN // Uncomment to enable.
+
+// Uncomment this define to force Grbl to always set the machine origin at bottom left.
+#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
 
 // Number of blocks Grbl executes upon startup. These blocks are stored in EEPROM, where the size
 // and addresses are defined in settings.h. With the current settings, up to 2 startup blocks may
@@ -187,7 +190,7 @@
 // defined at (http://corexy.com/theory.html). Motors are assumed to positioned and wired exactly as
 // described, if not, motions may move in strange directions. Grbl requires the CoreXY A and B motors
 // have the same steps per mm internally.
-// #define COREXY // Default disabled. Uncomment to enable.
+#define COREXY // Default disabled. Uncomment to enable.
 
 // Inverts pin logic of the control command pins based on a mask. This essentially means you can use
 // normally-closed switches on the specified pins, rather than the default normally-open switches.
@@ -658,8 +661,8 @@
 #define LIMIT_DDR         LPC_GPIO1->FIODIR
 #define LIMIT_PIN         LPC_GPIO1->FIOPIN
 #define LIMIT_PORT        LPC_GPIO1->FIOPIN
-#define X_LIMIT_BIT       25  // X-MIN=24, X-MAX=25
-#define Y_LIMIT_BIT       27  // Y-MIN=26, Y-MAX=27
+#define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
+#define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
 #define Z_LIMIT_BIT	      29  // Z-MIN=28, Z-MAX=29
 #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
 // hard limits not ported    #define LIMIT_INT        PCIE0  // Pin change interrupt enable pin
@@ -712,10 +715,10 @@
 #define CONTROL_INVERT_MASK   CONTROL_MASK // May be re-defined to only invert certain control pins.
 
 // Define probe switch input pin.
-#define PROBE_DDR       NotUsed
-#define PROBE_PIN       NotUsed
-#define PROBE_PORT      NotUsed
-#define PROBE_BIT       5  // Uno Analog Pin 5
+#define PROBE_DDR       NotUsed // LPC_GPIO1->FIODIR
+#define PROBE_PIN       NotUsed // LPC_GPIO1->FIOPIN
+#define PROBE_PORT      NotUsed // LPC_GPIO1->FIOPIN
+#define PROBE_BIT       5
 #define PROBE_MASK      (1<<PROBE_BIT)
 
 // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
@@ -723,58 +726,58 @@
 // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
 // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
 // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-#define SPINDLE_PWM_CHANNEL           PWM1_CH5
+#define SPINDLE_PWM_CHANNEL           PWM1_CH6
 #define SPINDLE_PWM_USE_PRIMARY_PIN   false
 #define SPINDLE_PWM_USE_SECONDARY_PIN true
 
 // Stepper current control
-#define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
-#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
-#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
-#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
+//#define CURRENT_I2C Driver_I2C1         // I2C driver for current control. Comment out to disable.
+//#define CURRENT_MCP44XX_ADDR 0b0101100  // Address of MCP44XX
+//#define CURRENT_WIPERS {0, 1, 6, 7};    // Wiper registers (X, Y, Z, A)
+//#define CURRENT_FACTOR 113.33           // Convert amps to digipot value
 
 // Paste default settings definitions here.
-#define DEFAULT_X_STEPS_PER_MM 158.0
-#define DEFAULT_Y_STEPS_PER_MM 158.0
-#define DEFAULT_Z_STEPS_PER_MM 158.0
-#define DEFAULT_X_MAX_RATE 30000 // mm/min
-#define DEFAULT_Y_MAX_RATE 30000 // mm/min
+#define DEFAULT_X_STEPS_PER_MM 160.0
+#define DEFAULT_Y_STEPS_PER_MM 160.0
+#define DEFAULT_Z_STEPS_PER_MM 160.0
+#define DEFAULT_X_MAX_RATE 24000 // mm/min
+#define DEFAULT_Y_MAX_RATE 24000 // mm/min
 #define DEFAULT_Z_MAX_RATE 500.0 // mm/min
-#define DEFAULT_X_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_Y_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_Z_ACCELERATION (5000.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
-#define DEFAULT_X_CURRENT 0.0 // amps
-#define DEFAULT_Y_CURRENT 0.0 // amps
+#define DEFAULT_X_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_Y_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_Z_ACCELERATION (2500.0*60*60) // 5000*60*60 mm/min^2 = 5000 mm/sec^2
+#define DEFAULT_X_CURRENT 0.4 // amps
+#define DEFAULT_Y_CURRENT 0.6 // amps
 #define DEFAULT_Z_CURRENT 0.0 // amps
 #define DEFAULT_A_CURRENT 0.0  // amps
-#define DEFAULT_X_MAX_TRAVEL 200.0 // mm
+#define DEFAULT_X_MAX_TRAVEL 300.0 // mm
 #define DEFAULT_Y_MAX_TRAVEL 200.0 // mm
-#define DEFAULT_Z_MAX_TRAVEL 200.0 // mm
+#define DEFAULT_Z_MAX_TRAVEL 50.0 // mm
 #define DEFAULT_SPINDLE_PWM_FREQ          5000        // Hz
 #define DEFAULT_SPINDLE_PWM_OFF_VALUE     0.0         // Percent
 #define DEFAULT_SPINDLE_PWM_MIN_VALUE     0.0         // Percent
 #define DEFAULT_SPINDLE_PWM_MAX_VALUE     100.0       // Percent
-#define DEFAULT_SPINDLE_RPM_MAX 1.0 // rpm
+#define DEFAULT_SPINDLE_RPM_MAX 1000.0 // rpm
 #define DEFAULT_SPINDLE_RPM_MIN 0.0 // rpm
-#define DEFAULT_STEP_PULSE_MICROSECONDS 1
+#define DEFAULT_STEP_PULSE_MICROSECONDS 10
 #define DEFAULT_STEPPING_INVERT_MASK 0
 #define DEFAULT_DIRECTION_INVERT_MASK 0
-#define DEFAULT_STEPPER_IDLE_LOCK_TIME 25 // msec (0-254, 255 keeps steppers enabled)
+#define DEFAULT_STEPPER_IDLE_LOCK_TIME 255 // msec (0-254, 255 keeps steppers enabled)
 #define DEFAULT_STATUS_REPORT_MASK 0 // WPos enabled
 #define DEFAULT_JUNCTION_DEVIATION 0.01 // mm
 #define DEFAULT_ARC_TOLERANCE 0.002 // mm
 #define DEFAULT_REPORT_INCHES 0 // false
 #define DEFAULT_INVERT_ST_ENABLE 0 // false
-#define DEFAULT_INVERT_LIMIT_PINS 0 // false
-#define DEFAULT_SOFT_LIMIT_ENABLE 0 // false
+#define DEFAULT_INVERT_LIMIT_PINS 1 // false
+#define DEFAULT_SOFT_LIMIT_ENABLE 1 // false
 #define DEFAULT_HARD_LIMIT_ENABLE 0  // false
 #define DEFAULT_INVERT_PROBE_PIN 0 // false
 #define DEFAULT_LASER_MODE 1 // true
-#define DEFAULT_HOMING_ENABLE 0  // false
-#define DEFAULT_HOMING_DIR_MASK 0 // move positive dir
-#define DEFAULT_HOMING_FEED_RATE 25.0 // mm/min
-#define DEFAULT_HOMING_SEEK_RATE 500.0 // mm/min
+#define DEFAULT_HOMING_ENABLE 1  // false
+#define DEFAULT_HOMING_DIR_MASK 1 // move positive dir
+#define DEFAULT_HOMING_FEED_RATE 50.0 // mm/min
+#define DEFAULT_HOMING_SEEK_RATE 6000.0 // mm/min
 #define DEFAULT_HOMING_DEBOUNCE_DELAY 250 // msec (0-65k)
-#define DEFAULT_HOMING_PULLOFF 1.0 // mm
+#define DEFAULT_HOMING_PULLOFF 2.0 // mm
 
 #endif
