@@ -31,6 +31,9 @@ New configuration settings
 * Your motors will likely stall if you don't set these!
 
 Build notes:
+* You should use virtual machines, if you use multiple toolchains on the same PC.
+* Install make if not already there (for Windows see http://gnuwin32.sourceforge.net/packages/make.htm)
+* Install the ARM embeded toolchain (see https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
 * Run ```git submodule init``` and ```git submodule update``` before building.
 * Make produces 2 files:
