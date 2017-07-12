@@ -43,6 +43,9 @@
 #define DEFAULTS_K40
 //#define DEFAULTS_FABKIT
 
+// For machines with A axis (like rotation axis)
+#define ENABLE_A_AXIS
+
 // Serial baud rate
 // #define BAUD_RATE 230400
 #define BAUD_RATE 115200

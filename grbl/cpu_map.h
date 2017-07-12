@@ -162,7 +162,9 @@
   #define X_STEP_BIT      0
   #define Y_STEP_BIT      1
   #define Z_STEP_BIT      2
-  #define A_STEP_BIT      3
+  #ifdef ENABLE_A_AXIS
+    #define A_STEP_BIT      3
+  #endif
   //#define B_STEP_BIT      8
   //#define C_STEP_BIT      9
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
@@ -173,7 +175,9 @@
   #define X_DIRECTION_BIT   5
   #define Y_DIRECTION_BIT   11
   #define Z_DIRECTION_BIT   20
-  #define A_DIRECTION_BIT   22
+  #ifdef ENABLE_A_AXIS
+    #define A_DIRECTION_BIT   22
+  #endif
   //#define B_DIRECTION_BIT   13
   //#define C_DIRECTION_BIT   NotUsed
   #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
@@ -184,7 +188,9 @@
   #define X_DISABLE_BIT           4
   #define Y_DISABLE_BIT           10
   #define Z_DISABLE_BIT           19
-  #define A_DISABLE_BIT           21
+  #ifdef ENABLE_A_AXIS
+    #define A_DISABLE_BIT           21
+  #endif
   //#define B_DISABLE_BIT           29
   //#define C_DISABLE_BIT           NotUsed
   #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
@@ -197,7 +203,9 @@
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
   #define Z_LIMIT_BIT	    29  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  #ifdef ENABLE_A_AXIS
+    #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  #endif
   //#define B_LIMIT_BIT       NotUsed
   //#define C_LIMIT_BIT 	  NotUsed
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
@@ -274,9 +282,9 @@
   #define X_STEP_BIT      0
   #define Y_STEP_BIT      1
   #define Z_STEP_BIT      2
-  #define A_STEP_BIT      3
-  //#define B_STEP_BIT      8
-  //#define C_STEP_BIT      9
+  #ifdef ENABLE_A_AXIS
+    #define A_STEP_BIT      3
+  #endif
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
 
   // Define step direction output pins. NOTE: All direction pins must be on the same port.
@@ -285,9 +293,9 @@
   #define X_DIRECTION_BIT   5
   #define Y_DIRECTION_BIT   11
   #define Z_DIRECTION_BIT   20
-  #define A_DIRECTION_BIT   22
-  //#define B_DIRECTION_BIT   13
-  //#define C_DIRECTION_BIT   NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DIRECTION_BIT   22
+  #endif
   #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
 
   // Define stepper driver enable/disable output pin.
@@ -296,9 +304,9 @@
   #define X_DISABLE_BIT           4
   #define Y_DISABLE_BIT           10
   #define Z_DISABLE_BIT           19
-  #define A_DISABLE_BIT           21
-  //#define B_DISABLE_BIT           29
-  //#define C_DISABLE_BIT           NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DISABLE_BIT           21
+  #endif
   #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
@@ -309,9 +317,9 @@
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
   #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       29  // reuse p1.25 from Z-MAX
-  //#define B_LIMIT_BIT       NotUsed
-  //#define C_LIMIT_BIT 	  NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
+  #endif
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
@@ -380,9 +388,9 @@
   #define X_STEP_BIT      0
   #define Y_STEP_BIT      1
   #define Z_STEP_BIT      2
-  #define A_STEP_BIT      3
-  //#define B_STEP_BIT      8
-  //#define C_STEP_BIT      9
+  #ifdef ENABLE_A_AXIS
+    #define A_STEP_BIT      3
+  #endif
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
 
   // Define step direction output pins. NOTE: All direction pins must be on the same port.
@@ -391,9 +399,9 @@
   #define X_DIRECTION_BIT   5
   #define Y_DIRECTION_BIT   11
   #define Z_DIRECTION_BIT   20
-  #define A_DIRECTION_BIT   22
-  //#define B_DIRECTION_BIT   13
-  //#define C_DIRECTION_BIT   NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DIRECTION_BIT   22
+  #endif
   #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
 
   // Define stepper driver enable/disable output pin.
@@ -402,9 +410,9 @@
   #define X_DISABLE_BIT           4
   #define Y_DISABLE_BIT           10
   #define Z_DISABLE_BIT           19
-  #define A_DISABLE_BIT           21
-  //#define B_DISABLE_BIT           29
-  //#define C_DISABLE_BIT           NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DISABLE_BIT           21
+  #endif
   #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
@@ -415,9 +423,9 @@
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
   #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
-  //#define B_LIMIT_BIT       NotUsed
-  //#define C_LIMIT_BIT 	  NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
+  #endif
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
@@ -486,9 +494,9 @@
   #define X_STEP_BIT      0
   #define Y_STEP_BIT      1
   #define Z_STEP_BIT      2
-  #define A_STEP_BIT      3
-  //#define B_STEP_BIT      8
-  //#define C_STEP_BIT      9
+  #ifdef ENABLE_A_AXIS
+    #define A_STEP_BIT      3
+  #endif
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
 
   // Define step direction output pins. NOTE: All direction pins must be on the same port.
@@ -497,9 +505,9 @@
   #define X_DIRECTION_BIT   5
   #define Y_DIRECTION_BIT   11
   #define Z_DIRECTION_BIT   20
-  #define A_DIRECTION_BIT   22
-  //#define B_DIRECTION_BIT   13
-  //#define C_DIRECTION_BIT   NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DIRECTION_BIT   22
+  #endif
   #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
 
   // Define stepper driver enable/disable output pin.
@@ -508,9 +516,9 @@
   #define X_DISABLE_BIT           4
   #define Y_DISABLE_BIT           10
   #define Z_DISABLE_BIT           19
-  #define A_DISABLE_BIT           21
-  //#define B_DISABLE_BIT           29
-  //#define C_DISABLE_BIT           NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_DISABLE_BIT           21
+  #endif
   #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
@@ -521,9 +529,9 @@
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
   #define Z_LIMIT_BIT	    29  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
-  //#define B_LIMIT_BIT       NotUsed
-  //#define C_LIMIT_BIT 	  NotUsed
+  #ifdef ENABLE_A_AXIS
+    #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  #endif
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
@@ -598,7 +606,9 @@
   #define X_STEP_BIT      1
   #define Y_STEP_BIT      2
   #define Z_STEP_BIT      3
-  #define A_STEP_BIT      0
+  #ifdef ENABLE_A_AXIS
+    #define A_STEP_BIT      0
+  #endif
   #define STEP_MASK       ((1<<X_STEP_BIT)|(1<<Y_STEP_BIT)|(1<<Z_STEP_BIT)|(1<<A_STEP_BIT)) // All step bits
 
   // Define step direction output pins. NOTE: All direction pins must be on the same port.
@@ -607,7 +617,9 @@
   #define X_DIRECTION_BIT   11
   #define Y_DIRECTION_BIT   20
   #define Z_DIRECTION_BIT   22
-  #define A_DIRECTION_BIT   5
+  #ifdef ENABLE_A_AXIS
+    #define A_DIRECTION_BIT   5
+  #endif
   #define DIRECTION_MASK    ((1<<X_DIRECTION_BIT)|(1<<Y_DIRECTION_BIT)|(1<<Z_DIRECTION_BIT)|(1<<A_DIRECTION_BIT)) // All direction bits
 
   // Define stepper driver enable/disable output pin.
@@ -616,7 +628,9 @@
   #define X_DISABLE_BIT           10
   #define Y_DISABLE_BIT           19
   #define Z_DISABLE_BIT           21
-  #define A_DISABLE_BIT           4
+  #ifdef ENABLE_A_AXIS
+    #define A_DISABLE_BIT           4
+  #endif
   #define STEPPERS_DISABLE_MASK   ((1<<X_DISABLE_BIT)|(1<<Y_DISABLE_BIT)|(1<<Z_DISABLE_BIT)|(1<<A_DISABLE_BIT))
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
@@ -627,7 +641,9 @@
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=27
   #define Y_LIMIT_BIT       25  // Y-MIN=25, Y-MAX=28
   #define Z_LIMIT_BIT	    26  // Z-MIN=26, Z-MAX=29
-  #define A_LIMIT_BIT       27  // reuse p1.27, as X-MAX is not used
+  #ifdef ENABLE_A_AXIS
+    #define A_LIMIT_BIT       27  // reuse p1.27, as X-MAX is not used
+  #endif
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
