@@ -190,8 +190,8 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
-  #define Z_LIMIT_BIT	    29  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
+  #define A_LIMIT_BIT       29  // reuse p1.29
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
@@ -490,8 +490,8 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
-  #define Z_LIMIT_BIT	    29  // Z-MIN=28, Z-MAX=29
-  #define A_LIMIT_BIT       28  // reuse p1.28, as z-min is not often used
+  #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
+  #define A_LIMIT_BIT       29  // reuse p1.29
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
