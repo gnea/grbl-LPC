@@ -31,13 +31,14 @@
 #include "LPC17xx.h"
 
 
-// Define CPU pin map and default settings.
-// NOTE: OEMs can avoid the need to maintain/update the defaults.h and cpu_map.h files and use only
-// one configuration file by placing their specific defaults and pin map at the bottom of this file.
-// If doing so, simply comment out these two defines and see instructions below.
-#define CPU_MAP_LPC1769 // NXP LPC1769 boards (like Smoothieboard, Cohesion3D, MKS SBase)
-#define BOARD_C3D       // For boards without i2c stepper current chip (like Cohesion3D).
+// Define board type for pin map and default settings.
+//#define CPU_MAP_SMOOTHIEBOARD   // Smoothieboard (NXP LPC1769 MCU)
+#define CPU_MAP_C3D_REMIX       // Cohesion3D Remix (NXP LPC1769 MCU)
+//#define CPU_MAP_C3D_MINI        // Cohesion3D Mini (NXP LPC1769 MCU)
+//#define CPU_MAP_MKS_SBASE       // MKS SBASE Board (NXP LPC1768 MCU)
+//#define CPU_MAP_AZTEEG_X5       // Azteeg X5 boards with NXP LPC1769 mcu
 
+// Define machine type for machine specific defaults
 //#define DEFAULTS_GENERIC
 #define DEFAULTS_K40
 //#define DEFAULTS_FABKIT
@@ -135,7 +136,7 @@
 // #define HOMING_FORCE_SET_ORIGIN // Uncomment to enable.
 
 // Uncomment this define to force Grbl to always set the machine origin at bottom left.
-#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
+//#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
 
 // Number of blocks Grbl executes upon startup. These blocks are stored in EEPROM, where the size
 // and addresses are defined in settings.h. With the current settings, up to 2 startup blocks may
