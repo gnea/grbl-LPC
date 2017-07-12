@@ -32,19 +32,16 @@
 
 
 // Define board type for pin map and default settings.
-//#define CPU_MAP_SMOOTHIEBOARD   // Smoothieboard (NXP LPC1769 MCU)
-#define CPU_MAP_C3D_REMIX       // Cohesion3D Remix (NXP LPC1769 MCU)
+#define CPU_MAP_SMOOTHIEBOARD   // Smoothieboard (NXP LPC1769 MCU)
+//#define CPU_MAP_C3D_REMIX       // Cohesion3D Remix (NXP LPC1769 MCU)
 //#define CPU_MAP_C3D_MINI        // Cohesion3D Mini (NXP LPC1769 MCU)
 //#define CPU_MAP_MKS_SBASE       // MKS SBASE Board (NXP LPC1768 MCU)
-//#define CPU_MAP_AZTEEG_X5       // Azteeg X5 boards with NXP LPC1769 mcu
+//#define CPU_MAP_AZTEEG_X5       // Azteeg X5 Board (NXP LPC1769 MCU)
 
 // Define machine type for machine specific defaults
 //#define DEFAULTS_GENERIC
 #define DEFAULTS_K40
 //#define DEFAULTS_FABKIT
-
-// For machines with A axis (like rotation axis)
-#define ENABLE_A_AXIS
 
 // Serial baud rate
 // #define BAUD_RATE 230400
