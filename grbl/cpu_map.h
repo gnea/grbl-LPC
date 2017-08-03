@@ -197,10 +197,10 @@
   // Define flood and mist coolant enable output pins.
   #define COOLANT_FLOOD_DDR   NotUsed
   #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
+  #define COOLANT_FLOOD_BIT   6  // MOSFET 2.6
   #define COOLANT_MIST_DDR   NotUsed
   #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
+  #define COOLANT_MIST_BIT   7  // MOSFET 2.7
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -299,12 +299,13 @@
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
-  #define COOLANT_FLOOD_DDR   NotUsed
-  #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   NotUsed
-  #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
+  #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
+  #define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
+  #define COOLANT_FLOOD_BIT   6  // MOSFET 2.6
+  #define COOLANT_MIST_DDR   LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT  LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT   7  // MOSFET 2.7
+  #define ENABLE_M7             // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
