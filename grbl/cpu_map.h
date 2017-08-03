@@ -195,12 +195,13 @@
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
-  #define COOLANT_FLOOD_DDR   NotUsed
-  #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   6  // MOSFET 2.6
-  #define COOLANT_MIST_DDR   NotUsed
-  #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   7  // MOSFET 2.7
+  #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
+  #define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
+  #define COOLANT_FLOOD_BIT   4  // SMALL MOSFET Q8 (P2.4)
+  #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT   6  // SMALL MOSFET Q9 (P2.6)
+  #define ENABLE_M7           // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -229,7 +230,7 @@
   // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
   // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
   // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-  #define SPINDLE_PWM_CHANNEL           PWM1_CH6
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6    // BIG MOSFET Q6 (P2.5)
   #define SPINDLE_PWM_USE_PRIMARY_PIN   false
   #define SPINDLE_PWM_USE_SECONDARY_PIN true
 
@@ -302,10 +303,10 @@
   #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
   #define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
   #define COOLANT_FLOOD_BIT   6  // MOSFET 2.6
-  #define COOLANT_MIST_DDR   LPC_GPIO2->FIODIR
-  #define COOLANT_MIST_PORT  LPC_GPIO2->FIOPIN
-  #define COOLANT_MIST_BIT   7  // MOSFET 2.7
-  #define ENABLE_M7             // enables COOLANT MIST
+  #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT    7  // MOSFET 2.7
+  #define ENABLE_M7           // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -334,7 +335,7 @@
   // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
   // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
   // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-  #define SPINDLE_PWM_CHANNEL           PWM1_CH6
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6    // BED MOSFET (P2.5)
   #define SPINDLE_PWM_USE_PRIMARY_PIN   false
   #define SPINDLE_PWM_USE_SECONDARY_PIN true
 
@@ -400,10 +401,11 @@
   // Define flood and mist coolant enable output pins.
   #define COOLANT_FLOOD_DDR   NotUsed
   #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   NotUsed
-  #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
+  #define COOLANT_FLOOD_BIT   6  // not available
+  #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT    7  // MOSFET 2 (P2.7)
+  #define ENABLE_M7           // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -432,7 +434,7 @@
   // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
   // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
   // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-  #define SPINDLE_PWM_CHANNEL           PWM1_CH6
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6    // BED MOSFET (P2.5)
   #define SPINDLE_PWM_USE_PRIMARY_PIN   false
   #define SPINDLE_PWM_USE_SECONDARY_PIN true
 
@@ -496,12 +498,13 @@
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
-  #define COOLANT_FLOOD_DDR   NotUsed
-  #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   NotUsed
-  #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
+  #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
+  #define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
+  #define COOLANT_FLOOD_BIT   6  // MOSFET 2.6
+  #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT    7  // MOSFET 2.7
+  #define ENABLE_M7           // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -600,13 +603,14 @@
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
   // Define flood and mist coolant enable output pins.
-  #define COOLANT_FLOOD_DDR   NotUsed
-  #define COOLANT_FLOOD_PORT  NotUsed
-  #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   NotUsed
-  #define COOLANT_MIST_PORT  NotUsed
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 3
-
+  #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
+  #define COOLANT_FLOOD_PORT  LPC_GPIO2->FIOPIN
+  #define COOLANT_FLOOD_BIT   4  // FAN MOSFET (P2.4)
+  #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
+  #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
+  #define COOLANT_MIST_BIT    7  // BED MOSFET (P2.7)
+  #define ENABLE_M7           // enables COOLANT MIST
+  
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
   #define CONTROL_DDR       NotUsed
@@ -631,10 +635,10 @@
 
   // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
   //
-  // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6  PWM1_CH7  PWM1_CH8
-  // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26     ?         ?
-  // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5      P2.6      P2.7
-  #define SPINDLE_PWM_CHANNEL           PWM1_CH8
+  // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
+  // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26   
+  // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5     
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6    // use Hotend MOSFET (P2.5)
   #define SPINDLE_PWM_USE_PRIMARY_PIN   false
   #define SPINDLE_PWM_USE_SECONDARY_PIN true
 
