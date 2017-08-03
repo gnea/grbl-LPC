@@ -575,6 +575,9 @@ void report_realtime_status()
         if (bit_istrue(lim_pin_state,bit(X_AXIS))) { serial_write('X'); }
         if (bit_istrue(lim_pin_state,bit(Y_AXIS))) { serial_write('Y'); }
         if (bit_istrue(lim_pin_state,bit(Z_AXIS))) { serial_write('Z'); }
+        if (bit_istrue(lim_pin_state,bit(A_AXIS))) { serial_write('A'); }
+        //if (bit_istrue(lim_pin_state,bit(B_AXIS))) { serial_write('B'); }
+        //if (bit_istrue(lim_pin_state,bit(C_AXIS))) { serial_write('C'); }
       }
       if (ctrl_pin_state) {
         #ifdef ENABLE_SAFETY_DOOR_INPUT_PIN
