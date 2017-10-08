@@ -38,6 +38,9 @@
 //#define CPU_MAP_MKS_SBASE       // MKS SBASE Board (NXP LPC1768 MCU)
 //#define CPU_MAP_AZTEEG_X5       // Azteeg X5 Board (NXP LPC1769 MCU)
 
+// Force Spincle PWM Pin 2.4 (default is P2.5)
+//#define SPINDLE_PWM_PIN_2_4
+
 // Define machine type for machine specific defaults
 //#define DEFAULTS_GENERIC
 #define DEFAULTS_K40
@@ -136,7 +139,7 @@
 // #define HOMING_FORCE_SET_ORIGIN // Uncomment to enable.
 
 // Uncomment this define to force Grbl to always set the machine origin at bottom left.
-//#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
+#define HOMING_FORCE_POSITIVE_SPACE // Uncomment to enable.
 
 // Number of blocks Grbl executes upon startup. These blocks are stored in EEPROM, where the size
 // and addresses are defined in settings.h. With the current settings, up to 2 startup blocks may
