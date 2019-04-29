@@ -25,37 +25,38 @@ static constexpr unsigned flash_addr = 0xF000;                    // Last 4k sec
 static constexpr unsigned flash_size = 1024;                      // Only using 1k of a 4k sector
 static char *flash_memory = (char *)flash_addr;                   // Flash memory
 static char flash_buffer[flash_size] __attribute__((aligned(4))); // Copy of flash memory
-using Iap = void(unsigned[], unsigned[]);                         // IAP entry point
-static const Iap *iap = (Iap *)0x1FFF1FF1;                        // IAP entry point
+using Iap = void(unsigned[], unsigned[]);                         // IAP entry point function
+static const Iap *iap = (Iap *)0x1FFF1FF1;                        // IAP entry point address
 
 void eeprom_init()
 {
-    memcpy(flash_buffer, flash_memory, flash_size);
+    memcpy(flash_buffer, flash_memory, flash_size);  // Copy flash memory into local flash buffer
 }
 
 void eeprom_commit()
 {
     if (!memcmp(flash_buffer, flash_memory, flash_size))
-        return;
+        return; // No changes to commit
     unsigned prepCommand[5] = {
-        50,
-        flash_sector,
-        flash_sector,
+        50,                     // Prepare sector(s) for write operation
+        flash_sector,           // Start sector
+        flash_sector,           // End sector
     };
     unsigned eraseCommand[5] = {
-        52,
-        flash_sector,
-        flash_sector,
-        SystemCoreClock / 1000,
+        52,                     // Erase sector(s)
+        flash_sector,           // Start sector
+        flash_sector,           // End sector
+        SystemCoreClock / 1000, // CPU clock frequency in kHz
     };
     unsigned writeCommand[5] = {
-        51,
-        flash_addr,
-        (unsigned)flash_buffer,
-        flash_size,
-        SystemCoreClock / 1000,
+        51,                     // Copy RAM to Flash
+        flash_addr,             // Destination flash address (256-byte boundary)
+        (unsigned)flash_buffer, // Source RAM address (word boundary)
+        flash_size,             // Number of bytes to write (must be: 256, 512, 1024, 4096)
+        SystemCoreClock / 1000, // CPU clock frequency in kHz
     };
     unsigned output[5];
+    // Run In-Application Programming (IAP) routines
     iap(prepCommand, output);
     iap(eraseCommand, output);
     iap(prepCommand, output);

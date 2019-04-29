@@ -22,11 +22,11 @@
 
 void delay_init()
 {
-    LPC_TIM3->CTCR = 0;   // timer mode
-    LPC_TIM3->PR = 0;     // no prescale
-    LPC_TIM3->MCR = 0;    // no MR actions
-    LPC_TIM3->CCR = 0;    // no capture
-    LPC_TIM3->EMR = 0;    // no external match
-    LPC_TIM3->TCR = 0b10; // reset
-    LPC_TIM3->TCR = 0b01; // enable
+    LPC_TIM3->CTCR = 0;   // Count Control (0=TimerMode, 1-3=EdgeCounterMode)
+    LPC_TIM3->PR = 0;     // no Prescale (TC increments ever PR+1 clocks)
+    LPC_TIM3->MCR = 0;    // no Match Control actions
+    LPC_TIM3->CCR = 0;    // no Capture Control actions
+    LPC_TIM3->EMR = 0;    // no External Match (controls external match pins)
+    LPC_TIM3->TCR = 0b10; // reset Timer Control (0b10=Reset, 0b01=Enable)
+    LPC_TIM3->TCR = 0b01; // enable Timer Control (0b10=Reset, 0b01=Enable)
 }

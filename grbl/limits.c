@@ -158,9 +158,9 @@ void limits_go_home(uint8_t cycle_mask)
 
   // Initialize variables used for homing computations.
   uint8_t n_cycle = (2*N_HOMING_LOCATE_CYCLE+1);
-  uint32_t step_pin[N_AXIS];
+  uint32_t step_pin[N_AXIS]; // Tracks which pins correspond to which axes (reduces calls to get_step_pin_mask())
   float target[N_AXIS];
-  float max_travel = 0.0;
+  float max_travel = 0.0; // Maximum travel distance to move searching for limits
   uint8_t idx;
   for (idx=0; idx<N_AXIS; idx++) {
     // Initialize step pin masks
@@ -183,11 +183,12 @@ void limits_go_home(uint8_t cycle_mask)
   uint32_t limit_state, axislock, n_active_axis;
   do {
 
+    // convert current sys_position (steps) to target (mm) so unused axes remain in place
     system_convert_array_steps_to_mpos(target,sys_position);
 
     // Initialize and declare variables needed for homing routine.
-    axislock = 0;
-    n_active_axis = 0;
+    axislock = 0; // Track which pins still need to find limits. Lock these axes by clearing these bits.
+    n_active_axis = 0; // Track number of axes being homed
     for (idx=0; idx<N_AXIS; idx++) {
       // Set target location for active axes and setup computation for homing rate.
       if (bit_istrue(cycle_mask,bit(idx))) {
@@ -215,7 +216,7 @@ void limits_go_home(uint8_t cycle_mask)
           if (approach) { target[idx] = max_travel; }
           else { target[idx] = -max_travel; }
         }
-        // Apply axislock to the step port pins active in this cycle.
+        // Apply axislock to the step port pins active in this cycle, allowing motion
         axislock |= step_pin[idx];
       }
 
@@ -235,15 +236,14 @@ void limits_go_home(uint8_t cycle_mask)
         // Check limit state. Lock out cycle axes when they change.
         limit_state = limits_get_state();
         for (idx=0; idx<N_AXIS; idx++) {
-          if (axislock & step_pin[idx]) {
-            if (limit_state & (1 << idx)) {
-              #ifdef COREXY
-                if (idx==Z_AXIS) { axislock &= ~(step_pin[Z_AXIS]); }
-                else { axislock &= ~(step_pin[A_MOTOR]|step_pin[B_MOTOR]); }
-              #else
-                axislock &= ~(step_pin[idx]);
-              #endif
-            }
+          if ((axislock & step_pin[idx]) && (limit_state & (1 << idx))) {
+            // Clear the axislock bits to prevent axis from moving after limit is hit
+            #ifdef COREXY
+              if (idx==Z_AXIS) { axislock &= ~(step_pin[Z_AXIS]); }
+              else { axislock &= ~(step_pin[A_MOTOR]|step_pin[B_MOTOR]); }
+            #else
+              axislock &= ~(step_pin[idx]);
+            #endif
           }
         }
         sys.homing_axis_lock = axislock;
@@ -297,7 +297,7 @@ void limits_go_home(uint8_t cycle_mask)
   // can be on either side of an axes, check and set axes machine zero appropriately. Also,
   // set up pull-off maneuver from axes limit switches that have been homed. This provides
   // some initial clearance off the switches and should also help prevent them from falsely
-  // triggering when hard limits are enabled or when more than one axes shares a limit pin.
+  // triggering when hard limits are enabled or when more than one axis shares a limit pin.
   int32_t set_axis_position;
   // Set machine positions for homed limit switches. Don't update non-homed axes.
   for (idx=0; idx<N_AXIS; idx++) {
