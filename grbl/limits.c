@@ -236,14 +236,16 @@ void limits_go_home(uint8_t cycle_mask)
         // Check limit state. Lock out cycle axes when they change.
         limit_state = limits_get_state();
         for (idx=0; idx<N_AXIS; idx++) {
-          if ((axislock & step_pin[idx]) && (limit_state & (1 << idx))) {
-            // Clear the axislock bits to prevent axis from moving after limit is hit
-            #ifdef COREXY
-              if (idx==Z_AXIS) { axislock &= ~(step_pin[Z_AXIS]); }
-              else { axislock &= ~(step_pin[A_MOTOR]|step_pin[B_MOTOR]); }
-            #else
-              axislock &= ~(step_pin[idx]);
-            #endif
+          if (axislock & step_pin[idx]) {
+            if (limit_state & (1 << idx)) {
+                // Clear the axislock bits to prevent axis from moving after limit is hit
+                #ifdef COREXY
+                  if (idx==Z_AXIS) { axislock &= ~(step_pin[Z_AXIS]); }
+                  else { axislock &= ~(step_pin[A_MOTOR]|step_pin[B_MOTOR]); }
+                #else
+                  axislock &= ~(step_pin[idx]);
+                #endif
+            }
           }
         }
         sys.homing_axis_lock = axislock;
