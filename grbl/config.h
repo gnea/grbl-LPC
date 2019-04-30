@@ -125,7 +125,7 @@
 // #define HOMING_CYCLE_1 (1<<Y_AXIS)  // COREXY COMPATIBLE: Then home Y
 
 // Number of homing cycles performed after when the machine initially jogs to limit switches.
-// This help in preventing overshoot and should improve repeatability. This value should be one or
+// This helps in preventing overshoot and should improve repeatability. This value should be one or
 // greater.
 #define N_HOMING_LOCATE_CYCLE 1 // Integer (1-128)
 

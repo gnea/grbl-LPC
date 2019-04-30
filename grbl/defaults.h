@@ -77,7 +77,7 @@
   #define DEFAULT_SPINDLE_PWM_OFF_VALUE 0    // $34 % (% of PWM when spindle is off)
   #define DEFAULT_SPINDLE_PWM_MIN_VALUE 1    // $35 % (% of PWM when spindle is at lowest setting)
   #define DEFAULT_SPINDLE_PWM_MAX_VALUE 100  // $36 % (% of PWM when spindle is at highest setting)
-  // Up to 3 HOMING_CYCLE_x can be defined, specifying which axes are homed and in which order
+  // Up to 4 HOMING_CYCLE_x can be defined (0-3), specifying which axes are homed and in which order
   #define HOMING_CYCLE_0 ((1<<X_AXIS)|(1<<Y_AXIS))
 #endif // end of DEFAULTS_GENERIC
 

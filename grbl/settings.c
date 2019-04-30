@@ -100,14 +100,14 @@ void settings_restore(uint8_t restore_flag) {
     settings.homing_pulloff = DEFAULT_HOMING_PULLOFF;
 
     settings.flags = 0;
-    if (DEFAULT_REPORT_INCHES) { settings.flags |= BITFLAG_REPORT_INCHES; }
-    if (DEFAULT_LASER_MODE) { settings.flags |= BITFLAG_LASER_MODE; }
-    if (DEFAULT_INVERT_ST_ENABLE) { settings.flags |= BITFLAG_INVERT_ST_ENABLE; }
+    if (DEFAULT_REPORT_INCHES)     { settings.flags |= BITFLAG_REPORT_INCHES;     }
+    if (DEFAULT_LASER_MODE)        { settings.flags |= BITFLAG_LASER_MODE;        }
+    if (DEFAULT_INVERT_ST_ENABLE)  { settings.flags |= BITFLAG_INVERT_ST_ENABLE;  }
     if (DEFAULT_HARD_LIMIT_ENABLE) { settings.flags |= BITFLAG_HARD_LIMIT_ENABLE; }
-    if (DEFAULT_HOMING_ENABLE) { settings.flags |= BITFLAG_HOMING_ENABLE; }
+    if (DEFAULT_HOMING_ENABLE)     { settings.flags |= BITFLAG_HOMING_ENABLE;     }
     if (DEFAULT_SOFT_LIMIT_ENABLE) { settings.flags |= BITFLAG_SOFT_LIMIT_ENABLE; }
     if (DEFAULT_INVERT_LIMIT_PINS) { settings.flags |= BITFLAG_INVERT_LIMIT_PINS; }
-    if (DEFAULT_INVERT_PROBE_PIN) { settings.flags |= BITFLAG_INVERT_PROBE_PIN; }
+    if (DEFAULT_INVERT_PROBE_PIN)  { settings.flags |= BITFLAG_INVERT_PROBE_PIN;  }
 
     settings.steps_per_mm[X_AXIS] = DEFAULT_X_STEPS_PER_MM;
     settings.steps_per_mm[Y_AXIS] = DEFAULT_Y_STEPS_PER_MM;
@@ -177,7 +177,7 @@ uint8_t settings_read_startup_line(uint8_t n, char *line)
   if (!(memcpy_from_eeprom_with_checksum((char*)line, addr, LINE_BUFFER_SIZE))) {
     // Reset line with default value
     line[0] = 0; // Empty line
-    settings_store_startup_line(n, line);
+    settings_store_startup_line(n, line); // Clear this startup line because it's corrupted
     return(false);
   }
   return(true);
@@ -190,7 +190,7 @@ uint8_t settings_read_build_info(char *line)
   if (!(memcpy_from_eeprom_with_checksum((char*)line, EEPROM_ADDR_BUILD_INFO, LINE_BUFFER_SIZE))) {
     // Reset line with default value
     line[0] = 0; // Empty line
-    settings_store_build_info(line);
+    settings_store_build_info(line); // Clear out build info string because it's corrupted
     return(false);
   }
   return(true);

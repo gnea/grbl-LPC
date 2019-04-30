@@ -23,14 +23,15 @@
 
 void system_init()
 {
+  // Configure user control pins (for cycle start, reset, feed hold, etc.)
   CONTROL_DDR &= ~(CONTROL_MASK); // Configure as input pins
   #ifdef DISABLE_CONTROL_PIN_PULL_UP
     CONTROL_PORT &= ~(CONTROL_MASK); // Normal low operation. Requires external pull-down.
   #else
-    CONTROL_PORT |= CONTROL_MASK;   // Enable internal pull-up resistors. Normal high operation.
+    CONTROL_PORT |= CONTROL_MASK;    // Enable internal pull-up resistors. Normal high operation.
   #endif
-  CONTROL_PCMSK |= CONTROL_MASK;  // Enable specific pins of the Pin Change Interrupt
-  PCICR |= (1 << CONTROL_INT);   // Enable Pin Change Interrupt
+  CONTROL_PCMSK |= CONTROL_MASK;     // Enable specific pins of the Pin Change Interrupt
+  PCICR |= (1 << CONTROL_INT);       // Enable Pin Change Interrupt
 }
 
 
@@ -195,7 +196,7 @@ uint8_t system_execute_line(char *line)
           if (!sys.abort) {  // Execute startup scripts after successful homing.
             sys.state = STATE_IDLE; // Set to IDLE when complete.
             st_go_idle(); // Set steppers to the settings idle state before returning.
-            if (line[2] == 0) { system_execute_startup(line); }
+            if (line[2] == 0) { system_execute_startup(line); } // Execute startup script again.
           }
           break;
         case 'S' : // Puts Grbl to sleep [IDLE/ALARM]

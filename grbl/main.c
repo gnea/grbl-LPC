@@ -42,13 +42,13 @@ int main(void)
 {
   // Initialize system upon power-up.
   debug_init();    // Initialize debug leds
-  isr_init();      // Set ISR priorities
-  delay_init();    // Setup delay timer
+  isr_init();      // Set ISR priorities (stepper ISR uses Timer1)
+  delay_init();    // Setup delay timer (uses Timer3)
   serial_init();   // Setup serial baud rate and interrupts
-  eeprom_init();   // Init EEPROM or FLASH
+  eeprom_init();   // Init EEPROM or Flash
   settings_init(); // Load Grbl settings from EEPROM
   current_init();  // Configure stepper driver current
-  stepper_init();  // Configure stepper pins and interrupt timers
+  stepper_init();  // Configure stepper pins and interrupt timers (uses Timer1)
   system_init();   // Configure pinout pins and pin-change interrupt
 
   memset(sys_position,0,sizeof(sys_position)); // Clear machine position.
@@ -61,7 +61,7 @@ int main(void)
   #else
     sys.state = STATE_IDLE;
   #endif
-  
+
   // Check for power-up and set system alarm if homing is enabled to force homing cycle
   // by setting Grbl's alarm state. Alarm locks out all g-code commands, including the
   // startup scripts, but allows access to settings and internal commands. Only a homing
@@ -84,26 +84,26 @@ int main(void)
     sys.f_override = DEFAULT_FEED_OVERRIDE;  // Set to 100%
     sys.r_override = DEFAULT_RAPID_OVERRIDE; // Set to 100%
     sys.spindle_speed_ovr = DEFAULT_SPINDLE_SPEED_OVERRIDE; // Set to 100%
-		memset(sys_probe_position,0,sizeof(sys_probe_position)); // Clear probe position.
-    sys_probe_state = 0;
-    sys_rt_exec_state = 0;
+    memset(sys_probe_position,0,sizeof(sys_probe_position)); // Clear probe position.
+    sys_probe_state = 0;   // PROBE_OFF
+    sys_rt_exec_state = 0; // EXEC_STATUS_REPORT
     sys_rt_exec_alarm = 0;
     sys_rt_exec_motion_override = 0;
     sys_rt_exec_accessory_override = 0;
 
     // Reset Grbl primary systems.
     serial_reset_read_buffer(); // Clear serial read buffer
-    gc_init(); // Set g-code parser to default state
-    spindle_init();
-    coolant_init();
-    limits_init();
-    probe_init();
-    plan_reset(); // Clear block buffer and planner variables
-    st_reset(); // Clear stepper subsystem variables.
+    gc_init();      // Set g-code parser to default state
+    spindle_init(); // Configure spindle pins and PWM values
+    coolant_init(); // Configure coolant pins
+    limits_init();  // Configure limit input pins and interrupts
+    probe_init();   // Configure probe input pin
+    plan_reset();   // Clear block buffer and planner variables
+    st_reset();     // Clear stepper subsystem variables.
 
     // Sync cleared gcode and planner positions to current system position.
-    plan_sync_position();
-    gc_sync_position();
+    plan_sync_position(); // Synchronize plan position with (actual) system position
+    gc_sync_position();   // Synchronize g-code position with (actual) system position
 
     // Print welcome message. Indicates an initialization has occured at power-up or with a reset.
     report_init_message();
