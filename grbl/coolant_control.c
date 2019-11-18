@@ -64,6 +64,7 @@ void coolant_stop()
   #else
     COOLANT_FLOOD_PORT &= ~(1 << COOLANT_FLOOD_BIT);
   #endif
+  delay_ms(1); // workaround for toolchain error
   #ifdef ENABLE_M7
     #ifdef INVERT_COOLANT_MIST_PIN
       COOLANT_MIST_PORT |= (1 << COOLANT_MIST_BIT);
@@ -95,6 +96,7 @@ void coolant_set_state(uint8_t mode)
         COOLANT_FLOOD_PORT |= (1 << COOLANT_FLOOD_BIT);
       #endif
     }
+    delay_ms(1); // workaround for toolchain error
   
     #ifdef ENABLE_M7
       if (mode & COOLANT_MIST_ENABLE) {
