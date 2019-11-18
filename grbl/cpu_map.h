@@ -63,7 +63,7 @@
   #define X_LIMIT_BIT      1  // Uno Digital Pin 9
   #define Y_LIMIT_BIT      2  // Uno Digital Pin 10
   #ifdef VARIABLE_SPINDLE // Z Limit pin and spindle enabled swapped to access hardware PWM on Pin 11.
-    #define Z_LIMIT_BIT	   4 // Uno Digital Pin 12
+    #define Z_LIMIT_BIT    4 // Uno Digital Pin 12
   #else
     #define Z_LIMIT_BIT    3  // Uno Digital Pin 11
   #endif
@@ -96,9 +96,9 @@
   #define COOLANT_FLOOD_DDR   DDRC
   #define COOLANT_FLOOD_PORT  PORTC
   #define COOLANT_FLOOD_BIT   3  // Uno Analog Pin 3
-  #define COOLANT_MIST_DDR   DDRC
-  #define COOLANT_MIST_PORT  PORTC
-  #define COOLANT_MIST_BIT   4  // Uno Analog Pin 4
+  #define COOLANT_MIST_DDR    DDRC
+  #define COOLANT_MIST_PORT   PORTC
+  #define COOLANT_MIST_BIT    4  // Uno Analog Pin 4
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
@@ -130,10 +130,10 @@
   #endif
   #define SPINDLE_PWM_OFF_VALUE     0
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	  TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	  TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
+  #define SPINDLE_COMB_BIT          COM2A1
 
   // Prescaled, 8-bit Fast PWM mode.
   #define SPINDLE_TCCRA_INIT_MASK   ((1<<WGM20) | (1<<WGM21))  // Configures fast PWM mode.
@@ -143,11 +143,11 @@
   #define SPINDLE_TCCRB_INIT_MASK      (1<<CS22)               // 1/64 prescaler -> 0.98kHz (J-tech laser)
 
   // NOTE: On the 328p, these must be the same as the SPINDLE_ENABLE settings.
-  #define SPINDLE_PWM_DDR	  DDRB
+  #define SPINDLE_PWM_DDR     DDRB
   #define SPINDLE_PWM_PORT    PORTB
-  #define SPINDLE_PWM_BIT	  3    // Uno Digital Pin 11
+  #define SPINDLE_PWM_BIT     3    // Uno Digital Pin 11
 
-#endif
+#endif // end of CPU_MAP_ATMEGA328P
 
 
 #ifdef CPU_MAP_SMOOTHIEBOARD // (Smoothieboards)
@@ -212,7 +212,7 @@
   #endif
   #define COOLANT_MIST_DDR    LPC_GPIO2->FIODIR
   #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
-  #define COOLANT_MIST_BIT   6  // SMALL MOSFET Q9 (P2.6)
+  #define COOLANT_MIST_BIT    6  // SMALL MOSFET Q9 (P2.6)
   #define ENABLE_M7           // enables COOLANT MIST
 
   // Define user-control controls (cycle start, reset, feed hold) input pins.
@@ -264,11 +264,11 @@
   #endif
   //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
-#endif
+  #define SPINDLE_COMB_BIT          COM2A1
+#endif // end of CPU_MAP_SMOOTHIEBOARD
 
 
 #ifdef CPU_MAP_C3D_REMIX // (Cohesion3D Remix Boards)
@@ -311,7 +311,7 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
-  #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
+  #define Z_LIMIT_BIT       28  // Z-MIN=28, Z-MAX=29
   #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
@@ -367,11 +367,11 @@
   #endif
   //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
-#endif
+  #define SPINDLE_COMB_BIT          COM2A1
+#endif // end of CPU_MAP_C3D_REMIX
 
 
 #ifdef CPU_MAP_C3D_MINI // (Cohesion3D Mini Boards)
@@ -414,7 +414,7 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
-  #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
+  #define Z_LIMIT_BIT       28  // Z-MIN=28, Z-MAX=29
   #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
@@ -470,11 +470,11 @@
   #endif
   //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
-#endif
+  #define SPINDLE_COMB_BIT          COM2A1
+#endif // end of CPU_MAP_C3D_MINI
 
 
 #ifdef CPU_MAP_MKS_SBASE // (MKS SBASE Boards)
@@ -517,7 +517,7 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=25
   #define Y_LIMIT_BIT       26  // Y-MIN=26, Y-MAX=27
-  #define Z_LIMIT_BIT	    28  // Z-MIN=28, Z-MAX=29
+  #define Z_LIMIT_BIT       28  // Z-MIN=28, Z-MAX=29
   #define A_LIMIT_BIT       29  // reuse p1.29
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
@@ -565,13 +565,19 @@
   // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
   // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
   // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
-  #ifdef SPINDLE_PWM_PIN_2_4
-    #define SPINDLE_PWM_CHANNEL         PWM1_CH5    // MOSFET3 (P2.4)
-  #else
-    #define SPINDLE_PWM_CHANNEL         PWM1_CH6    // BED MOSFET (P2.5)
-  #endif
+  #define SPINDLE_PWM_CHANNEL           PWM1_CH6    // BED MOSFET (P2.5)
   #define SPINDLE_PWM_USE_PRIMARY_PIN   false
   #define SPINDLE_PWM_USE_SECONDARY_PIN true
+  #ifdef SPINDLE_PWM_PIN_1_23
+    #define SPINDLE_PWM_CHANNEL           PWM1_CH4    // MOSFET3 (P1.23)
+    #define SPINDLE_PWM_USE_PRIMARY_PIN   true
+    #define SPINDLE_PWM_USE_SECONDARY_PIN false
+  #endif
+  #ifdef SPINDLE_PWM_PIN_2_4
+    #define SPINDLE_PWM_CHANNEL           PWM1_CH5    // MOSFET3 (P1.23)
+    #define SPINDLE_PWM_USE_PRIMARY_PIN   false
+    #define SPINDLE_PWM_USE_SECONDARY_PIN true
+  #endif
 
   // Stepper current control
   #define CURRENT_I2C Driver_I2C1       // I2C driver for current control. Comment out to disable (for C3d boards!)
@@ -587,11 +593,11 @@
   #endif
   //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
-#endif
+  #define SPINDLE_COMB_BIT          COM2A1
+#endif // end of CPU_MAP_MKS_SBASE
 
 
 #ifdef CPU_MAP_AZTEEG_X5 // (Azteeg X5 Boards)  not tested yet!
@@ -634,7 +640,7 @@
   #define LIMIT_PORT        LPC_GPIO1->FIOPIN
   #define X_LIMIT_BIT       24  // X-MIN=24, X-MAX=27
   #define Y_LIMIT_BIT       25  // Y-MIN=25, Y-MAX=28
-  #define Z_LIMIT_BIT	    26  // Z-MIN=26, Z-MAX=29
+  #define Z_LIMIT_BIT       26  // Z-MIN=26, Z-MAX=29
   #define A_LIMIT_BIT       27  // reuse p1.27, as X-MAX is not used
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
@@ -646,7 +652,7 @@
   #define COOLANT_MIST_PORT   LPC_GPIO2->FIOPIN
   #define COOLANT_MIST_BIT    7  // BED MOSFET (P2.7)
   #define ENABLE_M7           // enables COOLANT MIST
-  
+
   // Define user-control controls (cycle start, reset, feed hold) input pins.
   // NOTE: All CONTROLs pins must be on the same port and not on a port with other input pins (limits).
   #define CONTROL_DDR       NotUsed
@@ -672,8 +678,8 @@
   // The LPC17xx has 6 PWM channels. Each channel has 2 pins. It can drive both pins simultaneously to the same value.
   //
   // PWM Channel      PWM1_CH1  PWM1_CH2  PWM1_CH3  PWM1_CH4  PWM1_CH5  PWM1_CH6
-  // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26   
-  // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5     
+  // Primary pin      P1.18     P1.20     P1.21     P1.23     P1.24     P1.26
+  // Secondary pin    P2.0      P2.1      P2.2      P2.3      P2.4      P2.5
   #ifdef SPINDLE_PWM_PIN_2_4
     #define SPINDLE_PWM_CHANNEL         PWM1_CH5    // MOSFET3 (P2.4)
   #else
@@ -692,11 +698,11 @@
   #endif
   //#define SPINDLE_PWM_OFF_VALUE     0 // Defined in config.h
   #define SPINDLE_PWM_RANGE         (SPINDLE_PWM_MAX_VALUE-SPINDLE_PWM_MIN_VALUE)
-  #define SPINDLE_TCCRA_REGISTER	TCCR2A
-  #define SPINDLE_TCCRB_REGISTER	TCCR2B
+  #define SPINDLE_TCCRA_REGISTER    TCCR2A
+  #define SPINDLE_TCCRB_REGISTER    TCCR2B
   #define SPINDLE_OCR_REGISTER      OCR2A
-  #define SPINDLE_COMB_BIT	        COM2A1
-#endif
+  #define SPINDLE_COMB_BIT          COM2A1
+#endif // end of CPU_MAP_AZTEEG_X5
 
 
 /*

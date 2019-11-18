@@ -26,7 +26,7 @@
 
 
 // Version of the EEPROM data. Will be used to migrate existing data from older versions of Grbl
-// when firmware is upgraded. Always stored in byte 0 of eeprom
+// when firmware is upgraded. Always stored in byte 0 of EEPROM.
 #define SETTINGS_VERSION 11  // NOTE: Check settings_reset() when moving to next version.
 
 // Define bit flag masks for the boolean settings in settings.flag.
@@ -44,10 +44,10 @@
 #define BITFLAG_RT_STATUS_BUFFER_STATE      bit(1)
 
 // Define settings restore bitflags.
-#define SETTINGS_RESTORE_DEFAULTS bit(0)
-#define SETTINGS_RESTORE_PARAMETERS bit(1)
+#define SETTINGS_RESTORE_DEFAULTS      bit(0)
+#define SETTINGS_RESTORE_PARAMETERS    bit(1)
 #define SETTINGS_RESTORE_STARTUP_LINES bit(2)
-#define SETTINGS_RESTORE_BUILD_INFO bit(3)
+#define SETTINGS_RESTORE_BUILD_INFO    bit(3)
 #ifndef SETTINGS_RESTORE_ALL
   #define SETTINGS_RESTORE_ALL 0xFF // All bitflags
 #endif
@@ -56,6 +56,7 @@
 // NOTE: The Atmega328p has 1KB EEPROM. The upper half is reserved for parameters and
 // the startup script. The lower half contains the global settings and space for future
 // developments.
+// Note: Address 0 of EEPROM is reserved for SETTINGS_VERSION.
 #define EEPROM_ADDR_GLOBAL         1U
 #define EEPROM_ADDR_PARAMETERS     512U
 #define EEPROM_ADDR_STARTUP_BLOCK  768U
@@ -80,7 +81,7 @@ typedef struct {
   float steps_per_mm[N_AXIS];
   float max_rate[N_AXIS];
   float acceleration[N_AXIS];
-  float max_travel[N_AXIS];
+  float max_travel[N_AXIS];  // NOTE: Stored as a negative value
   float current[N_AXIS];
 
   // Remaining Grbl settings
