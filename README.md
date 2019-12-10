@@ -6,7 +6,7 @@ Note: cprezzi's branch disables current control and has defaults more suitable f
 ***
 This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
 
-Usage notes:
+**Usage notes:**
 * This uses a different usb-serial driver than Smoothieware. Windows 10 should recognize it automatically.
   If it doesn't, try installing VCOM_lib/usbser.inf.
 * This doesn't pass the sdcard to the host. Once installed you need to use a micro sdcard adaptor to replace or change it.
