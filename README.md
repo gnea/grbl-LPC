@@ -28,7 +28,7 @@ New configuration settings
   * Default to 0.0 A to avoid burning out your motors
   * Your motors will likely stall if you don't set these!
 
-Build notes:
+**Build notes:**
 * You should use virtual machines, if you use multiple toolchains on the same PC.
 * Install make if not already there (for Windows see http://gnuwin32.sourceforge.net/packages/make.htm)
 * Install the ARM embeded toolchain (see https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
