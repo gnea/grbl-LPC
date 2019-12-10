@@ -34,7 +34,7 @@ New configuration settings
 * Install the ARM embeded toolchain (see https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
 * Run ```git submodule init``` and ```git submodule update``` before building.
-* ```make``` produces 2 files:
+* Run ```make```, which produces 2 files:
   * ```build/firmware.bin```: this is compatible with the sdcard bootloader.
   * ```build/grbl.hex```: this is not compatible with the sdcard bootloader. It loads using Flash Magic 
     and is primarilly for developers who don't want to keep swapping sdcards. If you flash this,
