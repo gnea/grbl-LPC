@@ -223,6 +223,65 @@ void st_wake_up()
   // Initialize stepper output bits to ensure first ISR call does not step.
   st.step_outbits = step_port_invert_mask;
 
+  // Set any ports configured as open drain here
+  // https://sites.google.com/site/johnkneenmicrocontrollers/input_output/io_1768
+  // https://sites.google.com/site/johnkneenmicrocontrollers/18b-i2c/i2c_lpc1768#linkC1768
+  #ifdef OPEN_DRAIN_X
+    LPC_PINCON->PINMODE_OD2 |= 1<<0;   // Bit P2.0 is open drain Step
+    LPC_PINCON->PINMODE4 &= ~(3<<0);
+    LPC_PINCON->PINMODE4 |= (2<<0);    // P2.0 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<5;   // Bit P0.5 is open drain Dir
+    LPC_PINCON->PINMODE0 &= ~(3<<10);
+    LPC_PINCON->PINMODE0 |= (2<<10);   // P0.5 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<4;   // Bit P0.4 is open drain Enable
+    LPC_PINCON->PINMODE0 &= ~(3<<8);
+    LPC_PINCON->PINMODE0 |= (2<<8);    // P0.4 has no pull up/down resistor
+  #endif
+
+  #ifdef OPEN_DRAIN_Y
+    LPC_PINCON->PINMODE_OD2 |= 1<<1;   // Bit P2.1 is open drain Step
+    LPC_PINCON->PINMODE4 &= ~(3<<2);
+    LPC_PINCON->PINMODE4 |= (2<<2);    // P2.1 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<11;  // Bit P0.11 is open drain Dir
+    LPC_PINCON->PINMODE0 &= ~(3<<22);
+    LPC_PINCON->PINMODE0 |= (2<<22);   // P0.11 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<10;  // Bit P0.10 is open drain Enable
+    LPC_PINCON->PINMODE0 &= ~(3<<20);
+    LPC_PINCON->PINMODE0 |= (2<<20);   // P0.10 has no pull up/down resistor
+  #endif
+
+  #ifdef OPEN_DRAIN_Z
+    LPC_PINCON->PINMODE_OD2 |= 1<<2;   // Bit P2.2 is open drain Step
+    LPC_PINCON->PINMODE4 &= ~(3<<4);
+    LPC_PINCON->PINMODE4 |= (2<<4);    // P2.2 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<20;  // Bit P0.20 is open drain Dir
+    LPC_PINCON->PINMODE1 &= ~(3<<8);
+    LPC_PINCON->PINMODE1 |= (2<<8);    // P0.20 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<19;  // Bit P0.19 is open drain Enable
+    LPC_PINCON->PINMODE1 &= ~(3<<6);
+    LPC_PINCON->PINMODE1 |= (2<<6);    // P0.19 has no pull up/down resistor
+  #endif
+
+  #ifdef OPEN_DRAIN_A
+    LPC_PINCON->PINMODE_OD2 |= 1<<3;   // Bit P2.3 is open drain Step
+    LPC_PINCON->PINMODE4 &= ~(3<<6);
+    LPC_PINCON->PINMODE4 |= (2<<6);    // P2.2 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<22;  // Bit P0.22 is open drain Dir
+    LPC_PINCON->PINMODE1 &= ~(3<<12);
+    LPC_PINCON->PINMODE1 |= (2<<12);   // P0.22 has no pull up/down resistor
+
+    LPC_PINCON->PINMODE_OD0 |= 1<<21;  // Bit P0.21 is open drain Enable
+    LPC_PINCON->PINMODE1 &= ~(3<<10);
+    LPC_PINCON->PINMODE1 |= (2<<10);   // P0.21 has no pull up/down resistor
+  #endif
+
   // Initialize step pulse timing from settings. Here to ensure updating after re-writing.
   #ifdef STEP_PULSE_DELAY
     // Set total step pulse time after direction pin set. Ad hoc computation from oscilloscope.
