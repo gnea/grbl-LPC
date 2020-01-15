@@ -4,7 +4,14 @@
 Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
 Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
 ***
-This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
+This is GRBL 1.1 ported to the LPC1769. 
+It can run on the following boards:
+- Smoothieboard
+- Cohesion3D Remix and Mini
+- MKS SBase
+- Azteeg X5 
+
+SKR boards don't work, because pin mapping is messed!
 
 **Usage notes:**
 * This uses a different usb-serial driver than Smoothieware. Windows 10 should recognize it automatically.
