@@ -4,9 +4,16 @@
 Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
 Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
 ***
-This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
+This is GRBL 1.1 ported to the LPC1769. 
+It can run on the following boards:
+- Smoothieboard
+- Cohesion3D Remix and Mini
+- MKS SBase
+- Azteeg X5 
 
-Usage notes:
+SKR boards don't work, because pin mapping is messed!
+
+**Usage notes:**
 * This uses a different usb-serial driver than Smoothieware. Windows 10 should recognize it automatically.
   If it doesn't, try installing VCOM_lib/usbser.inf.
 * This doesn't pass the sdcard to the host. Once installed you need to use a micro sdcard adaptor to replace or change it.
@@ -28,13 +35,13 @@ New configuration settings
   * Default to 0.0 A to avoid burning out your motors
   * Your motors will likely stall if you don't set these!
 
-Build notes:
+**Build notes:**
 * You should use virtual machines, if you use multiple toolchains on the same PC.
 * Install make if not already there (for Windows see http://gnuwin32.sourceforge.net/packages/make.htm)
 * Install the ARM embeded toolchain (see https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 * Include ```make``` and the ```arm-none-eabi-*``` tools in your path.
 * Run ```git submodule init``` and ```git submodule update``` before building.
-* ```make``` produces 2 files:
+* Run ```make```, which produces 2 files:
   * ```build/firmware.bin```: this is compatible with the sdcard bootloader.
   * ```build/grbl.hex```: this is not compatible with the sdcard bootloader. It loads using Flash Magic 
     and is primarilly for developers who don't want to keep swapping sdcards. If you flash this,

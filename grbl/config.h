@@ -244,6 +244,18 @@
 // not throw an alarm message.
 #define CHECK_LIMITS_AT_INIT
 
+// Open Drain configuration
+// In order to use stepper drivers with optocoupler input, you may need to use
+// open drain configuration. In this configuration,  STEP, DIR, and ENABLE each
+// expose separate positive and negative pins. The positive pins on the driver
+// are tied directly to +5V, and the negative pins are separately routed to the
+// STEP, DIR, and ENABLE pins on the controller board, which function as
+// low-side switches to ground.
+//#define OPEN_DRAIN_X
+//#define OPEN_DRAIN_Y
+//#define OPEN_DRAIN_Z
+//#define OPEN_DRAIN_A
+
 // ---------------------------------------------------------------------------------------
 // ADVANCED CONFIGURATION OPTIONS:
 
