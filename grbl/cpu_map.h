@@ -426,6 +426,14 @@
   #define A_LIMIT_BIT       29  // reuse p1.29 from Z-MAX
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
 
+  // Define spindle enable and spindle direction output pins.
+  #define SPINDLE_ENABLE_DDR        NotUsed
+  #define SPINDLE_ENABLE_PORT       NotUsed
+  #define SPINDLE_ENABLE_BIT        30  // P1.30
+  #define SPINDLE_DIRECTION_DDR     LPC_GPIO1->FIODIR
+  #define SPINDLE_DIRECTION_PORT    LPC_GPIO1->FIOPIN
+  #define SPINDLE_DIRECTION_BIT     31  // P1.31
+
   // Define flood and mist coolant enable output pins.
   #define COOLANT_FLOOD_DDR   NotUsed
   #define COOLANT_FLOOD_PORT  NotUsed
@@ -651,6 +659,14 @@
   #define Z_LIMIT_BIT       26  // Z-MIN=26, Z-MAX=29
   #define A_LIMIT_BIT       27  // reuse p1.27, as X-MAX is not used
   #define LIMIT_MASK       ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)|(1<<A_LIMIT_BIT)) // All limit bits
+
+  // Define spindle enable and spindle direction output pins.
+  #define SPINDLE_ENABLE_DDR        LPC_GPIO1->FIODIR
+  #define SPINDLE_ENABLE_PORT       LPC_GPIO1->FIOPIN
+  #define SPINDLE_ENABLE_BIT        30  // P1.30
+  #define SPINDLE_DIRECTION_DDR     LPC_GPIO1->FIODIR
+  #define SPINDLE_DIRECTION_PORT    LPC_GPIO1->FIOPIN
+  #define SPINDLE_DIRECTION_BIT     31  // P1.31
 
   // Define flood and mist coolant enable output pins.
   #define COOLANT_FLOOD_DDR   LPC_GPIO2->FIODIR
