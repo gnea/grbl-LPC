@@ -22,7 +22,7 @@
 
 
 // Inverts the probe pin state depending on user settings and probing cycle mode.
-uint8_t probe_invert_mask;
+uint32_t probe_invert_mask;
 
 
 // Probe pin initialization routine.
