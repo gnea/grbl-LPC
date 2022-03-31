@@ -2,7 +2,7 @@
 
 ***
 Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
-Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
+Note: cprezzi's branch defaults stepper current to zero and has defaults more suitable for other boards.
 ***
 This is GRBL 1.1 ported to the LPC1769. It can run on Smoothieboard.
 
