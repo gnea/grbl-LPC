@@ -1,8 +1,7 @@
 ![GitHub Logo](https://github.com/gnea/gnea-Media/blob/master/Grbl%20Logo/Grbl%20Logo%20250px.png?raw=true)
 
 ***
-Old releases are in the `Release` tab. See [cprezzi's branch](https://github.com/cprezzi/grbl-LPC) for more recent releases.
-Note: cprezzi's branch disables current control and has defaults more suitable for other boards.
+Note: this branch defaults stepper current to zero and has defaults for more boards and machines.
 ***
 This is GRBL 1.1 ported to the LPC1769. 
 It can run on the following boards:
@@ -31,7 +30,7 @@ New configuration settings
 * $34 is PWM off value in %
 * $35 is PWM min value in %
 * $36 is PWM max value in %
-* $140, $141, $142 are X, Y, Z current (amps)
+* $140, $141, $142, $143 are X, Y, Z, E0 current (amps)
   * Default to 0.0 A to avoid burning out your motors
   * Your motors will likely stall if you don't set these!
 
